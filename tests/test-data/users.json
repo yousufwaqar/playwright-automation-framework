@@ -1,0 +1,26 @@
+{
+  "validUser": {
+    "username": "testuser@example.com",
+    "password": "SecurePassword123!",
+    "role": "viewer",
+    "displayName": "Test User"
+  },
+  "invalidUser": {
+    "username": "invalid@example.com",
+    "password": "WrongPassword!",
+    "role": "none",
+    "displayName": "Invalid User"
+  },
+  "adminUser": {
+    "username": "admin@example.com",
+    "password": "AdminPassword123!",
+    "role": "admin",
+    "displayName": "Admin User"
+  },
+  "readOnlyUser": {
+    "username": "readonly@example.com",
+    "password": "ReadOnly123!",
+    "role": "readonly",
+    "displayName": "ReadOnly User"
+  }
+}
