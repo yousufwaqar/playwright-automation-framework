@@ -1,3 +1,8 @@
+![Playwright Tests](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/playwright-ci.yml/badge.svg)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue)
+![Playwright](https://img.shields.io/badge/Playwright-E2E-green)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+
 # Playwright Automation Framework
 
 Enterprise-grade end-to-end test automation framework built with **Playwright** and **TypeScript**, following industry best practices for scalability, maintainability, and CI/CD integration.
