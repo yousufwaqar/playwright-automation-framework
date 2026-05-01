@@ -2,7 +2,7 @@
 
 Enterprise-grade end-to-end test automation framework built with **Playwright** and **TypeScript**, following industry best practices for scalability, maintainability, and CI/CD integration.
 
-Built by [Yousuf Waqar](https://github.com/YOUR-USERNAME) — SDET & QA Automation Lead with 11+ years of experience.
+Built by [Yousuf Waqar](https://github.com/yousufwaqar) — SDET & QA Automation Lead with 11+ years of experience.
 
 ---
 
