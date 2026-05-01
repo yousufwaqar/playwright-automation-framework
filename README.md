@@ -147,18 +147,3 @@ Video recordings (configurable)
 Trace viewer for debugging
 Configuration
 All framework settings are centralized in playwright.config.ts:
-
-Browsers: Chromium, Firefox, WebKit
-Parallel Workers: Configurable (default: 4)
-Retries: 2 retries on failure
-Timeouts: 30s default, configurable per test
-Screenshots: On failure
-Videos: On first retry
-Author
-Yousuf Waqar
-
-SDET & QA Automation Lead at LTIMindtree (Client: Microsoft)
-11+ years in test automation and quality engineering
-Email: yousufwaqar7@gmail.com
-LinkedIn: https://www.linkedin.com/in/yousuf-waqar/
-
