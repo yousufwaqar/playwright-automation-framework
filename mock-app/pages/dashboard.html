@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Demo App</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f2f5; }
+    .header { background: white; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .header-left { display: flex; align-items: center; gap: 16px; }
+    .header-right { display: flex; align-items: center; gap: 12px; }
+    .search-box { padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; width: 300px; font-size: 14px; }
+    .icon-btn { background: none; border: none; cursor: pointer; font-size: 20px; padding: 8px; border-radius: 50%; }
+    .icon-btn:hover { background: #f0f0f0; }
+    .main { padding: 24px; }
+    .welcome { font-size: 24px; margin-bottom: 24px; color: #1a1a1a; }
+    .tiles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+    .report-tile { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); cursor: pointer; transition: box-shadow 0.2s; }
+    .report-tile:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    .report-tile h3 { margin-bottom: 8px; color: #1a1a1a; }
+    .report-tile p { font-size: 13px; color: #666; }
+    .nav-menu { display: flex; gap: 16px; }
+    .nav-menu a { text-decoration: none; color: #555; font-size: 14px; }
+    .dropdown { position: relative; display: inline-block; }
+    .dropdown-content { display: none; position: absolute; right: 0; top: 100%; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.15); border-radius: 4px; min-width: 150px; z-index: 100; }
+    .dropdown-content.visible { display: block; }
+    .dropdown-content button { width: 100%; padding: 10px 16px; border: none; background: none; text-align: left; cursor: pointer; font-size: 14px; }
+    .dropdown-content button:hover { background: #f5f5f5; }
+    .side-panel { position: fixed; right: -300px; top: 0; width: 300px; height: 100vh; background: white; box-shadow: -2px 0 8px rgba(0,0,0,0.1); padding: 20px; transition: right 0.3s; z-index: 200; }
+    .side-panel.visible { right: 0; }
+    .create-btn { background: #1976d2; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-left">
+      <nav data-testid="nav-menu" class="nav-menu">
+        <a href="/dashboard">Home</a>
+        <a href="#">Reports</a>
+        <a href="#">Workspaces</a>
+      </nav>
+    </div>
+    <div class="header-right">
+      <input data-testid="search-input" type="text" class="search-box" placeholder="Search reports..." id="searchInput">
+      <button data-testid="create-new-btn" class="create-btn">+ Create</button>
+      <button data-testid="notification-bell" class="icon-btn" onclick="toggleNotifications()">&#x1F514;</button>
+      <div class="dropdown">
+        <button data-testid="user-profile" class="icon-btn" onclick="toggleProfileMenu()">&#x1F464;</button>
+        <div class="dropdown-content" id="profileMenu">
+          <button data-testid="logout-button" onclick="logout()">Sign Out</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div data-testid="welcome-message" class="welcome">Welcome back, Test User!</div>
+    <div class="tiles-grid" id="tilesGrid">
+      <div data-testid="report-tile" class="report-tile" onclick="openReport('1')">
+        <h3>Sales Report</h3>
+        <p>Last updated: Jan 15, 2026</p>
+      </div>
+      <div data-testid="report-tile" class="report-tile" onclick="openReport('2')">
+        <h3>Marketing Dashboard</h3>
+        <p>Last updated: Feb 20, 2026</p>
+      </div>
+      <div data-testid="report-tile" class="report-tile" onclick="openReport('3')">
+        <h3>Finance Overview</h3>
+        <p>Last updated: Mar 10, 2026</p>
+      </div>
+    </div>
+  </main>
+
+  <div data-testid="side-panel" class="side-panel" id="sidePanel">
+    <h3>Notifications</h3>
+    <p>No new notifications</p>
+  </div>
+
+  <script>
+    function toggleProfileMenu() {
+      document.getElementById('profileMenu').classList.toggle('visible');
+    }
+
+    function toggleNotifications() {
+      document.getElementById('sidePanel').classList.toggle('visible');
+    }
+
+    function logout() {
+      localStorage.removeItem('authToken');
+      window.location.href = '/login';
+    }
+
+    function openReport(id) {
+      document.title = 'Report ' + id + ' - Demo App';
+    }
+
+    document.getElementById('searchInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        const query = this.value.toLowerCase();
+        const tiles = document.querySelectorAll('[data-testid="report-tile"]');
+        tiles.forEach(tile => {
+          const name = tile.querySelector('h3').textContent.toLowerCase();
+          tile.style.display = name.includes(query) ? 'block' : 'none';
+        });
+      }
+    });
+  </script>
+</body>
+</html>
