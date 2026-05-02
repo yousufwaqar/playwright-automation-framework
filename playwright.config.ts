@@ -7,7 +7,8 @@ export default defineConfig({
   // Test directory
   testDir: "./tests",
 
-  // Maximum time one test can run
+  // Test file patterns
+  testMatch: "**/*.spec.ts",
   timeout: 30000,
 
   // Maximum time expect() should wait
