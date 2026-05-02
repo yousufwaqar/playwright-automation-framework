@@ -40,6 +40,7 @@ jobs:
         run: npx playwright test --project=${{ matrix.project }}
         env:
           CI: true
+          NODE_OPTIONS: --import tsx
           BASE_URL: ${{ secrets.BASE_URL }}
           API_TOKEN: ${{ secrets.API_TOKEN }}
 
