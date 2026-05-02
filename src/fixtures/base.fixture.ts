@@ -12,7 +12,11 @@ import { Logger } from "../utils/Logger";
  * @author Yousuf Waqar
  */
 
+<<<<<<< HEAD
 export type CustomFixtures = {
+=======
+type CustomFixtures = {
+>>>>>>> e78c24ec695b43146e56984be943791800ec77d2
   loginPage: LoginPage;
   dashboardPage: DashboardPage;
   logger: Logger;

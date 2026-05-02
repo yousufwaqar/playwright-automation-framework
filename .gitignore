@@ -98,6 +98,7 @@ dist
 # Sveltekit cache directory
 .svelte-kit/
 
+<<<<<<< HEAD
 # Playwright
 test-results/
 playwright-report/
@@ -112,6 +113,8 @@ playwright/.cache/
 ehthumbs.db
 Thumbs.db
 
+=======
+>>>>>>> e78c24ec695b43146e56984be943791800ec77d2
 # vitepress build output
 **/.vitepress/dist
 
