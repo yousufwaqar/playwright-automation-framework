@@ -2,7 +2,11 @@
   "compilerOptions": {
     "target": "ES2022",
     "module": "commonjs",
+<<<<<<< HEAD
     "lib": ["ES2022", "dom"],
+=======
+    "lib": ["ES2022"],
+>>>>>>> e78c24ec695b43146e56984be943791800ec77d2
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -13,7 +17,10 @@
     "sourceMap": true,
     "outDir": "./dist",
     "rootDir": ".",
+<<<<<<< HEAD
     "ignoreDeprecations": "5.0",
+=======
+>>>>>>> e78c24ec695b43146e56984be943791800ec77d2
     "baseUrl": ".",
     "paths": {
       "@pages/*": ["src/pages/*"],
