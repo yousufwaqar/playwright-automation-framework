@@ -31,11 +31,7 @@ export class ConfigManager {
   private constructor() {
     const configPath = path.resolve(
       __dirname,
-<<<<<<< HEAD
       "../../tests/test-data/environments.json"
-=======
-      "../../test-data/environments.json"
->>>>>>> e78c24ec695b43146e56984be943791800ec77d2
     );
     const rawData = fs.readFileSync(configPath, "utf-8");
     this.config = JSON.parse(rawData);

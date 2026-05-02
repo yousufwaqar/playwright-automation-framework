@@ -29,11 +29,7 @@ export class TestDataManager {
   private usersData: UsersData;
 
   private constructor() {
-<<<<<<< HEAD
     const usersPath = path.resolve(__dirname, "../../tests/test-data/users.json");
-=======
-    const usersPath = path.resolve(__dirname, "../../test-data/users.json");
->>>>>>> e78c24ec695b43146e56984be943791800ec77d2
     const rawData = fs.readFileSync(usersPath, "utf-8");
     this.usersData = JSON.parse(rawData);
   }

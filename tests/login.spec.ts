@@ -1,10 +1,7 @@
 import { test, expect } from "../src/fixtures/base.fixture";
 import { TestDataManager } from "../src/utils/TestDataManager";
-<<<<<<< HEAD
 import type { LoginPage } from "../src/pages/LoginPage";
 import type { Logger } from "../src/utils/Logger";
-=======
->>>>>>> e78c24ec695b43146e56984be943791800ec77d2
 
 /**
  * Login Feature Tests
@@ -22,21 +19,13 @@ import type { Logger } from "../src/utils/Logger";
 test.describe("Login Feature Tests", () => {
   const testData = TestDataManager.getInstance();
 
-<<<<<<< HEAD
   test.beforeEach(async ({ loginPage }: { loginPage: LoginPage }) => {
-=======
-  test.beforeEach(async ({ loginPage }) => {
->>>>>>> e78c24ec695b43146e56984be943791800ec77d2
     await loginPage.goto();
   });
 
   test(
     "should login successfully with valid credentials @smoke @regression",
-<<<<<<< HEAD
     async ({ loginPage, logger }: { loginPage: LoginPage; logger: Logger }) => {
-=======
-    async ({ loginPage, logger }) => {
->>>>>>> e78c24ec695b43146e56984be943791800ec77d2
       logger.step(1, "Get valid user credentials");
       const user = testData.getValidUser();
 
@@ -52,11 +41,7 @@ test.describe("Login Feature Tests", () => {
 
   test(
     "should show error message for invalid credentials @regression",
-<<<<<<< HEAD
     async ({ loginPage, logger }: { loginPage: LoginPage; logger: Logger }) => {
-=======
-    async ({ loginPage, logger }) => {
->>>>>>> e78c24ec695b43146e56984be943791800ec77d2
       logger.step(1, "Get invalid user credentials");
       const user = testData.getInvalidUser();
 
@@ -74,11 +59,7 @@ test.describe("Login Feature Tests", () => {
 
   test(
     "should disable login button when fields are empty @regression",
-<<<<<<< HEAD
     async ({ loginPage, logger }: { loginPage: LoginPage; logger: Logger }) => {
-=======
-    async ({ loginPage, logger }) => {
->>>>>>> e78c24ec695b43146e56984be943791800ec77d2
       logger.step(1, "Verify login button is disabled on page load");
       const isEnabled = await loginPage.isLoginButtonEnabled();
 
@@ -91,11 +72,7 @@ test.describe("Login Feature Tests", () => {
 
   test(
     "should verify login page is loaded correctly @smoke",
-<<<<<<< HEAD
     async ({ loginPage, logger }: { loginPage: LoginPage; logger: Logger }) => {
-=======
-    async ({ loginPage, logger }) => {
->>>>>>> e78c24ec695b43146e56984be943791800ec77d2
       logger.step(1, "Verify login page elements are visible");
       const isLoaded = await loginPage.isPageLoaded();
 
