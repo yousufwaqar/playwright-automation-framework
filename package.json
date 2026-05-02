@@ -1,0 +1,39 @@
+{
+  "name": "playwright-automation-framework",
+  "version": "1.0.0",
+  "description": "Enterprise-grade Playwright + TypeScript test automation framework with POM, parallel execution, and CI/CD integration",
+  "author": "Yousuf Waqar <yousufwaqar7@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:headed": "npx playwright test --headed",
+    "test:chrome": "npx playwright test --project=chromium",
+    "test:firefox": "npx playwright test --project=firefox",
+    "test:webkit": "npx playwright test --project=webkit",
+    "test:api": "npx playwright test tests/api/",
+    "test:smoke": "npx playwright test --grep @smoke",
+    "test:regression": "npx playwright test --grep @regression",
+    "report": "npx playwright show-report",
+    "lint": "eslint src/ tests/",
+    "clean": "rm -rf test-results/ playwright-report/"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.45.0",
+    "@types/node": "^25.6.0",
+    "dotenv": "^16.4.0",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "playwright",
+    "typescript",
+    "test-automation",
+    "e2e-testing",
+    "page-object-model",
+    "ci-cd",
+    "azure-devops",
+    "quality-gates"
+  ]
+}
