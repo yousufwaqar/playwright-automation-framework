@@ -1,6 +1,13 @@
 {
   "defaultEnvironment": "staging",
   "environments": {
+    "ci": {
+      "name": "CI Mock",
+      "baseUrl": "http://localhost:3000",
+      "apiBaseUrl": "http://localhost:3000/api/v1",
+      "timeout": 15000,
+      "retries": 2
+    },
     "dev": {
       "name": "Development",
       "baseUrl": "https://dev.app.powerbi.com",

@@ -6,7 +6,6 @@ on:
   pull_request:
     branches: [main]
   schedule:
-    # Run regression tests daily at 6 AM UTC
     - cron: "0 6 * * *"
 
 jobs:
@@ -36,13 +35,19 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps ${{ matrix.project }}
 
+      - name: Start mock application
+        run: |
+          node mock-app/server.js &
+          sleep 2
+          curl -f http://localhost:3000/api/v1/health || exit 1
+
       - name: Run Playwright tests
         run: npx playwright test --project=${{ matrix.project }}
         env:
           CI: true
-          NODE_OPTIONS: --import tsx
-          BASE_URL: ${{ secrets.BASE_URL }}
-          API_TOKEN: ${{ secrets.API_TOKEN }}
+          BASE_URL: http://localhost:3000
+          TEST_ENV: ci
+          API_TOKEN: mock-jwt-token-12345
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
