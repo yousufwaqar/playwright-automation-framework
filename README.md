@@ -14,8 +14,7 @@ ght%2Ftest?label=Playwright&logo=playwright&logoColor=white&color=45ba4b)](https
  [![License](https://img.shields.io/github/license/yousufwaqar/playwright-automation-framework?color=yellow)](./LICENSE)
  [![Tests](https://img.shields.io/badge/UI%20%2B%20API-Covered-success)](#test-coverage)
  [![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen.svg)](./CONTRIBUTING.md)
- [![Last Commit](https://img.shields.io/github/last-commit/yousufwaqar/playwright-automation-framework?color=blue)](https://github.com
-/yousufwaqar/playwright-automation-framework/commits/main)
+ [![Last Commit](https://img.shields.io/github/last-commit/yousufwaqar/playwright-automation-framework?color=blue)](https://github.com/yousufwaqar/playwright-automation-framework/commits/main)
 
 <p>
   <a href="#why-this-framework">Why this framework?</a> |
