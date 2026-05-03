@@ -4,13 +4,18 @@
 
 ### Enterprise-grade end-to-end test automation built for scale
 
-[![Build Status](https://img.shields.io/badge/Playwright%20Tests-Passing-brightgreen?logo=githubactions&logoColor=white)](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/playwright-ci.yml)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Playwright](https://img.shields.io/badge/Playwright-1.45+-45ba4b?logo=playwright&logoColor=white)](https://playwright.dev/)
-[![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
-[![Tests](https://img.shields.io/badge/UI%20%2B%20API-Covered-success)](#test-coverage)
-[![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen.svg)](./CONTRIBUTING.md)
+ [![Build Status](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/playwright-ci.yml/badge.svg?branch=
+main)](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/playwright-ci.yml)
+ [![TypeScript](https://img.shields.io/github/package-json/dependency-version/yousufwaqar/playwright-automation-framework/dev/typescri
+pt?label=TypeScript&logo=typescript&logoColor=white&color=3178C6)](https://www.typescriptlang.org/)
+ [![Playwright](https://img.shields.io/github/package-json/dependency-version/yousufwaqar/playwright-automation-framework/dev/@playwri
+ght%2Ftest?label=Playwright&logo=playwright&logoColor=white&color=45ba4b)](https://playwright.dev/)
+ [![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+ [![License](https://img.shields.io/github/license/yousufwaqar/playwright-automation-framework?color=yellow)](./LICENSE)
+ [![Tests](https://img.shields.io/badge/UI%20%2B%20API-Covered-success)](#test-coverage)
+ [![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen.svg)](./CONTRIBUTING.md)
+ [![Last Commit](https://img.shields.io/github/last-commit/yousufwaqar/playwright-automation-framework?color=blue)](https://github.com
+/yousufwaqar/playwright-automation-framework/commits/main)
 
 <p>
   <a href="#why-this-framework">Why this framework?</a> |
