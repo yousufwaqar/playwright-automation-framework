@@ -51,7 +51,7 @@ jobs:
           NODE_OPTIONS: "--import tsx"
 
       - name: Upload test results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: playwright-report-${{ matrix.project }}
@@ -61,7 +61,7 @@ jobs:
           retention-days: 30
 
       - name: Upload failure screenshots
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: failure-screenshots-${{ matrix.project }}
