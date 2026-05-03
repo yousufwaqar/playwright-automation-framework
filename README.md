@@ -10,6 +10,7 @@
 [![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![Tests](https://img.shields.io/badge/UI%20%2B%20API-Covered-success)](#test-coverage)
+[![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen.svg)](./CONTRIBUTING.md)
 
 <p>
   <a href="#why-this-framework">Why this framework?</a> |
@@ -31,31 +32,34 @@ SDET & QA Automation Lead | 11+ years of experience
 
 This repository is a production-style Playwright automation framework built to demonstrate the patterns used in scalable enterprise test automation: clean page objects, reusable fixtures, environment-driven configuration, UI + API coverage, CI-ready execution, and rich debugging artifacts.
 
-It is designed to be easy to clone, easy to understand, and easy to extend for real-world web applications.
+It is designed to be easy to clone, easy to understand, and easy to extend for real-world web applications. It also ships with a **bundled mock app** so the full suite runs out-of-the-box with zero external dependencies, plus a **public demo-site test pack** (SauceDemo, The Internet, RESTful Booker) that shows the framework in action against well-known practice sites.
 
-| What it solves             | How it helps                                                                             |
-| ---                        | ---                                                                                      |
-| Maintainable UI automation | Page Object Model keeps selectors and page actions isolated from tests                   |
-| Fast feedback              | Parallel execution across Chromium, Firefox, and WebKit                                  |
-| Reliable CI runs           | A lightweight mock app allows GitHub Actions to run without external system dependencies |
-| API confidence             | Contract tests validate health, auth behavior, schema, and response time                 |
-| Environment flexibility    | Centralized JSON config supports CI, dev, staging, and production targets                |
-| Debuggability              | HTML reports, screenshots, traces, videos, and structured logs                           |
+| What it solves             | How it helps                                                                 |
+| ---                        | ---                                                                          |
+| Maintainable UI automation | Page Object Model keeps selectors and page actions isolated from tests       |
+| Fast feedback              | Parallel execution across Chromium, Firefox, and WebKit                      |
+| Reliable CI runs           | A lightweight bundled mock app removes external system dependencies          |
+| API confidence             | Contract tests validate health, auth behavior, schema, and response time     |
+| Environment flexibility    | Centralized JSON config supports CI, dev, staging, and production targets    |
+| Debuggability              | HTML reports, screenshots, traces, videos, and structured logs               |
+| Real-world examples        | Optional external suites against SauceDemo, The Internet, and RESTful Booker |
 
 ---
 
 ## Highlights
 
 - **Playwright + TypeScript** foundation for modern E2E automation
-- **Page Object Model** for clean separation between test intent and UI implementation
-- **Custom fixtures** for shared page objects and logging
-- **Data-driven test data** through JSON files
+- **Page Object Model** with shared `BasePage` for clean separation of concerns
+- **Custom fixtures** for shared page objects and structured logging
+- **Data-driven testing** through JSON test data files
 - **Cross-browser execution** for Chromium, Firefox, and WebKit
+- **Mobile viewport projects** (Pixel 7, iPhone 14) ready to enable
 - **API contract validation** alongside UI coverage
-- **Mock application included** for repeatable CI demonstration
-- **GitHub Actions workflow** with matrix execution and artifact upload
+- **Bundled mock application** for fully self-contained CI runs
+- **External demo-site suites** (SauceDemo / The Internet / RESTful Booker) gated behind tags
+- **GitHub Actions workflows** with browser matrix, artifact upload, and a separate nightly external job
 - **HTML, JSON, screenshot, trace, and video reporting**
-- **Tag-based execution** with `@smoke`, `@regression`, and `@api`
+- **Tag-based execution** with `@smoke`, `@regression`, `@api`, `@external`
 
 ---
 
@@ -65,7 +69,8 @@ It is designed to be easy to clone, easy to understand, and easy to extend for r
 | ---                                           | ---                                            |
 | [Playwright](https://playwright.dev/)         | Browser automation and API testing             |
 | [TypeScript](https://www.typescriptlang.org/) | Type-safe test development                     |
-| [Node.js](https://nodejs.org/)                | Runtime environment                            |
+| [Node.js](https://nodejs.org/)                | Runtime environment (18+)                      |
+| [tsx](https://github.com/privatenumber/tsx)   | Native TypeScript loader for fixtures          |
 | GitHub Actions                                | CI pipeline and cross-browser matrix execution |
 | Playwright HTML Reporter                      | Interactive report for debugging test runs     |
 | JSON test data                                | Environment and user data management           |
@@ -83,7 +88,7 @@ npm --version
 
 Required:
 
-- Node.js 18 or higher
+- Node.js 18 or higher (see `.nvmrc`)
 - npm 8 or higher
 
 ### Install
@@ -95,7 +100,7 @@ npm install
 npx playwright install
 ```
 
-### Run the full test suite
+### Run the full test suite (against bundled mock app)
 
 ```bash
 npm run test
@@ -115,6 +120,17 @@ npm run test:webkit
 npm run test:smoke
 npm run test:regression
 npm run test:api
+```
+
+### Run external demo-site suites (optional)
+
+> External tests hit public practice sites (SauceDemo, The Internet, RESTful Booker). They are excluded from the default CI to keep the badge stable.
+
+```bash
+npm run test:external          # all external suites
+npm run test:saucedemo         # SauceDemo only
+npm run test:theinternet       # The Internet only
+npm run test:api:external      # RESTful Booker API only
 ```
 
 ### Run in headed mode
@@ -167,13 +183,17 @@ Mock app routes:
 
 ## Test coverage
 
-| Area          | Coverage                                                                        |
-| ---           | ---                                                                             |
-| Login UI      | Valid login, invalid login, empty field validation, page-load verification      |
-| Dashboard UI  | Dashboard load, welcome message, report search, report tile interaction, logout |
-| API contracts | Health check, unauthorized access, schema validation, response-time threshold   |
-| Cross-browser | Chromium, Firefox, WebKit                                                       |
-| Tags          | `@smoke`, `@regression`, `@api`                                                 |
+| Area                          | Coverage                                                                        |
+| ---                           | ---                                                                             |
+| Login UI (mock)               | Valid login, invalid login, empty field validation, page-load verification      |
+| Dashboard UI (mock)           | Dashboard load, welcome message, report search, report tile interaction, logout |
+| API contracts (mock)          | Health check, unauthorized access, schema validation, response-time threshold   |
+| SauceDemo (external)          | Login, inventory, add-to-cart, full checkout flow                               |
+| The Internet (external)       | Checkboxes, dropdowns, dynamic loading, alerts                                  |
+| RESTful Booker API (external) | Auth token, create / read / update / delete booking, schema validation          |
+| Cross-browser                 | Chromium, Firefox, WebKit                                                       |
+| Mobile viewports              | Pixel 7, iPhone 14 (configured, opt-in)                                         |
+| Tags                          | `@smoke`, `@regression`, `@api`, `@external`, `@saucedemo`, `@theinternet`      |
 
 ---
 
@@ -182,8 +202,15 @@ Mock app routes:
 ```text
 playwright-automation-framework/
 ├── .github/
-│   └── workflows/
-│       └── playwright-ci.yml          # GitHub Actions pipeline
+│   ├── workflows/
+│   │   ├── playwright-ci.yml          # Default CI (mock app, excludes @external)
+│   │   └── external-ci.yml            # Nightly external demo-site suite
+│   ├── ISSUE_TEMPLATE/
+│   │   ├── bug_report.md
+│   │   └── feature_request.md
+│   ├── pull_request_template.md
+│   ├── CODEOWNERS
+│   └── dependabot.yml
 ├── mock-app/
 │   ├── server.js                      # Local mock server for CI/demo runs
 │   └── pages/
@@ -191,23 +218,42 @@ playwright-automation-framework/
 │       └── dashboard.html             # Mock dashboard page
 ├── src/
 │   ├── fixtures/
-│   │   └── base.fixture.ts            # Custom Playwright fixtures
+│   │   ├── base.fixture.ts            # Custom Playwright fixtures (mock app)
+│   │   └── saucedemo.fixture.ts       # Fixtures for SauceDemo external suite
 │   ├── pages/
 │   │   ├── BasePage.ts                # Shared page actions and assertions
-│   │   ├── LoginPage.ts               # Login page object
-│   │   └── DashboardPage.ts           # Dashboard page object
-│   └── utils/
-│       ├── ConfigManager.ts           # Environment config loader
-│       ├── Logger.ts                  # Structured logging utility
-│       └── TestDataManager.ts         # Test data accessor
+│   │   ├── LoginPage.ts               # Mock login page object
+│   │   ├── DashboardPage.ts           # Mock dashboard page object
+│   │   └── external/
+│   │       └── saucedemo/
+│   │           ├── SauceLoginPage.ts
+│   │           ├── SauceInventoryPage.ts
+│   │           ├── SauceCartPage.ts
+│   │           └── SauceCheckoutPage.ts
+│   ├── utils/
+│   │   ├── ConfigManager.ts           # Environment config loader
+│   │   ├── Logger.ts                  # Structured logging utility
+│   │   └── TestDataManager.ts         # Test data accessor
+│   └── global.d.ts                    # Ambient type declarations
 ├── tests/
 │   ├── api/
-│   │   └── api-contract.spec.ts       # API contract tests
+│   │   └── api-contract.spec.ts       # Mock API contract tests
+│   ├── external/
+│   │   ├── saucedemo/
+│   │   │   ├── login.spec.ts
+│   │   │   └── checkout.spec.ts
+│   │   ├── the-internet/
+│   │   │   └── ui-elements.spec.ts
+│   │   └── api/
+│   │       └── restful-booker.spec.ts
 │   ├── test-data/
 │   │   ├── environments.json          # CI/dev/staging/prod config
-│   │   └── users.json                 # Test users
+│   │   ├── users.json                 # Test users
+│   │   └── external-sites.json        # Credentials/URLs for demo sites
 │   ├── dashboard.spec.ts              # Dashboard UI tests
 │   └── login.spec.ts                  # Login UI tests
+├── .nvmrc                             # Pinned Node version
+├── CONTRIBUTING.md
 ├── playwright.config.ts               # Playwright configuration
 ├── package.json                       # Scripts and dependencies
 ├── tsconfig.json                      # TypeScript configuration
@@ -278,20 +324,24 @@ npm run report
 
 ## CI/CD
 
-GitHub Actions runs the suite automatically on:
+Two separate GitHub Actions workflows keep the public demo signal clean:
+
+### `playwright-ci.yml` — default workflow
+
+Runs on:
 
 - Push to `main` or `develop`
 - Pull requests targeting `main`
 - Daily scheduled run
 
-The workflow uses a browser matrix:
+Uses a browser matrix:
 
 ```yaml
 matrix:
   project: [chromium, firefox, webkit]
 ```
 
-CI also starts the mock app before running tests:
+Starts the bundled mock app, then runs the suite **with `@external` excluded** so public practice-site outages cannot turn the badge red:
 
 ```yaml
 - name: Start mock application
@@ -299,25 +349,34 @@ CI also starts the mock app before running tests:
     node mock-app/server.js &
     sleep 2
     curl -f http://localhost:3000/api/v1/health || exit 1
+
+- name: Run Playwright tests
+  run: npx playwright test --project=${{ matrix.project }} --grep-invert @external
 ```
 
-This keeps the public demo pipeline deterministic and independent of private environments.
+### `external-ci.yml` — nightly external workflow
+
+Runs the SauceDemo, The Internet, and RESTful Booker suites on a nightly schedule and on manual dispatch only. Failures here do not affect the main badge.
 
 ---
 
 ## Available scripts
 
-| Command                   | Description                    |
-| ---                       | ---                            |
-| `npm run test`            | Run all Playwright tests       |
-| `npm run test:headed`     | Run tests with visible browser |
-| `npm run test:chrome`     | Run Chromium project           |
-| `npm run test:firefox`    | Run Firefox project            |
-| `npm run test:webkit`     | Run WebKit project             |
-| `npm run test:api`        | Run API contract tests         |
-| `npm run test:smoke`      | Run smoke tests                |
-| `npm run test:regression` | Run regression tests           |
-| `npm run report`          | Open Playwright HTML report    |
+| Command                     | Description                           |
+| ---                         | ---                                   |
+| `npm run test`              | Run all non-external tests            |
+| `npm run test:headed`       | Run tests with visible browser        |
+| `npm run test:chrome`       | Run Chromium project                  |
+| `npm run test:firefox`      | Run Firefox project                   |
+| `npm run test:webkit`       | Run WebKit project                    |
+| `npm run test:api`          | Run mock API contract tests           |
+| `npm run test:smoke`        | Run smoke tests                       |
+| `npm run test:regression`   | Run regression tests                  |
+| `npm run test:external`     | Run all external demo-site suites     |
+| `npm run test:saucedemo`    | Run SauceDemo external suite          |
+| `npm run test:theinternet`  | Run The Internet external suite       |
+| `npm run test:api:external` | Run RESTful Booker external API suite |
+| `npm run report`            | Open Playwright HTML report           |
 
 ---
 
@@ -330,7 +389,6 @@ This keeps the public demo pipeline deterministic and independent of private env
 - Add accessibility testing with axe-core
 - Add reusable GitHub Actions workflow templates
 - Add example pull request quality gates
-- Add contribution guidelines
 
 ---
 
@@ -355,7 +413,7 @@ sdet
 
 ## Contributing
 
-Contributions are welcome.
+Contributions are welcome. See [CONTRIBUTING.md](./CONTRIBUTING.md) for the full guide.
 
 1. Fork the repository
 2. Create a feature branch
