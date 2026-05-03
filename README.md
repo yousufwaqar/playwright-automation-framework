@@ -1,359 +1,392 @@
 <div align="center">
 
-# 🎭 Playwright Automation Framework
+# Playwright Automation Framework
 
-### Enterprise-grade end-to-end test automation built for scale
+### Enterprise-grade Playwright + TypeScript test automation framework for UI, API, and CI/CD validation
 
-[![Playwright Tests](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/playwright-ci.yml/badge.svg)](https://github.com/yousufwaqar/playwright-automation-framework/actions)
+[![Playwright Tests](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/playwright-ci.yml/badge.svg)](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/playwright-ci.yml)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Playwright](https://img.shields.io/badge/Playwright-Latest-45ba4b?logo=playwright&logoColor=white)](https://playwright.dev/)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](./CONTRIBUTING.md)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+[![Tests](https://img.shields.io/badge/UI%20%2B%20API-Covered-success)](#test-coverage)
 
 <p>
-  <a href="#-quick-start">Quick Start</a> •
-  <a href="#-framework-highlights">Highlights</a> •
-  <a href="#-project-structure">Structure</a> •
-  <a href="#-design-patterns">Patterns</a> •
-  <a href="#-cicd-integration">CI/CD</a> •
-  <a href="#-reporting">Reporting</a>
+  <a href="#why-this-framework">Why this framework?</a> |
+  <a href="#quick-start">Quick start</a> |
+  <a href="#test-coverage">Test coverage</a> |
+  <a href="#project-architecture">Architecture</a> |
+  <a href="#cicd">CI/CD</a> |
+  <a href="#roadmap">Roadmap</a>
 </p>
 
----
-
-Built by **[Yousuf Waqar](https://github.com/yousufwaqar)**
-*SDET & QA Automation Lead · 11+ years of experience*
+Built by <strong><a href="https://github.com/yousufwaqar">Yousuf Waqar</a></strong><br/>
+SDET & QA Automation Lead | 11+ years of experience
 
 </div>
 
 ---
 
-## 🌟 Framework Highlights
+## Why this framework?
 
-| Feature | Details |
-|---|---|
-| 🏗️ **Page Object Model** | Encapsulated, reusable page interactions |
-| 📊 **Data-Driven Testing** | JSON-based test data — no hardcoded values |
-| ⚡ **Parallel Execution** | Configurable worker threads for fast feedback |
-| 🌐 **Cross-Browser** | Chromium · Firefox · WebKit out of the box |
-| 🔌 **API Testing** | Contract validation alongside UI tests |
-| 🔄 **CI/CD Ready** | GitHub Actions + Azure Pipelines templates |
-| 📈 **Rich Reporting** | HTML reports with screenshots, video & traces |
-| 🔧 **Env-Agnostic Config** | Seamless dev / staging / production switching |
-| 📝 **Custom Logging** | Structured logs for debugging & traceability |
-| 🔁 **Retry Logic** | Built-in flaky test resilience |
+This repository is a production-style Playwright automation framework built to demonstrate the patterns used in scalable enterprise test automation: clean page objects, reusable fixtures, environment-driven configuration, UI + API coverage, CI-ready execution, and rich debugging artifacts.
 
----
+It is designed to be easy to clone, easy to understand, and easy to extend for real-world web applications.
 
-## 🛠️ Tech Stack
-
-<div align="center">
-
-| Technology | Version | Purpose |
-|---|---|---|
-| [Playwright](https://playwright.dev/) | Latest | E2E testing engine |
-| [TypeScript](https://www.typescriptlang.org/) | 5.x | Type-safe scripting |
-| [Node.js](https://nodejs.org/) | 18+ | Runtime environment |
-| [GitHub Actions](https://github.com/features/actions) | — | Cloud CI/CD pipeline |
-| [Azure DevOps](https://azure.microsoft.com/en-us/products/devops/) | — | Enterprise CI/CD |
-| HTML Reporter | Built-in | Test result visualization |
-
-</div>
+| What it solves             | How it helps                                                                             |
+| ---                        | ---                                                                                      |
+| Maintainable UI automation | Page Object Model keeps selectors and page actions isolated from tests                   |
+| Fast feedback              | Parallel execution across Chromium, Firefox, and WebKit                                  |
+| Reliable CI runs           | A lightweight mock app allows GitHub Actions to run without external system dependencies |
+| API confidence             | Contract tests validate health, auth behavior, schema, and response time                 |
+| Environment flexibility    | Centralized JSON config supports CI, dev, staging, and production targets                |
+| Debuggability              | HTML reports, screenshots, traces, videos, and structured logs                           |
 
 ---
 
-## 🚀 Quick Start
+## Highlights
+
+- **Playwright + TypeScript** foundation for modern E2E automation
+- **Page Object Model** for clean separation between test intent and UI implementation
+- **Custom fixtures** for shared page objects and logging
+- **Data-driven test data** through JSON files
+- **Cross-browser execution** for Chromium, Firefox, and WebKit
+- **API contract validation** alongside UI coverage
+- **Mock application included** for repeatable CI demonstration
+- **GitHub Actions workflow** with matrix execution and artifact upload
+- **HTML, JSON, screenshot, trace, and video reporting**
+- **Tag-based execution** with `@smoke`, `@regression`, and `@api`
+
+---
+
+## Tech stack
+
+| Tool                                          | Purpose                                        |
+| ---                                           | ---                                            |
+| [Playwright](https://playwright.dev/)         | Browser automation and API testing             |
+| [TypeScript](https://www.typescriptlang.org/) | Type-safe test development                     |
+| [Node.js](https://nodejs.org/)                | Runtime environment                            |
+| GitHub Actions                                | CI pipeline and cross-browser matrix execution |
+| Playwright HTML Reporter                      | Interactive report for debugging test runs     |
+| JSON test data                                | Environment and user data management           |
+
+---
+
+## Quick start
 
 ### Prerequisites
 
 ```bash
-node --version   # v18.0.0 or higher required
-npm --version    # 8.0.0 or higher recommended
+node --version
+npm --version
 ```
 
-### Installation
+Required:
+
+- Node.js 18 or higher
+- npm 8 or higher
+
+### Install
 
 ```bash
-# 1. Clone the repository
 git clone https://github.com/yousufwaqar/playwright-automation-framework.git
 cd playwright-automation-framework
-
-# 2. Install dependencies
 npm install
-
-# 3. Install Playwright browsers
 npx playwright install
-
-# 4. Copy environment config and set your values
-cp test-data/environments.example.json test-data/environments.json
 ```
 
-### Running Tests
+### Run the full test suite
 
 ```bash
-# Run the full test suite
 npm run test
+```
 
-# Run in headed mode (watch the browser)
-npm run test:headed
+### Run against a specific browser
 
-# Run a specific test file
-npm run test -- tests/login.spec.ts
-
-# Run tests by tag
-npm run test -- --grep @smoke
-
-# Run against a specific browser
+```bash
 npm run test:chrome
 npm run test:firefox
 npm run test:webkit
+```
 
-# Run API contract tests only
+### Run focused suites
+
+```bash
+npm run test:smoke
+npm run test:regression
 npm run test:api
-
-# Open the interactive HTML report
-npm run report
 ```
 
-> **Tip:** Prefix any command with `DEBUG=pw:api` to enable verbose Playwright logging.
+### Run in headed mode
 
----
-
-## 📁 Project Structure
-
-```
-playwright-automation-framework/
-│
-├── 📄 playwright.config.ts          # Central Playwright configuration
-├── 📄 tsconfig.json                 # TypeScript compiler options
-├── 📄 package.json                  # Scripts & dependencies
-│
-├── 📂 .github/
-│   └── 📂 workflows/
-│       └── playwright-ci.yml        # GitHub Actions pipeline
-│
-├── 📂 src/
-│   ├── 📂 pages/                    # Page Object Models (POM)
-│   │   ├── BasePage.ts              # Shared methods & element helpers
-│   │   ├── LoginPage.ts             # Login page interactions
-│   │   └── DashboardPage.ts         # Dashboard page interactions
-│   │
-│   ├── 📂 utils/                    # Reusable utilities
-│   │   ├── ConfigManager.ts         # Environment & config loader
-│   │   ├── Logger.ts                # Structured logging utility
-│   │   └── TestDataManager.ts       # JSON test data accessor
-│   │
-│   └── 📂 fixtures/                 # Custom Playwright fixtures
-│       └── base.fixture.ts          # Extended test context setup
-│
-├── 📂 tests/                        # Test specifications
-│   ├── login.spec.ts                # Authentication test suite
-│   ├── dashboard.spec.ts            # Dashboard feature tests
-│   └── 📂 api/
-│       └── api-contract.spec.ts     # API contract validation
-│
-├── 📂 test-data/                    # Externalized test data
-│   ├── users.json                   # User credentials & roles
-│   └── environments.json           # Per-environment URLs & settings
-│
-└── 📂 reports/                      # Auto-generated test artifacts
-    ├── html/                        # Interactive HTML report
-    ├── screenshots/                 # Captured on failure
-    └── traces/                      # Playwright trace files
+```bash
+npm run test:headed
 ```
 
----
-
-## 🎨 Design Patterns
-
-### Page Object Model (POM)
-
-Every application page has a dedicated class that owns its locators, actions, and assertions. Tests remain clean and readable — changes to the UI only require updates in one place.
-
-```typescript
-// src/pages/LoginPage.ts
-
-import { BasePage } from './BasePage';
-
-export class LoginPage extends BasePage {
-  // --- Locators ---
-  private readonly usernameInput = this.page.getByLabel('Username');
-  private readonly passwordInput = this.page.getByLabel('Password');
-  private readonly loginButton   = this.page.getByRole('button', { name: 'Sign in' });
-  private readonly errorBanner   = this.page.getByRole('alert');
-
-  // --- Actions ---
-  async login(username: string, password: string): Promise<void> {
-    await this.usernameInput.fill(username);
-    await this.passwordInput.fill(password);
-    await this.loginButton.click();
-  }
-
-  // --- Assertions ---
-  async expectErrorMessage(message: string): Promise<void> {
-    await expect(this.errorBanner).toContainText(message);
-  }
-}
-```
-
-### Data-Driven Testing
-
-Test data lives in version-controlled JSON files. The same spec can cover dozens of scenarios without touching test logic.
-
-```typescript
-// tests/login.spec.ts
-
-import users from '../test-data/users.json';
-
-for (const { role, username, password, expectedLanding } of users.validUsers) {
-  test(`${role} can log in successfully`, async ({ loginPage, dashboardPage }) => {
-    await loginPage.login(username, password);
-    await dashboardPage.expectPageTitle(expectedLanding);
-  });
-}
-```
-
-### Custom Fixtures
-
-Base fixtures pre-wire page objects and shared state so every test starts from a clean, consistent context.
-
-```typescript
-// src/fixtures/base.fixture.ts
-
-import { test as base } from '@playwright/test';
-import { LoginPage }     from '../pages/LoginPage';
-import { DashboardPage } from '../pages/DashboardPage';
-
-export const test = base.extend<{
-  loginPage: LoginPage;
-  dashboardPage: DashboardPage;
-}>({
-  loginPage:     async ({ page }, use) => { await use(new LoginPage(page)); },
-  dashboardPage: async ({ page }, use) => { await use(new DashboardPage(page)); },
-});
-```
-
----
-
-## 🔄 CI/CD Integration
-
-### GitHub Actions
-
-Tests run automatically on every **push** and **pull request**. Artifacts (reports, screenshots, traces) are uploaded for post-run inspection.
-
-```yaml
-# .github/workflows/playwright-ci.yml  (simplified view)
-name: Playwright Tests
-
-on: [push, pull_request]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: '18' }
-      - run: npm ci
-      - run: npx playwright install --with-deps
-      - run: npm run test
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: playwright-report
-          path: reports/
-```
-
-### Azure DevOps
-
-Enterprise YAML pipeline templates are included under `.azure/` with:
-- Multi-stage pipelines (build → test → report)
-- Quality gates based on pass-rate thresholds
-- Test result publishing to Azure Test Plans
-
----
-
-## 📊 Reporting
-
-Generate and open the full interactive HTML report after any test run:
+### Open the HTML report
 
 ```bash
 npm run report
 ```
 
-Each report includes:
+---
 
-| Artifact | Description |
-|---|---|
-| 📋 **Summary** | Pass / fail / skip counts with duration |
-| 📸 **Screenshots** | Auto-captured on test failure |
-| 🎥 **Video** | Full test recording (configurable) |
-| 🔍 **Trace Viewer** | Step-by-step DOM & network snapshot |
-| ⏱️ **Timings** | Per-test and per-step execution times |
+## Run with the included mock app
+
+The repository includes a small local mock application under `mock-app/`. This makes the framework demo-friendly because CI does not need credentials for a real external application.
+
+Start the mock app:
+
+```bash
+node mock-app/server.js
+```
+
+In a second terminal, run the tests against the local app:
+
+```bash
+BASE_URL=http://localhost:3000 TEST_ENV=ci API_TOKEN=mock-jwt-token-12345 npm run test
+```
+
+On Windows PowerShell:
+
+```powershell
+$env:BASE_URL="http://localhost:3000"; $env:TEST_ENV="ci"; $env:API_TOKEN="mock-jwt-token-12345"; npm run test
+```
+
+Mock app routes:
+
+| Route             | Purpose                                     |
+| ---               | ---                                         |
+| `/login`          | Login page used by UI tests                 |
+| `/dashboard`      | Dashboard page used by UI tests             |
+| `/api/v1/health`  | Health endpoint used by API smoke tests     |
+| `/api/v1/reports` | Reports endpoint used by API contract tests |
+| `/api/login`      | Login endpoint used by the mock UI          |
 
 ---
 
-## ⚙️ Configuration
+## Test coverage
 
-All framework settings live in a single file:
+| Area          | Coverage                                                                        |
+| ---           | ---                                                                             |
+| Login UI      | Valid login, invalid login, empty field validation, page-load verification      |
+| Dashboard UI  | Dashboard load, welcome message, report search, report tile interaction, logout |
+| API contracts | Health check, unauthorized access, schema validation, response-time threshold   |
+| Cross-browser | Chromium, Firefox, WebKit                                                       |
+| Tags          | `@smoke`, `@regression`, `@api`                                                 |
 
-```typescript
-// playwright.config.ts
+---
 
-import { defineConfig, devices } from '@playwright/test';
-import { ConfigManager }         from './src/utils/ConfigManager';
+## Project architecture
 
-const env = ConfigManager.getEnvironment();
-
-export default defineConfig({
-  testDir:   './tests',
-  timeout:    30_000,
-  retries:    process.env.CI ? 2 : 0,
-  workers:    process.env.CI ? 4 : undefined,
-  reporter:  [['html', { outputFolder: 'reports/html' }], ['list']],
-
-  use: {
-    baseURL:           env.baseUrl,
-    screenshot:        'only-on-failure',
-    video:             'retain-on-failure',
-    trace:             'on-first-retry',
-  },
-
-  projects: [
-    { name: 'chromium', use: { ...devices['Desktop Chrome']  } },
-    { name: 'firefox',  use: { ...devices['Desktop Firefox'] } },
-    { name: 'webkit',   use: { ...devices['Desktop Safari']  } },
-  ],
-});
+```text
+playwright-automation-framework/
+├── .github/
+│   └── workflows/
+│       └── playwright-ci.yml          # GitHub Actions pipeline
+├── mock-app/
+│   ├── server.js                      # Local mock server for CI/demo runs
+│   └── pages/
+│       ├── login.html                 # Mock login page
+│       └── dashboard.html             # Mock dashboard page
+├── src/
+│   ├── fixtures/
+│   │   └── base.fixture.ts            # Custom Playwright fixtures
+│   ├── pages/
+│   │   ├── BasePage.ts                # Shared page actions and assertions
+│   │   ├── LoginPage.ts               # Login page object
+│   │   └── DashboardPage.ts           # Dashboard page object
+│   └── utils/
+│       ├── ConfigManager.ts           # Environment config loader
+│       ├── Logger.ts                  # Structured logging utility
+│       └── TestDataManager.ts         # Test data accessor
+├── tests/
+│   ├── api/
+│   │   └── api-contract.spec.ts       # API contract tests
+│   ├── test-data/
+│   │   ├── environments.json          # CI/dev/staging/prod config
+│   │   └── users.json                 # Test users
+│   ├── dashboard.spec.ts              # Dashboard UI tests
+│   └── login.spec.ts                  # Login UI tests
+├── playwright.config.ts               # Playwright configuration
+├── package.json                       # Scripts and dependencies
+├── tsconfig.json                      # TypeScript configuration
+└── README.md
 ```
 
 ---
 
-## 🤝 Contributing
+## Design patterns
 
-Contributions are welcome and appreciated!
+### Page Object Model
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feat/your-feature`
-3. Commit your changes: `git commit -m 'feat: add your feature'`
-4. Push to the branch: `git push origin feat/your-feature`
-5. Open a Pull Request
+Page classes own page-specific locators, interactions, and assertions. Tests call clear business-level actions instead of repeating selector logic.
 
-Please follow the [Conventional Commits](https://www.conventionalcommits.org/) specification.
+```typescript
+await loginPage.goto();
+await loginPage.login(user.username, user.password);
+await loginPage.assertLoginSuccess();
+```
+
+### Custom fixtures
+
+The framework extends Playwright fixtures to provide ready-to-use page objects and logging in every test.
+
+```typescript
+test("should login successfully", async ({ loginPage, logger }) => {
+  logger.step(1, "Navigate and login");
+  await loginPage.goto();
+});
+```
+
+### Configuration management
+
+`ConfigManager` loads environment-specific settings from:
+
+```text
+tests/test-data/environments.json
+```
+
+This supports clean switching between `ci`, `dev`, `staging`, and `production` through:
+
+```bash
+TEST_ENV=ci
+```
 
 ---
 
-## 📄 License
+## Reporting and debugging
 
-This project is licensed under the **MIT License** — see the [LICENSE](./LICENSE) file for details.
+The framework is configured to generate:
+
+| Artifact     | Purpose                      |
+| ---          | ---                          |
+| HTML report  | Interactive test report      |
+| JSON results | Machine-readable test output |
+| Screenshots  | Captured on failure          |
+| Traces       | Captured on first retry      |
+| Videos       | Captured on first retry      |
+| Logs         | Step-level execution details |
+
+Open the report after a run:
+
+```bash
+npm run report
+```
+
+---
+
+## CI/CD
+
+GitHub Actions runs the suite automatically on:
+
+- Push to `main` or `develop`
+- Pull requests targeting `main`
+- Daily scheduled regression run
+
+The workflow uses a browser matrix:
+
+```yaml
+matrix:
+  project: [chromium, firefox, webkit]
+```
+
+CI also starts the mock app before running tests:
+
+```yaml
+- name: Start mock application
+  run: |
+    node mock-app/server.js &
+    sleep 2
+    curl -f http://localhost:3000/api/v1/health || exit 1
+```
+
+This keeps the public demo pipeline deterministic and independent of private environments.
+
+---
+
+## Available scripts
+
+| Command                   | Description                    |
+| ---                       | ---                            |
+| `npm run test`            | Run all Playwright tests       |
+| `npm run test:headed`     | Run tests with visible browser |
+| `npm run test:chrome`     | Run Chromium project           |
+| `npm run test:firefox`    | Run Firefox project            |
+| `npm run test:webkit`     | Run WebKit project             |
+| `npm run test:api`        | Run API contract tests         |
+| `npm run test:smoke`      | Run smoke tests                |
+| `npm run test:regression` | Run regression tests           |
+| `npm run report`          | Open Playwright HTML report    |
+
+---
+
+## Roadmap
+
+- Add Allure reporting integration
+- Publish Playwright HTML reports to GitHub Pages
+- Add Docker support for consistent local execution
+- Add visual regression testing
+- Add accessibility testing with axe-core
+- Add reusable GitHub Actions workflow templates
+- Add example pull request quality gates
+- Add contribution guidelines
+
+---
+
+## Recommended repository topics
+
+Add these topics in GitHub so the project is easier to discover:
+
+```text
+playwright
+typescript
+test-automation
+e2e-testing
+api-testing
+page-object-model
+github-actions
+qa-automation
+ci-cd
+sdet
+```
+
+---
+
+## Contributing
+
+Contributions are welcome.
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push your branch
+5. Open a pull request
+
+Recommended branch naming:
+
+```bash
+git checkout -b feat/add-new-test-suite
+```
+
+Recommended commit style:
+
+```bash
+git commit -m "feat: add dashboard filter tests"
+```
+
+---
+
+## License
+
+This project is licensed under the MIT License. See [LICENSE](./LICENSE) for details.
 
 ---
 
 <div align="center">
 
-Made with ❤️ by **[Yousuf Waqar](https://github.com/yousufwaqar)**
+### If this framework helps you, consider giving it a star.
 
-*If this framework helped you, consider giving it a ⭐ on GitHub!*
+Built with Playwright, TypeScript, and a quality-first automation mindset.
 
 </div>
