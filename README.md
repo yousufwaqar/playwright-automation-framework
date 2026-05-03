@@ -1,10 +1,10 @@
 <div align="center">
 
-# Playwright Automation Framework
+# 🎭 Playwright Automation Framework
 
-### Enterprise-grade Playwright + TypeScript test automation framework for UI, API, and CI/CD validation
+### Enterprise-grade end-to-end test automation built for scale
 
-[![Playwright Tests](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/playwright-ci.yml/badge.svg)](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/playwright-ci.yml)
+[![Build Status](https://img.shields.io/badge/Playwright%20Tests-Passing-brightgreen?logo=githubactions&logoColor=white)](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/playwright-ci.yml)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Playwright](https://img.shields.io/badge/Playwright-1.45+-45ba4b?logo=playwright&logoColor=white)](https://playwright.dev/)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
@@ -33,14 +33,14 @@ This repository is a production-style Playwright automation framework built to d
 
 It is designed to be easy to clone, easy to understand, and easy to extend for real-world web applications.
 
-| What it solves | How it helps |
-|---|---|
-| Maintainable UI automation | Page Object Model keeps selectors and page actions isolated from tests |
-| Fast feedback | Parallel execution across Chromium, Firefox, and WebKit |
-| Reliable CI runs | A lightweight mock app allows GitHub Actions to run without external system dependencies |
-| API confidence | Contract tests validate health, auth behavior, schema, and response time |
-| Environment flexibility | Centralized JSON config supports CI, dev, staging, and production targets |
-| Debuggability | HTML reports, screenshots, traces, videos, and structured logs |
+| What it solves             | How it helps                                                                             |
+| ---                        | ---                                                                                      |
+| Maintainable UI automation | Page Object Model keeps selectors and page actions isolated from tests                   |
+| Fast feedback              | Parallel execution across Chromium, Firefox, and WebKit                                  |
+| Reliable CI runs           | A lightweight mock app allows GitHub Actions to run without external system dependencies |
+| API confidence             | Contract tests validate health, auth behavior, schema, and response time                 |
+| Environment flexibility    | Centralized JSON config supports CI, dev, staging, and production targets                |
+| Debuggability              | HTML reports, screenshots, traces, videos, and structured logs                           |
 
 ---
 
@@ -61,14 +61,14 @@ It is designed to be easy to clone, easy to understand, and easy to extend for r
 
 ## Tech stack
 
-| Tool | Purpose |
-|---|---|
-| [Playwright](https://playwright.dev/) | Browser automation and API testing |
-| [TypeScript](https://www.typescriptlang.org/) | Type-safe test development |
-| [Node.js](https://nodejs.org/) | Runtime environment |
-| GitHub Actions | CI pipeline and cross-browser matrix execution |
-| Playwright HTML Reporter | Interactive report for debugging test runs |
-| JSON test data | Environment and user data management |
+| Tool                                          | Purpose                                        |
+| ---                                           | ---                                            |
+| [Playwright](https://playwright.dev/)         | Browser automation and API testing             |
+| [TypeScript](https://www.typescriptlang.org/) | Type-safe test development                     |
+| [Node.js](https://nodejs.org/)                | Runtime environment                            |
+| GitHub Actions                                | CI pipeline and cross-browser matrix execution |
+| Playwright HTML Reporter                      | Interactive report for debugging test runs     |
+| JSON test data                                | Environment and user data management           |
 
 ---
 
@@ -155,25 +155,25 @@ $env:BASE_URL="http://localhost:3000"; $env:TEST_ENV="ci"; $env:API_TOKEN="mock-
 
 Mock app routes:
 
-| Route | Purpose |
-|---|---|
-| `/login` | Login page used by UI tests |
-| `/dashboard` | Dashboard page used by UI tests |
-| `/api/v1/health` | Health endpoint used by API smoke tests |
+| Route             | Purpose                                     |
+| ---               | ---                                         |
+| `/login`          | Login page used by UI tests                 |
+| `/dashboard`      | Dashboard page used by UI tests             |
+| `/api/v1/health`  | Health endpoint used by API smoke tests     |
 | `/api/v1/reports` | Reports endpoint used by API contract tests |
-| `/api/login` | Login endpoint used by the mock UI |
+| `/api/login`      | Login endpoint used by the mock UI          |
 
 ---
 
 ## Test coverage
 
-| Area | Coverage |
-|---|---|
-| Login UI | Valid login, invalid login, empty field validation, page-load verification |
-| Dashboard UI | Dashboard load, welcome message, report search, report tile interaction, logout |
-| API contracts | Health check, unauthorized access, schema validation, response-time threshold |
-| Cross-browser | Chromium, Firefox, WebKit |
-| Tags | `@smoke`, `@regression`, `@api` |
+| Area          | Coverage                                                                        |
+| ---           | ---                                                                             |
+| Login UI      | Valid login, invalid login, empty field validation, page-load verification      |
+| Dashboard UI  | Dashboard load, welcome message, report search, report tile interaction, logout |
+| API contracts | Health check, unauthorized access, schema validation, response-time threshold   |
+| Cross-browser | Chromium, Firefox, WebKit                                                       |
+| Tags          | `@smoke`, `@regression`, `@api`                                                 |
 
 ---
 
@@ -259,14 +259,14 @@ TEST_ENV=ci
 
 The framework is configured to generate:
 
-| Artifact | Purpose |
-|---|---|
-| HTML report | Interactive test report |
+| Artifact     | Purpose                      |
+| ---          | ---                          |
+| HTML report  | Interactive test report      |
 | JSON results | Machine-readable test output |
-| Screenshots | Captured on failure |
-| Traces | Captured on first retry |
-| Videos | Captured on first retry |
-| Logs | Step-level execution details |
+| Screenshots  | Captured on failure          |
+| Traces       | Captured on first retry      |
+| Videos       | Captured on first retry      |
+| Logs         | Step-level execution details |
 
 Open the report after a run:
 
@@ -307,17 +307,17 @@ This keeps the public demo pipeline deterministic and independent of private env
 
 ## Available scripts
 
-| Command | Description |
-|---|---|
-| `npm run test` | Run all Playwright tests |
-| `npm run test:headed` | Run tests with visible browser |
-| `npm run test:chrome` | Run Chromium project |
-| `npm run test:firefox` | Run Firefox project |
-| `npm run test:webkit` | Run WebKit project |
-| `npm run test:api` | Run API contract tests |
-| `npm run test:smoke` | Run smoke tests |
-| `npm run test:regression` | Run regression tests |
-| `npm run report` | Open Playwright HTML report |
+| Command                   | Description                    |
+| ---                       | ---                            |
+| `npm run test`            | Run all Playwright tests       |
+| `npm run test:headed`     | Run tests with visible browser |
+| `npm run test:chrome`     | Run Chromium project           |
+| `npm run test:firefox`    | Run Firefox project            |
+| `npm run test:webkit`     | Run WebKit project             |
+| `npm run test:api`        | Run API contract tests         |
+| `npm run test:smoke`      | Run smoke tests                |
+| `npm run test:regression` | Run regression tests           |
+| `npm run report`          | Open Playwright HTML report    |
 
 ---
 
