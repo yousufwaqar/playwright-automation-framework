@@ -1,0 +1,47 @@
+{
+  "saucedemo": {
+    "baseUrl": "https://www.saucedemo.com",
+    "users": {
+      "standard": {
+        "username": "standard_user",
+        "password": "secret_sauce"
+      },
+      "lockedOut": {
+        "username": "locked_out_user",
+        "password": "secret_sauce"
+      },
+      "problem": {
+        "username": "problem_user",
+        "password": "secret_sauce"
+      },
+      "performanceGlitch": {
+        "username": "performance_glitch_user",
+        "password": "secret_sauce"
+      }
+    },
+    "customer": {
+      "firstName": "Test",
+      "lastName": "Automation",
+      "postalCode": "12345"
+    },
+    "products": [
+      "sauce-labs-backpack",
+      "sauce-labs-bike-light",
+      "sauce-labs-bolt-t-shirt"
+    ]
+  },
+  "theInternet": {
+    "baseUrl": "https://the-internet.herokuapp.com",
+    "credentials": {
+      "valid": { "username": "tomsmith", "password": "SuperSecretPassword!" },
+      "invalid": { "username": "wrong", "password": "wrong" }
+    }
+  },
+  "restfulBooker": {
+    "baseUrl": "https://restful-booker.herokuapp.com",
+    "admin": {
+      "username": "admin",
+      "password": "password123"
+    }
+  }
+}
