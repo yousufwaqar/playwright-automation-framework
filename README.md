@@ -2,7 +2,7 @@
 
 # 🎭 Playwright Automation Framework
 
-### Enterprise-grade end-to-end test automation built for scale
+### Enterprise-grade end-to-end test automation built for scale  
 
 [![Build Status](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/playwright-ci.yml/badge.svg)](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/playwright-ci.yml)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
