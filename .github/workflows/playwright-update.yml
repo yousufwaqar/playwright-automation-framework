@@ -1,0 +1,60 @@
+name: Check for Playwright updates
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  check-playwright:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Compare installed vs latest Playwright
+        id: check
+        run: |
+          INSTALLED=$(node -p "require('./package.json').devDependencies['@playwright/test']" | tr -d '^~')
+          LATEST=$(npm view @playwright/test version)
+          echo "installed=$INSTALLED" >> "$GITHUB_OUTPUT"
+          echo "latest=$LATEST" >> "$GITHUB_OUTPUT"
+          if [ "$INSTALLED" != "$LATEST" ]; then
+            echo "needs_update=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "needs_update=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Update Playwright
+        if: steps.check.outputs.needs_update == 'true'
+        run: |
+          npm install --save-dev @playwright/test@latest
+          npx playwright install --with-deps
+
+      - name: Open PR
+        if: steps.check.outputs.needs_update == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'chore: bump @playwright/test to ${{ steps.check.outputs.latest }}'
+          branch: chore/playwright-${{ steps.check.outputs.latest }}
+          delete-branch: true
+          title: 'chore: bump @playwright/test from ${{ steps.check.outputs.installed }} to ${{ steps.check.outputs.latest }}'
+          body: |
+            Automated weekly Playwright version check.
+
+            - Installed: `${{ steps.check.outputs.installed }}`
+            - Latest:    `${{ steps.check.outputs.latest }}`
+
+            Release notes: https://github.com/microsoft/playwright/releases
+
+            CI must pass before merging.
+          labels: dependencies,playwright
