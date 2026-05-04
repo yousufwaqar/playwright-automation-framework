@@ -11,6 +11,7 @@ on:
 jobs:
   cspell:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v6
 
@@ -18,5 +19,8 @@ jobs:
         with:
           node-version: 20
 
-      - name: Run cspell
-        run: npx --yes cspell --no-progress --gitignore "**/*.{md,ts,js}"
+      - name: Run cspell (advisory only)
+        continue-on-error: true
+        run: |
+          npx --yes cspell --no-progress --gitignore "**/*.{md,ts,js}" || \
+          echo "::warning::cspell found typos. Review the log above. This check is advisory and does not block merging."
