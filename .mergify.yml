@@ -1,0 +1,60 @@
+queue_rules:
+  - name: default
+    queue_conditions:
+      - check-success=Lint and Test (chromium)
+      - check-success=Lint and Test (firefox)
+      - check-success=Lint and Test (webkit)
+    merge_conditions:
+      - check-success=Lint and Test (chromium)
+      - check-success=Lint and Test (firefox)
+      - check-success=Lint and Test (webkit)
+    merge_method: squash
+
+pull_request_rules:
+  - name: Auto-merge Renovate non-major PRs
+    conditions:
+      - author=renovate[bot]
+      - check-success=Lint and Test (chromium)
+      - check-success=Lint and Test (firefox)
+      - check-success=Lint and Test (webkit)
+      - -label=major-bump
+      - -label=needs-review
+    actions:
+      queue:
+        name: default
+
+  - name: Auto-merge Dependabot non-major PRs
+    conditions:
+      - author=dependabot[bot]
+      - check-success=Lint and Test (chromium)
+      - check-success=Lint and Test (firefox)
+      - check-success=Lint and Test (webkit)
+      - -title~=major
+    actions:
+      queue:
+        name: default
+
+  - name: Welcome first-time contributors
+    conditions:
+      - author!=dependabot[bot]
+      - author!=renovate[bot]
+      - author!=yousufwaqar
+    actions:
+      comment:
+        message: |
+          👋 Thanks for opening a pull request, @{{author}}!
+
+          A maintainer will review this shortly. In the meantime, please make sure:
+          - [ ] Tests pass locally (`npm test`)
+          - [ ] Lint is clean (`npm run lint`)
+          - [ ] You've read [CONTRIBUTING.md](./CONTRIBUTING.md)
+
+  - name: Label dependency PRs
+    conditions:
+      - or:
+          - author=dependabot[bot]
+          - author=renovate[bot]
+    actions:
+      label:
+        add:
+          - dependencies
