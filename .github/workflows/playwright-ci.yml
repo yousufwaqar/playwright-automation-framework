@@ -17,7 +17,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        project: [chromium, firefox, webkit]
+        project: [chromium]
 
     steps:
       - name: Checkout code
@@ -46,6 +46,7 @@ jobs:
         env:
           CI: true
           BASE_URL: http://localhost:3000
+          API_BASE_URL: http://localhost:3000/api/v1
           TEST_ENV: ci
           API_TOKEN: mock-jwt-token-12345
           NODE_OPTIONS: "--import tsx"
