@@ -11,6 +11,16 @@
       "expectTimeout": 10000,
       "retries": 1
     },
+    "ci": {
+      "name": "ci",
+      "baseUrl": "http://localhost:3000",
+      "apiBaseUrl": "http://localhost:3000/api/v1",
+      "timeout": 60000,
+      "actionTimeout": 15000,
+      "navigationTimeout": 60000,
+      "expectTimeout": 15000,
+      "retries": 2
+    },
     "production": {
       "name": "production",
       "baseUrl": "http://localhost:3000",

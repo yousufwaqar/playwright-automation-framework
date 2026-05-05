@@ -54,57 +54,40 @@ export class ConfigManager {
 
   /**
    * Get the current environment configuration
+   * Falls back to default environment, then to hardcoded safe values
    */
   getEnvironment(): EnvironmentConfig {
-    return this.config.environments[this.currentEnv];
+    // Try current environment
+    const env = this.config.environments[this.currentEnv];
+    if (env) {
+      return env;
+    }
+
+    // Try default environment
+    const defaultEnv =
+      this.config.environments[this.config.defaultEnvironment];
+    if (defaultEnv) {
+      console.warn(
+        `[ConfigManager] Environment "${this.currentEnv}" not found. ` +
+          `Falling back to default: "${this.config.defaultEnvironment}"`
+      );
+      return defaultEnv;
+    }
+
+    // Final hardcoded fallback
+    console.warn(
+      `[ConfigManager] No valid environment found. Using hardcoded fallback.`
+    );
+    return {
+      name: "fallback",
+      baseUrl: process.env.BASE_URL || "http://localhost:3000",
+      apiBaseUrl: process.env.API_BASE_URL || "http://localhost:3000/api/v1",
+      timeout: 30000,
+      actionTimeout: 10000,
+      navigationTimeout: 30000,
+      expectTimeout: 10000,
+      retries: 1,
+    };
   }
 
-  /**
-   * Get the base URL for the current environment
-   */
-  getBaseUrl(): string {
-    return this.getEnvironment().baseUrl;
-  }
-
-  /**
-   * Get the API base URL for the current environment
-   */
-  getApiBaseUrl(): string {
-    return this.getEnvironment().apiBaseUrl;
-  }
-
-  /**
-   * Get the timeout for the current environment
-   */
-  getTimeout(): number {
-    return this.getEnvironment().timeout;
-  }
-
-  /**
-   * Get the action timeout for the current environment (slower servers may need higher values)
-   */
-  getActionTimeout(): number {
-    return this.getEnvironment().actionTimeout;
-  }
-
-  /**
-   * Get the navigation timeout for the current environment
-   */
-  getNavigationTimeout(): number {
-    return this.getEnvironment().navigationTimeout;
-  }
-
-  /**
-   * Get the expect timeout for the current environment
-   */
-  getExpectTimeout(): number {
-    return this.getEnvironment().expectTimeout;
-  }
-
-  /**
-   * Get the current environment name
-   */
-  getEnvironmentName(): string {
-    return this.currentEnv;
-  }
-}
+  
