@@ -1,20 +1,14 @@
 import * as fs from "fs";
 import * as path from "path";
 
-/**
- * ConfigManager - Centralized environment configuration management
- *
- * Handles loading and accessing environment-specific configurations
- * without hardcoding values in test files.
- *
- * @author Yousuf Waqar
- */
-
 interface EnvironmentConfig {
   name: string;
   baseUrl: string;
   apiBaseUrl: string;
   timeout: number;
+  actionTimeout: number;
+  navigationTimeout: number;
+  expectTimeout: number;
   retries: number;
 }
 
@@ -39,9 +33,6 @@ export class ConfigManager {
       process.env.TEST_ENV || this.config.defaultEnvironment || "staging";
   }
 
-  /**
-   * Get singleton instance of ConfigManager
-   */
   static getInstance(): ConfigManager {
     if (!ConfigManager.instance) {
       ConfigManager.instance = new ConfigManager();
@@ -49,37 +40,51 @@ export class ConfigManager {
     return ConfigManager.instance;
   }
 
-  /**
-   * Get the current environment configuration
-   */
   getEnvironment(): EnvironmentConfig {
-    return this.config.environments[this.currentEnv];
+    const env = this.config.environments[this.currentEnv];
+    if (env) {
+      return env;
+    }
+    const defaultEnv = this.config.environments[this.config.defaultEnvironment];
+    if (defaultEnv) {
+      return defaultEnv;
+    }
+    return {
+      name: "fallback",
+      baseUrl: process.env.BASE_URL || "http://localhost:3000",
+      apiBaseUrl: process.env.API_BASE_URL || "http://localhost:3000/api/v1",
+      timeout: 30000,
+      actionTimeout: 10000,
+      navigationTimeout: 30000,
+      expectTimeout: 10000,
+      retries: 1,
+    };
   }
 
-  /**
-   * Get the base URL for the current environment
-   */
   getBaseUrl(): string {
-    return this.getEnvironment().baseUrl;
+    return process.env.BASE_URL || this.getEnvironment().baseUrl;
   }
 
-  /**
-   * Get the API base URL for the current environment
-   */
   getApiBaseUrl(): string {
-    return this.getEnvironment().apiBaseUrl;
+    return process.env.API_BASE_URL || this.getEnvironment().apiBaseUrl;
   }
 
-  /**
-   * Get the timeout for the current environment
-   */
   getTimeout(): number {
     return this.getEnvironment().timeout;
   }
 
-  /**
-   * Get the current environment name
-   */
+  getActionTimeout(): number {
+    return this.getEnvironment().actionTimeout;
+  }
+
+  getNavigationTimeout(): number {
+    return this.getEnvironment().navigationTimeout;
+  }
+
+  getExpectTimeout(): number {
+    return this.getEnvironment().expectTimeout;
+  }
+
   getEnvironmentName(): string {
     return this.currentEnv;
   }
