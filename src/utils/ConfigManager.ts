@@ -15,6 +15,9 @@ interface EnvironmentConfig {
   baseUrl: string;
   apiBaseUrl: string;
   timeout: number;
+  actionTimeout: number;
+  navigationTimeout: number;
+  expectTimeout: number;
   retries: number;
 }
 
@@ -75,6 +78,27 @@ export class ConfigManager {
    */
   getTimeout(): number {
     return this.getEnvironment().timeout;
+  }
+
+  /**
+   * Get the action timeout for the current environment (slower servers may need higher values)
+   */
+  getActionTimeout(): number {
+    return this.getEnvironment().actionTimeout;
+  }
+
+  /**
+   * Get the navigation timeout for the current environment
+   */
+  getNavigationTimeout(): number {
+    return this.getEnvironment().navigationTimeout;
+  }
+
+  /**
+   * Get the expect timeout for the current environment
+   */
+  getExpectTimeout(): number {
+    return this.getEnvironment().expectTimeout;
   }
 
   /**
