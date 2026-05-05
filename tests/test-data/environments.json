@@ -1,32 +1,44 @@
 {
   "defaultEnvironment": "staging",
   "environments": {
-    "ci": {
-      "name": "CI Mock",
+    "staging": {
+      "name": "staging",
       "baseUrl": "http://localhost:3000",
       "apiBaseUrl": "http://localhost:3000/api/v1",
-      "timeout": 15000,
-      "retries": 2
-    },
-    "dev": {
-      "name": "Development",
-      "baseUrl": "https://dev.app.powerbi.com",
-      "apiBaseUrl": "https://dev-api.powerbi.com/v1",
       "timeout": 30000,
+      "actionTimeout": 10000,
+      "navigationTimeout": 30000,
+      "expectTimeout": 10000,
       "retries": 1
     },
-    "staging": {
-      "name": "Staging",
-      "baseUrl": "https://staging.app.powerbi.com",
-      "apiBaseUrl": "https://staging-api.powerbi.com/v1",
-      "timeout": 30000,
+    "ci": {
+      "name": "ci",
+      "baseUrl": "http://localhost:3000",
+      "apiBaseUrl": "http://localhost:3000/api/v1",
+      "timeout": 60000,
+      "actionTimeout": 15000,
+      "navigationTimeout": 60000,
+      "expectTimeout": 15000,
       "retries": 2
     },
     "production": {
-      "name": "Production",
-      "baseUrl": "https://app.powerbi.com",
-      "apiBaseUrl": "https://api.powerbi.com/v1",
-      "timeout": 15000,
+      "name": "production",
+      "baseUrl": "http://localhost:3000",
+      "apiBaseUrl": "http://localhost:3000/api/v1",
+      "timeout": 60000,
+      "actionTimeout": 15000,
+      "navigationTimeout": 60000,
+      "expectTimeout": 15000,
+      "retries": 2
+    },
+    "local": {
+      "name": "local",
+      "baseUrl": "http://localhost:3000",
+      "apiBaseUrl": "http://localhost:3000/api/v1",
+      "timeout": 30000,
+      "actionTimeout": 10000,
+      "navigationTimeout": 30000,
+      "expectTimeout": 10000,
       "retries": 0
     }
   }
