@@ -1,15 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
 
-/**
- * ConfigManager - Centralized environment configuration management
- *
- * Handles loading and accessing environment-specific configurations
- * without hardcoding values in test files.
- *
- * @author Yousuf Waqar
- */
-
 interface EnvironmentConfig {
   name: string;
   baseUrl: string;
@@ -42,9 +33,6 @@ export class ConfigManager {
       process.env.TEST_ENV || this.config.defaultEnvironment || "staging";
   }
 
-  /**
-   * Get singleton instance of ConfigManager
-   */
   static getInstance(): ConfigManager {
     if (!ConfigManager.instance) {
       ConfigManager.instance = new ConfigManager();
@@ -52,32 +40,15 @@ export class ConfigManager {
     return ConfigManager.instance;
   }
 
-  /**
-   * Get the current environment configuration
-   * Falls back to default environment, then to hardcoded safe values
-   */
   getEnvironment(): EnvironmentConfig {
-    // Try current environment
     const env = this.config.environments[this.currentEnv];
     if (env) {
       return env;
     }
-
-    // Try default environment
-    const defaultEnv =
-      this.config.environments[this.config.defaultEnvironment];
+    const defaultEnv = this.config.environments[this.config.defaultEnvironment];
     if (defaultEnv) {
-      console.warn(
-        `[ConfigManager] Environment "${this.currentEnv}" not found. ` +
-          `Falling back to default: "${this.config.defaultEnvironment}"`
-      );
       return defaultEnv;
     }
-
-    // Final hardcoded fallback
-    console.warn(
-      `[ConfigManager] No valid environment found. Using hardcoded fallback.`
-    );
     return {
       name: "fallback",
       baseUrl: process.env.BASE_URL || "http://localhost:3000",
@@ -90,4 +61,31 @@ export class ConfigManager {
     };
   }
 
-  
+  getBaseUrl(): string {
+    return process.env.BASE_URL || this.getEnvironment().baseUrl;
+  }
+
+  getApiBaseUrl(): string {
+    return process.env.API_BASE_URL || this.getEnvironment().apiBaseUrl;
+  }
+
+  getTimeout(): number {
+    return this.getEnvironment().timeout;
+  }
+
+  getActionTimeout(): number {
+    return this.getEnvironment().actionTimeout;
+  }
+
+  getNavigationTimeout(): number {
+    return this.getEnvironment().navigationTimeout;
+  }
+
+  getExpectTimeout(): number {
+    return this.getEnvironment().expectTimeout;
+  }
+
+  getEnvironmentName(): string {
+    return this.currentEnv;
+  }
+}
