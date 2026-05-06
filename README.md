@@ -38,7 +38,7 @@ It is designed to be easy to clone, easy to understand, and easy to extend for r
 | What it solves             | How it helps                                                                 |
 | ---                        | ---                                                                          |
 | Maintainable UI automation | Page Object Model keeps selectors and page actions isolated from tests       |
-| Fast feedback              | Parallel execution across Chromium, Firefox, and WebKit                      |
+| Fast feedback              | Parallel execution on Chromium in CI, with Firefox and WebKit available locally |
 | Reliable CI runs           | A lightweight bundled mock app removes external system dependencies          |
 | API confidence             | Contract tests validate health, auth behavior, schema, and response time     |
 | Environment flexibility    | Centralized JSON config supports CI, dev, staging, and production targets    |
@@ -53,12 +53,12 @@ It is designed to be easy to clone, easy to understand, and easy to extend for r
 - **Page Object Model** with shared `BasePage` for clean separation of concerns
 - **Custom fixtures** for shared page objects and structured logging
 - **Data-driven testing** through JSON test data files
-- **Cross-browser execution** for Chromium, Firefox, and WebKit
+- **Cross-browser ready** — Chromium runs in CI; Firefox and WebKit are configured and run locally
 - **Mobile viewport projects** (Pixel 7, iPhone 14) ready to enable
 - **API contract validation** alongside UI coverage
 - **Bundled mock application** for fully self-contained CI runs
 - **External demo-site suites** (SauceDemo / The Internet / RESTful Booker) gated behind tags
-- **GitHub Actions workflows** with browser matrix, artifact upload, and a separate nightly external job
+- **GitHub Actions workflows** with Chromium runs, artifact upload, and a separate nightly external job
 - **HTML, JSON, screenshot, trace, and video reporting**
 - **Tag-based execution** with `@smoke`, `@regression`, `@api`, `@external`
 
@@ -72,7 +72,7 @@ It is designed to be easy to clone, easy to understand, and easy to extend for r
 | [TypeScript](https://www.typescriptlang.org/) | Type-safe test development                     |
 | [Node.js](https://nodejs.org/)                | Runtime environment (18+)                      |
 | [tsx](https://github.com/privatenumber/tsx)   | Native TypeScript loader for fixtures          |
-| GitHub Actions                                | CI pipeline and cross-browser matrix execution |
+| GitHub Actions                                | CI pipeline (Chromium) and scheduled external runs |
 | Playwright HTML Reporter                      | Interactive report for debugging test runs     |
 | JSON test data                                | Environment and user data management           |
 
@@ -111,9 +111,11 @@ npm run test
 
 ```bash
 npm run test:chrome
-npm run test:firefox
-npm run test:webkit
+npm run test:firefox   # local only
+npm run test:webkit    # local only
 ```
+
+> **Note:** CI runs Chromium only. Firefox and WebKit work locally but are skipped in GitHub Actions because the Ubuntu runner image is missing required system libraries for those engines.
 
 ### Run focused suites
 
@@ -192,7 +194,7 @@ Mock app routes:
 | SauceDemo (external)          | Login, inventory, add-to-cart, full checkout flow                               |
 | The Internet (external)       | Checkboxes, dropdowns, dynamic loading, alerts                                  |
 | RESTful Booker API (external) | Auth token, create / read / update / delete booking, schema validation          |
-| Cross-browser                 | Chromium, Firefox, WebKit                                                       |
+| Cross-browser                 | Chromium (CI + local), Firefox & WebKit (local)                                 |
 | Mobile viewports              | Pixel 7, iPhone 14 (configured, opt-in)                                         |
 | Tags                          | `@smoke`, `@regression`, `@api`, `@external`, `@saucedemo`, `@theinternet`      |
 
@@ -335,14 +337,7 @@ Runs on:
 - Pull requests targeting `main`
 - Daily scheduled run
 
-Uses a browser matrix:
-
-```yaml
-matrix:
-  project: [chromium, firefox, webkit]
-```
-
-Starts the bundled mock app, then runs the suite **with `@external` excluded** so public practice-site outages cannot turn the badge red:
+Runs on Chromium (Firefox and WebKit are skipped in CI due to missing system libraries on the Ubuntu runner; both work locally):
 
 ```yaml
 - name: Start mock application
@@ -352,7 +347,7 @@ Starts the bundled mock app, then runs the suite **with `@external` excluded** s
     curl -f http://localhost:3000/api/v1/health || exit 1
 
 - name: Run Playwright tests
-  run: npx playwright test --project=${{ matrix.project }} --grep-invert @external
+  run: npx playwright test --project=chromium --grep-invert @external
 ```
 
 ### `external-ci.yml` — nightly external workflow
@@ -368,8 +363,8 @@ Runs the SauceDemo, The Internet, and RESTful Booker suites on a nightly schedul
 | `npm run test`              | Run all non-external tests            |
 | `npm run test:headed`       | Run tests with visible browser        |
 | `npm run test:chrome`       | Run Chromium project                  |
-| `npm run test:firefox`      | Run Firefox project                   |
-| `npm run test:webkit`       | Run WebKit project                    |
+| `npm run test:firefox`      | Run Firefox project (local only)      |
+| `npm run test:webkit`       | Run WebKit project (local only)       |
 | `npm run test:api`          | Run mock API contract tests           |
 | `npm run test:smoke`        | Run smoke tests                       |
 | `npm run test:regression`   | Run regression tests                  |
@@ -449,3 +444,4 @@ This project is licensed under the MIT License. See [LICENSE](./LICENSE) for det
 Built with Playwright, TypeScript, and a quality-first automation mindset.
 
 </div>
+
