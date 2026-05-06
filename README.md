@@ -21,9 +21,14 @@
   <a href="#cicd">CI/CD</a> |
   <a href="#roadmap">Roadmap</a>
 </p>
+ Built by <strong><a href="https://github.com/yousufwaqar">Yousuf Waqar</a></strong><br/>
+ SDET & QA Automation Lead | 11+ years of experience
+ <br/><br/>
 
-Built by <strong><a href="https://github.com/yousufwaqar">Yousuf Waqar</a></strong><br/>
-SDET & QA Automation Lead | 11+ years of experience
+ 👋 <strong>Hiring or evaluating my work?</strong> See <a href="./SKILLS.md"><strong>SKILLS.md</strong></a> — a guided tour of the
+engineering skills this repo demonstrates and how to reach me.
+
+ </div>
 
 </div>
 
