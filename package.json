@@ -1,6 +1,6 @@
 {
   "name": "playwright-automation-framework",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Enterprise-grade Playwright + TypeScript test automation framework with POM, parallel execution, and CI/CD integration",
   "author": "Yousuf Waqar <yousufwaqar7@gmail.com>",
   "license": "MIT",
@@ -18,7 +18,7 @@
     "test:theinternet": "cross-env NODE_OPTIONS=\"--import tsx\" npx playwright test --grep @theinternet",
     "test:api:external": "cross-env NODE_OPTIONS=\"--import tsx\" npx playwright test tests/external/api/",
     "report": "npx playwright show-report",
-    "lint": "eslint src/ tests/",
+    "typecheck": "tsc --noEmit",
     "clean": "rm -rf test-results/ playwright-report/"
   },
   "devDependencies": {
