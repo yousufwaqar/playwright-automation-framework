@@ -159,16 +159,10 @@ npm run report
 
 The repository includes a small local mock application under `mock-app/`. This makes the framework demo-friendly because CI does not need credentials for a real external application.
 
-Start the mock app:
+The mock app is **automatically started** by Playwright using the `webServer` configuration. You don't need to start it manually. Just run:
 
 ```bash
-node mock-app/server.js
-```
-
-In a second terminal, run the tests against the local app:
-
-```bash
-BASE_URL=http://localhost:3000 TEST_ENV=ci API_TOKEN=mock-jwt-token-12345 npm run test
+npm run test
 ```
 
 On Windows PowerShell:

@@ -7,6 +7,12 @@ dotenv.config();
 const config = ConfigManager.getInstance();
 
 export default defineConfig({
+  webServer: {
+    command: 'node mock-app/server.js',
+    url: 'http://localhost:3000',
+    timeout: 120 * 1000,
+    reuseExistingServer: true,
+  },
   testDir: "./tests",
   testMatch: "**/*.spec.ts",
   timeout: config.getTimeout(),
@@ -42,7 +48,7 @@ export default defineConfig({
       name: "chromium",
       use: {
         ...devices["Desktop Chrome"],
-        channel: "chrome",
+
       },
     },
     // {
