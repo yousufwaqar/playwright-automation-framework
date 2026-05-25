@@ -11,7 +11,7 @@ export default defineConfig({
     command: 'node mock-app/server.js',
     url: 'http://localhost:3000',
     timeout: 120 * 1000,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: true,
   },
   testDir: "./tests",
   testMatch: "**/*.spec.ts",
