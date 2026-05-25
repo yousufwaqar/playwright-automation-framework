@@ -1,7 +1,7 @@
 import { test, expect } from "../src/fixtures/base.fixture";
 import { TestDataManager } from "../src/utils/TestDataManager";
 import type { LoginPage } from "../src/pages/LoginPage";
-import type { DashboardPage } from "../src/pages/DashboardPage.ts";
+import type { DashboardPage } from "../src/pages/DashboardPage";
 import type { Logger } from "../src/utils/Logger";
 
 /**

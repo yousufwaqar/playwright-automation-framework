@@ -3,6 +3,7 @@
     "target": "ES2022",
     "module": "commonjs",
     "lib": ["ES2022", "dom"],
+    "types": ["node"],
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -13,13 +14,13 @@
     "sourceMap": true,
     "outDir": "./dist",
     "rootDir": ".",
-    "ignoreDeprecations": "5.0",
+    "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "paths": {
       "@pages/*": ["src/pages/*"],
       "@utils/*": ["src/utils/*"],
       "@fixtures/*": ["src/fixtures/*"],
-      "@test-data/*": ["test-data/*"]
+      "@test-data/*": ["tests/test-data/*"]
     }
   },
   "include": ["src/**/*", "tests/**/*"],
