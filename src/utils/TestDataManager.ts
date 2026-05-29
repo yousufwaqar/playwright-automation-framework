@@ -75,10 +75,7 @@ export class TestDataManager {
     this.logger = new Logger("TestDataManager");
 
     try {
-      const usersPath = path.resolve(
-        __dirname,
-        "../../tests/test-data/users.json"
-      );
+      const usersPath = path.resolve(__dirname, "../../tests/test-data/users.json");
       const rawData = fs.readFileSync(usersPath, "utf-8");
       const parsedData = JSON.parse(rawData);
 

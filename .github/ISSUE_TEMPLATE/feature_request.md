@@ -3,7 +3,7 @@ name: Feature request
 about: Suggest a new test, page object, fixture, or framework capability
 title: "[feat] "
 labels: enhancement
-assignees: ''
+assignees: ""
 ---
 
 ## What's the problem?

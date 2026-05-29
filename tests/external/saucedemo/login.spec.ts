@@ -31,10 +31,7 @@ test.describe("SauceDemo - Login @external @saucedemo", () => {
     expect(productCount).toBeGreaterThan(0);
   });
 
-  test("should reject locked-out user @regression", async ({
-    sauceLoginPage,
-    logger,
-  }) => {
+  test("should reject locked-out user @regression", async ({ sauceLoginPage, logger }) => {
     logger.step(1, "Attempt login with locked-out user");
     const user = data.saucedemo.users.lockedOut;
     await sauceLoginPage.login(user.username, user.password);
@@ -44,10 +41,7 @@ test.describe("SauceDemo - Login @external @saucedemo", () => {
     expect(errorText).toContain("locked out");
   });
 
-  test("should reject invalid credentials @regression", async ({
-    sauceLoginPage,
-    logger,
-  }) => {
+  test("should reject invalid credentials @regression", async ({ sauceLoginPage, logger }) => {
     logger.step(1, "Attempt login with invalid credentials");
     await sauceLoginPage.login("invalid_user", "wrong_password");
 

@@ -15,9 +15,7 @@ export class SauceCartPage extends BasePage {
     super(page);
     this.cartItems = page.locator(".cart_item");
     this.checkoutButton = page.locator('[data-test="checkout"]');
-    this.continueShoppingButton = page.locator(
-      '[data-test="continue-shopping"]'
-    );
+    this.continueShoppingButton = page.locator('[data-test="continue-shopping"]');
   }
 
   async getItemCount(): Promise<number> {

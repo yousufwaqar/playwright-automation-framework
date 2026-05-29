@@ -32,8 +32,11 @@ function parseBody(req) {
     let body = "";
     req.on("data", (chunk) => (body += chunk));
     req.on("end", () => {
-      try { resolve(JSON.parse(body)); }
-      catch { resolve({}); }
+      try {
+        resolve(JSON.parse(body));
+      } catch {
+        resolve({});
+      }
     });
   });
 }
@@ -76,7 +79,10 @@ const server = http.createServer(async (req, res) => {
     if (VALID_USERS[email] && VALID_USERS[email] === password) {
       return jsonResponse(res, 200, { success: true, token: "mock-jwt-token-12345" });
     }
-    return jsonResponse(res, 401, { success: false, message: "Invalid email or password. Please try again." });
+    return jsonResponse(res, 401, {
+      success: false,
+      message: "Invalid email or password. Please try again.",
+    });
   }
 
   jsonResponse(res, 404, { error: "Not Found" });

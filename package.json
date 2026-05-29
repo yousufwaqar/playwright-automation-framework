@@ -19,15 +19,36 @@
     "test:api:external": "cross-env NODE_OPTIONS=\"--import tsx\" npx playwright test tests/external/api/",
     "report": "npx playwright show-report",
     "typecheck": "tsc --noEmit",
-    "clean": "rm -rf test-results/ playwright-report/"
+    "clean": "rm -rf test-results/ playwright-report/ allure-results/ allure-report/",
+    "allure:generate": "allure generate allure-results --clean -o allure-report",
+    "allure:open": "allure open allure-report",
+    "allure:serve": "allure serve allure-results",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
+    "format": "prettier --write \"**/*.{ts,json,md}\"",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@faker-js/faker": "^10.4.0",
     "@playwright/test": "^1.45.0",
     "@types/node": "^25.9.1",
+    "allure-commandline": "^2.42.0",
+    "allure-playwright": "^3.9.0",
     "cross-env": "^7.0.3",
     "dotenv": "^17.4.2",
     "tsx": "^4.21.0",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.60.0"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -41,5 +62,8 @@
     "ci-cd",
     "azure-devops",
     "quality-gates"
-  ]
+  ],
+  "dependencies": {
+    "zod": "^4.4.3"
+  }
 }

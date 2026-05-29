@@ -126,10 +126,7 @@ export class BasePage {
   /**
    * Get attribute value of an element
    */
-  async getAttribute(
-    locator: Locator,
-    attribute: string
-  ): Promise<string | null> {
+  async getAttribute(locator: Locator, attribute: string): Promise<string | null> {
     return locator.getAttribute(attribute);
   }
 

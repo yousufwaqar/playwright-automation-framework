@@ -33,7 +33,7 @@ npm run test:external
 Use a short, descriptive prefix:
 
 | Prefix      | When to use                          |
-| ----------  | --------------------------           |
+| ----------- | ------------------------------------ |
 | `feat/`     | New tests, fixtures, pages           |
 | `fix/`      | Bug fix or flaky test fix            |
 | `docs/`     | README / docs only                   |

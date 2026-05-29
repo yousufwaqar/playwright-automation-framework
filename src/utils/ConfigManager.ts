@@ -23,14 +23,10 @@ export class ConfigManager {
   private currentEnv: string;
 
   private constructor() {
-    const configPath = path.resolve(
-      __dirname,
-      "../../tests/test-data/environments.json"
-    );
+    const configPath = path.resolve(__dirname, "../../tests/test-data/environments.json");
     const rawData = fs.readFileSync(configPath, "utf-8");
     this.config = JSON.parse(rawData);
-    this.currentEnv =
-      process.env.TEST_ENV || this.config.defaultEnvironment || "staging";
+    this.currentEnv = process.env.TEST_ENV || this.config.defaultEnvironment || "staging";
   }
 
   static getInstance(): ConfigManager {

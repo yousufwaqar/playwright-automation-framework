@@ -36,9 +36,7 @@ export const test = base.extend<CustomFixtures>({
     const logger = new Logger(testInfo.title);
     logger.info(`🧪 Starting test: ${testInfo.title}`);
     await use(logger);
-    logger.info(
-      `✅ Finished test: ${testInfo.title} - Status: ${testInfo.status}`
-    );
+    logger.info(`✅ Finished test: ${testInfo.title} - Status: ${testInfo.status}`);
   },
 
   /**
@@ -55,9 +53,7 @@ export const test = base.extend<CustomFixtures>({
     const dashboardPage = new DashboardPage(page);
 
     try {
-      logger.info(
-        "🔐 Attempting to authenticate user before test execution..."
-      );
+      logger.info("🔐 Attempting to authenticate user before test execution...");
 
       // Get test user credentials
       const testDataManager = TestDataManager.getInstance();
@@ -77,8 +73,7 @@ export const test = base.extend<CustomFixtures>({
 
       await use(dashboardPage);
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : String(error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
 
       logger.error(
         `❌ AUTHENTICATION FAILED: ${errorMessage}\n` +

@@ -8,8 +8,8 @@ const config = ConfigManager.getInstance();
 
 export default defineConfig({
   webServer: {
-    command: 'node mock-app/server.js',
-    url: 'http://localhost:3000',
+    command: "node mock-app/server.js",
+    url: "http://localhost:3000",
     timeout: 120 * 1000,
     reuseExistingServer: true,
   },
@@ -30,6 +30,7 @@ export default defineConfig({
     ["list"],
     ["html", { open: "never", outputFolder: "playwright-report" }],
     ["json", { outputFile: "test-results/results.json" }],
+    ["allure-playwright", { outputFolder: "allure-results" }],
   ],
 
   use: {
@@ -42,13 +43,22 @@ export default defineConfig({
     navigationTimeout: config.getNavigationTimeout(),
     ignoreHTTPSErrors: true,
   },
+  /* Configure visual regression testing */
+  expect: {
+    timeout: config.getExpectTimeout(),
+    toHaveScreenshot: {
+      maxDiffPixels: 100,
+    },
+    toMatchSnapshot: {
+      maxDiffPixelRatio: 0.1,
+    },
+  },
 
   projects: [
     {
       name: "chromium",
       use: {
         ...devices["Desktop Chrome"],
-
       },
     },
     // {

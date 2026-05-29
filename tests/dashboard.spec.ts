@@ -20,65 +20,89 @@ import type { Logger } from "../src/utils/Logger";
 test.describe("Dashboard Feature Tests", () => {
   const testData = TestDataManager.getInstance();
 
-  test.beforeEach(async ({ loginPage, dashboardPage, logger }: { loginPage: LoginPage; dashboardPage: DashboardPage; logger: Logger }) => {
-    logger.info("Pre-condition: Login and navigate to dashboard");
-    const user = testData.getValidUser();
-    await loginPage.goto();
-    await loginPage.login(user.username, user.password);
-    await dashboardPage.assertDashboardLoaded();
+  test.beforeEach(
+    async ({
+      loginPage,
+      dashboardPage,
+      logger,
+    }: {
+      loginPage: LoginPage;
+      dashboardPage: DashboardPage;
+      logger: Logger;
+    }) => {
+      logger.info("Pre-condition: Login and navigate to dashboard");
+      const user = testData.getValidUser();
+      await loginPage.goto();
+      await loginPage.login(user.username, user.password);
+      await dashboardPage.assertDashboardLoaded();
+    }
+  );
+
+  test("should display dashboard with welcome message @smoke @regression", async ({
+    dashboardPage,
+    logger,
+  }: {
+    dashboardPage: DashboardPage;
+    logger: Logger;
+  }) => {
+    logger.step(1, "Verify welcome message is displayed");
+    const welcomeMessage = await dashboardPage.getWelcomeMessage();
+
+    logger.step(2, "Assert welcome message contains expected text");
+    expect(welcomeMessage).toContain("Welcome");
+
+    logger.info("Welcome message verification completed");
   });
 
-  test(
-    "should display dashboard with welcome message @smoke @regression",
-    async ({ dashboardPage, logger }: { dashboardPage: DashboardPage; logger: Logger }) => {
-      logger.step(1, "Verify welcome message is displayed");
-      const welcomeMessage = await dashboardPage.getWelcomeMessage();
+  test("should search for a specific report @regression", async ({
+    dashboardPage,
+    logger,
+  }: {
+    dashboardPage: DashboardPage;
+    logger: Logger;
+  }) => {
+    logger.step(1, "Search for a report");
+    await dashboardPage.searchReport("Sales Report");
 
-      logger.step(2, "Assert welcome message contains expected text");
-      expect(welcomeMessage).toContain("Welcome");
+    logger.step(2, "Verify search results are displayed");
+    const reportCount = await dashboardPage.getReportCount();
+    expect(reportCount).toBeGreaterThan(0);
 
-      logger.info("Welcome message verification completed");
-    }
-  );
+    logger.info("Report search test completed");
+  });
 
-  test(
-    "should search for a specific report @regression",
-    async ({ dashboardPage, logger }: { dashboardPage: DashboardPage; logger: Logger }) => {
-      logger.step(1, "Search for a report");
-      await dashboardPage.searchReport("Sales Report");
+  test("should open a report tile @regression", async ({
+    dashboardPage,
+    logger,
+  }: {
+    dashboardPage: DashboardPage;
+    logger: Logger;
+  }) => {
+    logger.step(1, "Click on the first report tile");
+    await dashboardPage.openReport(0);
 
-      logger.step(2, "Verify search results are displayed");
-      const reportCount = await dashboardPage.getReportCount();
-      expect(reportCount).toBeGreaterThan(0);
+    logger.step(2, "Verify report page is loaded");
+    // Report-specific assertions would go here
 
-      logger.info("Report search test completed");
-    }
-  );
+    logger.info("Report open test completed");
+  });
 
-  test(
-    "should open a report tile @regression",
-    async ({ dashboardPage, logger }: { dashboardPage: DashboardPage; logger: Logger }) => {
-      logger.step(1, "Click on the first report tile");
-      await dashboardPage.openReport(0);
+  test("should logout successfully @smoke @regression", async ({
+    dashboardPage,
+    loginPage,
+    logger,
+  }: {
+    dashboardPage: DashboardPage;
+    loginPage: LoginPage;
+    logger: Logger;
+  }) => {
+    logger.step(1, "Click logout");
+    await dashboardPage.logout();
 
-      logger.step(2, "Verify report page is loaded");
-      // Report-specific assertions would go here
+    logger.step(2, "Verify redirect to login page");
+    const isLoginPageLoaded = await loginPage.isPageLoaded();
+    expect(isLoginPageLoaded).toBe(true);
 
-      logger.info("Report open test completed");
-    }
-  );
-
-  test(
-    "should logout successfully @smoke @regression",
-    async ({ dashboardPage, loginPage, logger }: { dashboardPage: DashboardPage; loginPage: LoginPage; logger: Logger }) => {
-      logger.step(1, "Click logout");
-      await dashboardPage.logout();
-
-      logger.step(2, "Verify redirect to login page");
-      const isLoginPageLoaded = await loginPage.isPageLoaded();
-      expect(isLoginPageLoaded).toBe(true);
-
-      logger.info("Logout test completed successfully");
-    }
-  );
+    logger.info("Logout test completed successfully");
+  });
 });

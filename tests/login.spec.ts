@@ -23,63 +23,73 @@ test.describe("Login Feature Tests", () => {
     await loginPage.goto();
   });
 
-  test(
-    "should login successfully with valid credentials @smoke @regression",
-    async ({ loginPage, logger }: { loginPage: LoginPage; logger: Logger }) => {
-      logger.step(1, "Get valid user credentials");
-      const user = testData.getValidUser();
+  test("should login successfully with valid credentials @smoke @regression", async ({
+    loginPage,
+    logger,
+  }: {
+    loginPage: LoginPage;
+    logger: Logger;
+  }) => {
+    logger.step(1, "Get valid user credentials");
+    const user = testData.getValidUser();
 
-      logger.step(2, "Enter credentials and click login");
-      await loginPage.login(user.username, user.password);
+    logger.step(2, "Enter credentials and click login");
+    await loginPage.login(user.username, user.password);
 
-      logger.step(3, "Verify successful login redirect");
-      await loginPage.assertLoginSuccess();
+    logger.step(3, "Verify successful login redirect");
+    await loginPage.assertLoginSuccess();
 
-      logger.info("Login test completed successfully");
-    }
-  );
+    logger.info("Login test completed successfully");
+  });
 
-  test(
-    "should show error message for invalid credentials @regression",
-    async ({ loginPage, logger }: { loginPage: LoginPage; logger: Logger }) => {
-      logger.step(1, "Get invalid user credentials");
-      const user = testData.getInvalidUser();
+  test("should show error message for invalid credentials @regression", async ({
+    loginPage,
+    logger,
+  }: {
+    loginPage: LoginPage;
+    logger: Logger;
+  }) => {
+    logger.step(1, "Get invalid user credentials");
+    const user = testData.getInvalidUser();
 
-      logger.step(2, "Attempt login with invalid credentials");
-      await loginPage.login(user.username, user.password);
+    logger.step(2, "Attempt login with invalid credentials");
+    await loginPage.login(user.username, user.password);
 
-      logger.step(3, "Verify error message is displayed");
-      await loginPage.assertLoginError(
-        "Invalid email or password. Please try again."
-      );
+    logger.step(3, "Verify error message is displayed");
+    await loginPage.assertLoginError("Invalid email or password. Please try again.");
 
-      logger.info("Invalid login test completed successfully");
-    }
-  );
+    logger.info("Invalid login test completed successfully");
+  });
 
-  test(
-    "should disable login button when fields are empty @regression",
-    async ({ loginPage, logger }: { loginPage: LoginPage; logger: Logger }) => {
-      logger.step(1, "Verify login button is disabled on page load");
-      const isEnabled = await loginPage.isLoginButtonEnabled();
+  test("should disable login button when fields are empty @regression", async ({
+    loginPage,
+    logger,
+  }: {
+    loginPage: LoginPage;
+    logger: Logger;
+  }) => {
+    logger.step(1, "Verify login button is disabled on page load");
+    const isEnabled = await loginPage.isLoginButtonEnabled();
 
-      logger.step(2, "Assert login button is disabled");
-      expect(isEnabled).toBe(false);
+    logger.step(2, "Assert login button is disabled");
+    expect(isEnabled).toBe(false);
 
-      logger.info("Empty field validation test completed");
-    }
-  );
+    logger.info("Empty field validation test completed");
+  });
 
-  test(
-    "should verify login page is loaded correctly @smoke",
-    async ({ loginPage, logger }: { loginPage: LoginPage; logger: Logger }) => {
-      logger.step(1, "Verify login page elements are visible");
-      const isLoaded = await loginPage.isPageLoaded();
+  test("should verify login page is loaded correctly @smoke", async ({
+    loginPage,
+    logger,
+  }: {
+    loginPage: LoginPage;
+    logger: Logger;
+  }) => {
+    logger.step(1, "Verify login page elements are visible");
+    const isLoaded = await loginPage.isPageLoaded();
 
-      logger.step(2, "Assert page is loaded");
-      expect(isLoaded).toBe(true);
+    logger.step(2, "Assert page is loaded");
+    expect(isLoaded).toBe(true);
 
-      logger.info("Page load verification completed");
-    }
-  );
+    logger.info("Page load verification completed");
+  });
 });

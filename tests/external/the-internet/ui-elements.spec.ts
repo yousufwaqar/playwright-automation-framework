@@ -25,9 +25,7 @@ test.describe("The Internet - UI patterns @external @theinternet", () => {
     await page.locator("#password").fill(data.theInternet.credentials.valid.password);
     await page.locator('button[type="submit"]').click();
 
-    await expect(page.locator(".flash.success")).toContainText(
-      "You logged into a secure area"
-    );
+    await expect(page.locator(".flash.success")).toContainText("You logged into a secure area");
   });
 
   test("should reject invalid credentials @regression", async ({ page }) => {

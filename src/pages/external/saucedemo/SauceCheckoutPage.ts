@@ -26,11 +26,7 @@ export class SauceCheckoutPage extends BasePage {
     this.summaryTotal = page.locator(".summary_total_label");
   }
 
-  async fillCustomerInfo(
-    firstName: string,
-    lastName: string,
-    postalCode: string
-  ): Promise<void> {
+  async fillCustomerInfo(firstName: string, lastName: string, postalCode: string): Promise<void> {
     await this.fill(this.firstNameInput, firstName);
     await this.fill(this.lastNameInput, lastName);
     await this.fill(this.postalCodeInput, postalCode);

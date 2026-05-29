@@ -24,11 +24,7 @@
       "lastName": "Automation",
       "postalCode": "12345"
     },
-    "products": [
-      "sauce-labs-backpack",
-      "sauce-labs-bike-light",
-      "sauce-labs-bolt-t-shirt"
-    ]
+    "products": ["sauce-labs-backpack", "sauce-labs-bike-light", "sauce-labs-bolt-t-shirt"]
   },
   "theInternet": {
     "baseUrl": "https://the-internet.herokuapp.com",

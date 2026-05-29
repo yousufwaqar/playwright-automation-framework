@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { ConfigManager } from "../../src/utils/ConfigManager";
 import { Logger } from "../../src/utils/Logger";
+import { HealthCheckSchema, ReportsResponseSchema } from "../../src/utils/api-schemas";
 
 /**
  * API Contract Tests
@@ -19,9 +20,7 @@ test.describe("API Contract Tests", () => {
   const config = ConfigManager.getInstance();
   const apiBaseUrl = config.getApiBaseUrl();
 
-  test("should return 200 for health check endpoint @smoke @api", async ({
-    request,
-  }) => {
+  test("should return 200 for health check endpoint @smoke @api", async ({ request }) => {
     const logger = new Logger("API Health Check");
 
     logger.step(1, "Send GET request to health check endpoint");
@@ -30,17 +29,16 @@ test.describe("API Contract Tests", () => {
     logger.step(2, "Verify response status is 200");
     expect(response.status()).toBe(200);
 
-    logger.step(3, "Verify response body contains expected fields");
+    logger.step(3, "Verify response body matches schema");
     const body = await response.json();
-    expect(body).toHaveProperty("status");
+    const result = HealthCheckSchema.safeParse(body);
+    expect(result.success).toBe(true);
     expect(body.status).toBe("healthy");
 
     logger.info("Health check API test passed");
   });
 
-  test("should return 401 for unauthorized request @regression @api", async ({
-    request,
-  }) => {
+  test("should return 401 for unauthorized request @regression @api", async ({ request }) => {
     const logger = new Logger("API Unauthorized Access");
 
     logger.step(1, "Send request without authentication");
@@ -71,25 +69,15 @@ test.describe("API Contract Tests", () => {
     logger.step(2, "Verify response status is 200");
     expect(response.status()).toBe(200);
 
-    logger.step(3, "Validate response schema structure");
+    logger.step(3, "Validate response body matches schema");
     const body = await response.json();
-    expect(body).toHaveProperty("data");
-    expect(Array.isArray(body.data)).toBe(true);
-
-    if (body.data.length > 0) {
-      const firstReport = body.data[0];
-      expect(firstReport).toHaveProperty("id");
-      expect(firstReport).toHaveProperty("name");
-      expect(firstReport).toHaveProperty("createdAt");
-      expect(firstReport).toHaveProperty("status");
-    }
+    const result = ReportsResponseSchema.safeParse(body);
+    expect(result.success).toBe(true);
 
     logger.info("Schema validation test passed");
   });
 
-  test("should respond within acceptable time threshold @regression @api", async ({
-    request,
-  }) => {
+  test("should respond within acceptable time threshold @regression @api", async ({ request }) => {
     const logger = new Logger("API Performance Check");
 
     logger.step(1, "Send request and measure response time");

@@ -28,18 +28,14 @@ export class LoginPage extends BasePage {
   constructor(page: Page) {
     super(page);
 
-    this.emailInput = page.locator('[data-testid="email-input"]');
-    this.passwordInput = page.locator('[data-testid="password-input"]');
-    this.loginButton = page.locator('[data-testid="login-button"]');
-    this.forgotPasswordLink = page.locator(
-      '[data-testid="forgot-password-link"]'
-    );
-    this.errorMessage = page.locator('[data-testid="error-message"]');
-    this.rememberMeCheckbox = page.locator(
-      '[data-testid="remember-me-checkbox"]'
-    );
-    this.ssoButton = page.locator('[data-testid="sso-button"]');
-    this.loadingSpinner = page.locator('[data-testid="loading-spinner"]');
+    this.emailInput = page.getByTestId("email-input");
+    this.passwordInput = page.getByTestId("password-input");
+    this.loginButton = page.getByTestId("login-button");
+    this.forgotPasswordLink = page.getByTestId("forgot-password-link");
+    this.errorMessage = page.getByTestId("error-message");
+    this.rememberMeCheckbox = page.getByTestId("remember-me-checkbox");
+    this.ssoButton = page.getByTestId("sso-button");
+    this.loadingSpinner = page.getByTestId("loading-spinner");
   }
 
   // ==========================================

@@ -30,15 +30,15 @@ export class DashboardPage extends BasePage {
   constructor(page: Page) {
     super(page);
 
-    this.welcomeMessage = page.locator('[data-testid="welcome-message"]');
-    this.navigationMenu = page.locator('[data-testid="nav-menu"]');
-    this.searchInput = page.locator('[data-testid="search-input"]');
-    this.userProfileIcon = page.locator('[data-testid="user-profile"]');
-    this.logoutButton = page.locator('[data-testid="logout-button"]');
-    this.reportTiles = page.locator('[data-testid="report-tile"]');
-    this.createNewButton = page.locator('[data-testid="create-new-btn"]');
-    this.notificationBell = page.locator('[data-testid="notification-bell"]');
-    this.sidePanel = page.locator('[data-testid="side-panel"]');
+    this.welcomeMessage = page.getByTestId("welcome-message");
+    this.navigationMenu = page.getByTestId("nav-menu");
+    this.searchInput = page.getByTestId("search-input");
+    this.userProfileIcon = page.getByTestId("user-profile");
+    this.logoutButton = page.getByTestId("logout-button");
+    this.reportTiles = page.getByTestId("report-tile");
+    this.createNewButton = page.getByTestId("create-new-btn");
+    this.notificationBell = page.getByTestId("notification-bell");
+    this.sidePanel = page.getByTestId("side-panel");
   }
 
   // ==========================================
@@ -74,9 +74,7 @@ export class DashboardPage extends BasePage {
    * Click on a specific report tile by name
    */
   async openReportByName(reportName: string): Promise<void> {
-    const reportTile = this.page.locator(
-      `[data-testid="report-tile"]:has-text("${reportName}")`
-    );
+    const reportTile = this.page.locator(`[data-testid="report-tile"]:has-text("${reportName}")`);
     await this.click(reportTile);
     await this.waitForPageLoad();
   }
@@ -144,9 +142,7 @@ export class DashboardPage extends BasePage {
   async assertReportCount(expectedCount: number): Promise<void> {
     const actualCount = await this.getReportCount();
     if (actualCount !== expectedCount) {
-      throw new Error(
-        `Expected ${expectedCount} reports but found ${actualCount}`
-      );
+      throw new Error(`Expected ${expectedCount} reports but found ${actualCount}`);
     }
   }
 }

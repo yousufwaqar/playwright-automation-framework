@@ -1,16 +1,16 @@
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"label": "Run Playwright Tests (chromium)",
-			"type": "shell",
-			"command": "npm run test:chrome"
-		},
-		{
-			"label": "Start Mock Server",
-			"type": "shell",
-			"command": "node mock-app/server.js",
-			"isBackground": true
-		}
-	]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run Playwright Tests (chromium)",
+      "type": "shell",
+      "command": "npm run test:chrome"
+    },
+    {
+      "label": "Start Mock Server",
+      "type": "shell",
+      "command": "node mock-app/server.js",
+      "isBackground": true
+    }
+  ]
 }

@@ -58,10 +58,7 @@ test.describe("SauceDemo - Checkout flow @external @saucedemo @regression", () =
     expect(message).toMatch(/thank you/i);
   });
 
-  test("should sort products from low to high price", async ({
-    sauceInventoryPage,
-    logger,
-  }) => {
+  test("should sort products from low to high price", async ({ sauceInventoryPage, logger }) => {
     logger.step(1, "Sort products by price low to high");
     await sauceInventoryPage.sortBy("lohi");
 
@@ -69,10 +66,7 @@ test.describe("SauceDemo - Checkout flow @external @saucedemo @regression", () =
     expect(await sauceInventoryPage.getProductCount()).toBeGreaterThan(0);
   });
 
-  test("should logout successfully", async ({
-    sauceInventoryPage,
-    logger,
-  }) => {
+  test("should logout successfully", async ({ sauceInventoryPage, logger }) => {
     logger.step(1, "Logout from inventory");
     await sauceInventoryPage.logout();
 

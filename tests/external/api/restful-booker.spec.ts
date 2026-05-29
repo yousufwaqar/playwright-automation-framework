@@ -117,16 +117,12 @@ test.describe("RESTful Booker API @external @api", () => {
     expect([200, 201]).toContain(response.status());
   });
 
-  test("should return 404 for non-existent booking @regression", async ({
-    request,
-  }) => {
+  test("should return 404 for non-existent booking @regression", async ({ request }) => {
     const response = await request.get(`${baseUrl}/booking/99999999`);
     expect(response.status()).toBe(404);
   });
 
-  test("ping endpoint should respond within threshold @regression", async ({
-    request,
-  }) => {
+  test("ping endpoint should respond within threshold @regression", async ({ request }) => {
     const start = Date.now();
     const response = await request.get(`${baseUrl}/ping`);
     const elapsed = Date.now() - start;
