@@ -11,7 +11,7 @@ export const HealthCheckSchema = z.object({
 });
 
 export const ReportSchema = z.object({
-  id: z.number(),
+  id: z.string(),
   name: z.string(),
   createdAt: z.string(),
   status: z.enum(["active", "archived", "draft"]),

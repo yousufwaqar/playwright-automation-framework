@@ -1,0 +1,6 @@
+[2026-05-29T20:06:50.305Z] [INFO] [should show error message for invalid credentials @regression] 🧪 Starting test: should show error message for invalid credentials @regression
+[2026-05-29T20:06:50.306Z] [STEP] [should show error message for invalid credentials @regression] Step 1: Get invalid user credentials
+[2026-05-29T20:06:50.306Z] [STEP] [should show error message for invalid credentials @regression] Step 2: Attempt login with invalid credentials
+[2026-05-29T20:06:50.426Z] [STEP] [should show error message for invalid credentials @regression] Step 3: Verify error message is displayed
+[2026-05-29T20:06:50.536Z] [INFO] [should show error message for invalid credentials @regression] Invalid login test completed successfully
+[2026-05-29T20:06:50.537Z] [INFO] [should show error message for invalid credentials @regression] ✅ Finished test: should show error message for invalid credentials @regression - Status: passed

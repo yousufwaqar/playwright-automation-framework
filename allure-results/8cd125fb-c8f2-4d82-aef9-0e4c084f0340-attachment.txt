@@ -1,0 +1,6 @@
+[2026-05-29T20:09:07.169Z] [INFO] [should display dashboard with welcome message @smoke @regression] 🧪 Starting test: should display dashboard with welcome message @smoke @regression
+[2026-05-29T20:09:07.170Z] [INFO] [should display dashboard with welcome message @smoke @regression] Pre-condition: Login and navigate to dashboard
+[2026-05-29T20:09:07.917Z] [STEP] [should display dashboard with welcome message @smoke @regression] Step 1: Verify welcome message is displayed
+[2026-05-29T20:09:07.922Z] [STEP] [should display dashboard with welcome message @smoke @regression] Step 2: Assert welcome message contains expected text
+[2026-05-29T20:09:07.924Z] [INFO] [should display dashboard with welcome message @smoke @regression] Welcome message verification completed
+[2026-05-29T20:09:07.925Z] [INFO] [should display dashboard with welcome message @smoke @regression] ✅ Finished test: should display dashboard with welcome message @smoke @regression - Status: passed

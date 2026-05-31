@@ -1,0 +1,6 @@
+[2026-05-29T20:09:09.868Z] [INFO] [should login successfully with valid credentials @smoke @regression] 🧪 Starting test: should login successfully with valid credentials @smoke @regression
+[2026-05-29T20:09:09.868Z] [STEP] [should login successfully with valid credentials @smoke @regression] Step 1: Get valid user credentials
+[2026-05-29T20:09:09.868Z] [STEP] [should login successfully with valid credentials @smoke @regression] Step 2: Enter credentials and click login
+[2026-05-29T20:09:09.987Z] [STEP] [should login successfully with valid credentials @smoke @regression] Step 3: Verify successful login redirect
+[2026-05-29T20:09:10.112Z] [INFO] [should login successfully with valid credentials @smoke @regression] Login test completed successfully
+[2026-05-29T20:09:10.113Z] [INFO] [should login successfully with valid credentials @smoke @regression] ✅ Finished test: should login successfully with valid credentials @smoke @regression - Status: passed

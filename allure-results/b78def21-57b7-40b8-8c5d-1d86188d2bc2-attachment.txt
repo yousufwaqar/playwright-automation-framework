@@ -1,0 +1,3 @@
+[2026-05-29T20:08:47.337Z] [STEP] [API Schema Validation] Step 1: Send authenticated GET request to reports endpoint
+[2026-05-29T20:08:47.341Z] [STEP] [API Schema Validation] Step 2: Verify response status is 200
+[2026-05-29T20:08:47.342Z] [STEP] [API Schema Validation] Step 3: Validate response body matches schema

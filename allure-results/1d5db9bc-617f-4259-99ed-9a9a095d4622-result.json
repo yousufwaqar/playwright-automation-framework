@@ -1,0 +1,427 @@
+{
+  "uuid": "1d5db9bc-617f-4259-99ed-9a9a095d4622",
+  "name": "should open a report tile @regression",
+  "historyId": "90df6e126487bd8d5447d1dbb5a2ad9b:5bd835b0d6b1d4ada3b9f0db936e82c8",
+  "status": "passed",
+  "statusDetails": {},
+  "stage": "finished",
+  "steps": [
+    {
+      "status": "passed",
+      "statusDetails": {},
+      "stage": "finished",
+      "steps": [
+        {
+          "status": "passed",
+          "statusDetails": {},
+          "stage": "finished",
+          "steps": [
+            {
+              "status": "passed",
+              "statusDetails": {},
+              "stage": "finished",
+              "steps": [
+                {
+                  "status": "passed",
+                  "statusDetails": {},
+                  "stage": "finished",
+                  "steps": [],
+                  "attachments": [],
+                  "parameters": [],
+                  "name": "Create context",
+                  "start": 1780085207024,
+                  "uuid": "c05f906c-f5d7-4e95-b0a0-1dbbb045fc08",
+                  "stop": 1780085207027
+                }
+              ],
+              "attachments": [],
+              "parameters": [],
+              "name": "Fixture \"context\"",
+              "start": 1780085207023,
+              "uuid": "a1ba6c8c-6fff-4c64-a9b7-d23309cd635d",
+              "stop": 1780085207027
+            },
+            {
+              "status": "passed",
+              "statusDetails": {},
+              "stage": "finished",
+              "steps": [
+                {
+                  "status": "passed",
+                  "statusDetails": {},
+                  "stage": "finished",
+                  "steps": [],
+                  "attachments": [],
+                  "parameters": [],
+                  "name": "Create page",
+                  "start": 1780085207028,
+                  "uuid": "de66a3ec-7eb3-4c6d-8545-624f837b6313",
+                  "stop": 1780085207081
+                }
+              ],
+              "attachments": [],
+              "parameters": [],
+              "name": "Fixture \"page\"",
+              "start": 1780085207027,
+              "uuid": "1702cb53-85a1-493d-ae1a-9a7398caa1d4",
+              "stop": 1780085207081
+            },
+            {
+              "status": "passed",
+              "statusDetails": {},
+              "stage": "finished",
+              "steps": [],
+              "attachments": [],
+              "parameters": [],
+              "name": "Fixture \"loginPage\"",
+              "start": 1780085207082,
+              "uuid": "1d81b4b7-21f4-4d79-b57b-30c3d7251a63",
+              "stop": 1780085207082
+            },
+            {
+              "status": "passed",
+              "statusDetails": {},
+              "stage": "finished",
+              "steps": [],
+              "attachments": [],
+              "parameters": [],
+              "name": "Fixture \"dashboardPage\"",
+              "start": 1780085207082,
+              "uuid": "accd4d22-21a7-4b37-adfc-8c3b47c23850",
+              "stop": 1780085207082
+            },
+            {
+              "status": "passed",
+              "statusDetails": {},
+              "stage": "finished",
+              "steps": [],
+              "attachments": [],
+              "parameters": [],
+              "name": "Fixture \"logger\"",
+              "start": 1780085207083,
+              "uuid": "29a2633c-b3bb-4a37-aabe-3696b0217721",
+              "stop": 1780085207083
+            },
+            {
+              "status": "passed",
+              "statusDetails": {},
+              "stage": "finished",
+              "steps": [],
+              "attachments": [],
+              "parameters": [],
+              "name": "Navigate to \"/login\"",
+              "start": 1780085207084,
+              "uuid": "ebaf248d-dcba-4334-81b8-06335d6f0dee",
+              "stop": 1780085207121
+            },
+            {
+              "status": "passed",
+              "statusDetails": {},
+              "stage": "finished",
+              "steps": [],
+              "attachments": [],
+              "parameters": [],
+              "name": "Wait for load state \"networkidle\"",
+              "start": 1780085207123,
+              "uuid": "deb6e670-bd7f-4e89-9473-911b995b2111",
+              "stop": 1780085207600
+            },
+            {
+              "status": "passed",
+              "statusDetails": {},
+              "stage": "finished",
+              "steps": [],
+              "attachments": [],
+              "parameters": [],
+              "name": "Wait for selector getByTestId('email-input')",
+              "start": 1780085207601,
+              "uuid": "416e62df-e865-40b9-aab4-dbca0bd76dfc",
+              "stop": 1780085207637
+            },
+            {
+              "status": "passed",
+              "statusDetails": {},
+              "stage": "finished",
+              "steps": [],
+              "attachments": [],
+              "parameters": [],
+              "name": "Clear getByTestId('email-input')",
+              "start": 1780085207639,
+              "uuid": "d8cf6cfa-7671-431f-b8ef-29c7d0f5eb64",
+              "stop": 1780085207648
+            },
+            {
+              "status": "passed",
+              "statusDetails": {},
+              "stage": "finished",
+              "steps": [],
+              "attachments": [],
+              "parameters": [],
+              "name": "Fill \"testuser@example.com\" getByTestId('email-input')",
+              "start": 1780085207650,
+              "uuid": "5f2f754d-ed1e-463a-bc2c-09b549ba9cb8",
+              "stop": 1780085207658
+            },
+            {
+              "status": "passed",
+              "statusDetails": {},
+              "stage": "finished",
+              "steps": [],
+              "attachments": [],
+              "parameters": [],
+              "name": "Wait for selector getByTestId('password-input')",
+              "start": 1780085207660,
+              "uuid": "b760faf2-6a77-47f4-9fe1-358f52087deb",
+              "stop": 1780085207662
+            },
+            {
+              "status": "passed",
+              "statusDetails": {},
+              "stage": "finished",
+              "steps": [],
+              "attachments": [],
+              "parameters": [],
+              "name": "Clear getByTestId('password-input')",
+              "start": 1780085207663,
+              "uuid": "d328a32a-a682-442d-8016-bc48b7188489",
+              "stop": 1780085207670
+            },
+            {
+              "status": "passed",
+              "statusDetails": {},
+              "stage": "finished",
+              "steps": [],
+              "attachments": [],
+              "parameters": [],
+              "name": "Fill \"SecurePassword123!\" getByTestId('password-input')",
+              "start": 1780085207671,
+              "uuid": "9b09e971-ec0c-4642-a043-caa6b93f9ab2",
+              "stop": 1780085207677
+            },
+            {
+              "status": "passed",
+              "statusDetails": {},
+              "stage": "finished",
+              "steps": [],
+              "attachments": [],
+              "parameters": [],
+              "name": "Wait for selector getByTestId('login-button')",
+              "start": 1780085207678,
+              "uuid": "ffa40fd6-da19-4875-8026-73872ca0d1b8",
+              "stop": 1780085207681
+            },
+            {
+              "status": "passed",
+              "statusDetails": {},
+              "stage": "finished",
+              "steps": [],
+              "attachments": [],
+              "parameters": [],
+              "name": "Click getByTestId('login-button')",
+              "start": 1780085207682,
+              "uuid": "80b58902-8855-48f8-ae61-1394f411997f",
+              "stop": 1780085207725
+            },
+            {
+              "status": "passed",
+              "statusDetails": {},
+              "stage": "finished",
+              "steps": [],
+              "attachments": [],
+              "parameters": [],
+              "name": "Wait for load state \"networkidle\"",
+              "start": 1780085207726,
+              "uuid": "a1bf6638-a04c-4cd1-b0bb-79d322016230",
+              "stop": 1780085207727
+            },
+            {
+              "status": "passed",
+              "statusDetails": {},
+              "stage": "finished",
+              "steps": [],
+              "attachments": [],
+              "parameters": [],
+              "name": "Expect \"toBeVisible\" getByTestId('welcome-message')",
+              "start": 1780085207728,
+              "uuid": "fb916e0f-c1e8-4e6e-b4ea-87997cbf5333",
+              "stop": 1780085207857
+            },
+            {
+              "status": "passed",
+              "statusDetails": {},
+              "stage": "finished",
+              "steps": [],
+              "attachments": [],
+              "parameters": [],
+              "name": "Expect \"toHaveURL\"",
+              "start": 1780085207859,
+              "uuid": "3e22f145-b4df-48ce-9537-cf3f7b8e208b",
+              "stop": 1780085207862
+            }
+          ],
+          "attachments": [],
+          "parameters": [],
+          "name": "beforeEach hook",
+          "start": 1780085207017,
+          "uuid": "88ffd840-8183-43c4-8764-7e4c678087eb",
+          "stop": 1780085207862
+        }
+      ],
+      "attachments": [],
+      "parameters": [],
+      "name": "Before Hooks",
+      "start": 1780085207017,
+      "uuid": "d7f7a854-bc94-498e-b47d-bbf080ffc14b",
+      "stop": 1780085207864
+    },
+    {
+      "status": "passed",
+      "statusDetails": {},
+      "stage": "finished",
+      "steps": [],
+      "attachments": [],
+      "parameters": [],
+      "start": 1780085207865,
+      "name": "Wait for selector getByTestId('report-tile').first()",
+      "uuid": "d51e3430-41a0-434f-82fc-3bb60343b50e",
+      "stop": 1780085207870
+    },
+    {
+      "status": "passed",
+      "statusDetails": {},
+      "stage": "finished",
+      "steps": [],
+      "attachments": [],
+      "parameters": [],
+      "start": 1780085207872,
+      "name": "Click getByTestId('report-tile').first()",
+      "uuid": "31fa0c22-d40e-4142-8a19-d87e54d1153f",
+      "stop": 1780085207904
+    },
+    {
+      "status": "passed",
+      "statusDetails": {},
+      "stage": "finished",
+      "steps": [],
+      "attachments": [],
+      "parameters": [],
+      "start": 1780085207905,
+      "name": "Wait for load state \"networkidle\"",
+      "uuid": "245b42b7-f195-4209-9e75-7a789b1a3268",
+      "stop": 1780085208247
+    },
+    {
+      "status": "passed",
+      "statusDetails": {},
+      "stage": "finished",
+      "steps": [
+        {
+          "status": "passed",
+          "statusDetails": {},
+          "stage": "finished",
+          "steps": [],
+          "attachments": [],
+          "parameters": [],
+          "name": "Fixture \"logger\"",
+          "start": 1780085208248,
+          "uuid": "ba677a72-1622-41ff-a3e4-e78b8053ff54",
+          "stop": 1780085208248
+        },
+        {
+          "status": "passed",
+          "statusDetails": {},
+          "stage": "finished",
+          "steps": [],
+          "attachments": [],
+          "parameters": [],
+          "name": "Fixture \"dashboardPage\"",
+          "start": 1780085208248,
+          "uuid": "7250ebfd-93b0-42b1-8c61-996fdbeff17d",
+          "stop": 1780085208248
+        },
+        {
+          "status": "passed",
+          "statusDetails": {},
+          "stage": "finished",
+          "steps": [],
+          "attachments": [],
+          "parameters": [],
+          "name": "Fixture \"loginPage\"",
+          "start": 1780085208248,
+          "uuid": "f740b24d-8f97-4d83-8827-f21e14d406ed",
+          "stop": 1780085208249
+        },
+        {
+          "status": "passed",
+          "statusDetails": {},
+          "stage": "finished",
+          "steps": [],
+          "attachments": [],
+          "parameters": [],
+          "name": "Fixture \"page\"",
+          "start": 1780085208249,
+          "uuid": "04611197-b803-4ae9-96c3-bc5d947be222",
+          "stop": 1780085208249
+        },
+        {
+          "status": "passed",
+          "statusDetails": {},
+          "stage": "finished",
+          "steps": [
+            {
+              "status": "passed",
+              "statusDetails": {},
+              "stage": "finished",
+              "steps": [],
+              "attachments": [],
+              "parameters": [],
+              "name": "Close context",
+              "start": 1780085208299,
+              "uuid": "30c877bb-712c-44b7-8d16-fe4667fff04e",
+              "stop": 1780085208303
+            }
+          ],
+          "attachments": [],
+          "parameters": [],
+          "name": "Fixture \"context\"",
+          "start": 1780085208249,
+          "uuid": "8965f02d-94c8-48c3-9e64-2360393e976e",
+          "stop": 1780085208303
+        }
+      ],
+      "attachments": [],
+      "parameters": [],
+      "name": "After Hooks",
+      "start": 1780085208247,
+      "uuid": "b9c12dd9-6f43-4fa0-8037-a893b71271b7",
+      "stop": 1780085208308
+    }
+  ],
+  "attachments": [
+    {
+      "name": "stdout",
+      "source": "9c94ded6-05c2-46d7-b53c-76d7316faec9-attachment.txt",
+      "type": "text/plain"
+    }
+  ],
+  "parameters": [{ "name": "Project", "value": "chromium" }],
+  "labels": [
+    { "name": "language", "value": "javascript" },
+    { "name": "framework", "value": "playwright" },
+    { "name": "package", "value": "playwright-automation-framework.dashboard.spec.ts" },
+    { "name": "_fallbackTestCaseId", "value": "e1962638c66bf1f355e2cc8df62e2dfe" },
+    { "name": "titlePath", "value": " > chromium > dashboard.spec.ts > Dashboard Feature Tests" },
+    { "name": "tag", "value": "regression" },
+    { "name": "host", "value": "4f366791b977" },
+    { "name": "thread", "value": "pid-8326-worker-1" },
+    { "name": "parentSuite", "value": "chromium" },
+    { "name": "suite", "value": "dashboard.spec.ts" },
+    { "name": "subSuite", "value": "Dashboard Feature Tests" }
+  ],
+  "links": [],
+  "start": 1780085207017,
+  "testCaseId": "90df6e126487bd8d5447d1dbb5a2ad9b",
+  "fullName": "dashboard.spec.ts:74:3",
+  "titlePath": ["playwright-automation-framework", "dashboard.spec.ts", "Dashboard Feature Tests"],
+  "stop": 1780085208294
+}

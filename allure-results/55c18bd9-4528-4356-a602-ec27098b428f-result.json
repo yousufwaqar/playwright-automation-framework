@@ -1,0 +1,180 @@
+{
+  "uuid": "55c18bd9-4528-4356-a602-ec27098b428f",
+  "name": "should validate response schema for reports endpoint @regression @api",
+  "historyId": "89b4b69861fe6b3dce5e9dbd90ae0282:5bd835b0d6b1d4ada3b9f0db936e82c8",
+  "status": "failed",
+  "statusDetails": {
+    "message": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false",
+    "trace": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false\n    at /home/ubuntu/playwright-automation-framework/tests/api/api-contract.spec.ts:75:28"
+  },
+  "stage": "finished",
+  "steps": [
+    {
+      "status": "passed",
+      "statusDetails": {},
+      "stage": "finished",
+      "steps": [
+        {
+          "status": "passed",
+          "statusDetails": {},
+          "stage": "finished",
+          "steps": [
+            {
+              "status": "passed",
+              "statusDetails": {},
+              "stage": "finished",
+              "steps": [],
+              "attachments": [],
+              "parameters": [],
+              "name": "Create request context",
+              "start": 1780085328494,
+              "uuid": "26f0be78-76e8-499d-b161-a10d1b09b09a",
+              "stop": 1780085328498
+            }
+          ],
+          "attachments": [],
+          "parameters": [],
+          "name": "Fixture \"request\"",
+          "start": 1780085328491,
+          "uuid": "1bc697be-0bf3-4f02-be51-16961b57b9c9",
+          "stop": 1780085328503
+        }
+      ],
+      "attachments": [],
+      "parameters": [],
+      "name": "Before Hooks",
+      "start": 1780085328476,
+      "uuid": "3e07520b-11de-4318-a40c-044777c36b92",
+      "stop": 1780085328503
+    },
+    {
+      "status": "passed",
+      "statusDetails": {},
+      "stage": "finished",
+      "steps": [],
+      "attachments": [],
+      "parameters": [],
+      "start": 1780085328507,
+      "name": "GET \"/api/v1/reports\"",
+      "uuid": "0c801053-2779-419e-b6ef-4d0e3f0550d4",
+      "stop": 1780085328530
+    },
+    {
+      "status": "passed",
+      "statusDetails": {},
+      "stage": "finished",
+      "steps": [],
+      "attachments": [],
+      "parameters": [],
+      "start": 1780085328532,
+      "name": "Expect \"toBe\"",
+      "uuid": "d968908b-101b-4f99-82a4-372f7cfa45bb",
+      "stop": 1780085328533
+    },
+    {
+      "status": "failed",
+      "statusDetails": {
+        "message": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false",
+        "trace": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false\n    at /home/ubuntu/playwright-automation-framework/tests/api/api-contract.spec.ts:75:28"
+      },
+      "stage": "finished",
+      "steps": [],
+      "attachments": [],
+      "parameters": [],
+      "start": 1780085328537,
+      "name": "Expect \"toBe\"",
+      "uuid": "737a9c90-efc8-44ca-bf05-148e276b018e",
+      "stop": 1780085328539
+    },
+    {
+      "statusDetails": {},
+      "stage": "finished",
+      "steps": [],
+      "attachments": [
+        {
+          "name": "error-context",
+          "source": "f7bb72ec-dba5-4fad-b302-47abf2db979f-attachment.md",
+          "type": "text/markdown"
+        }
+      ],
+      "parameters": [],
+      "start": 1780085328607,
+      "name": "error-context",
+      "stop": 1780085328607
+    },
+    {
+      "statusDetails": {},
+      "stage": "finished",
+      "steps": [],
+      "attachments": [
+        {
+          "name": "trace",
+          "source": "174aca22-0969-4c5c-ad1b-617e1aed0d19-attachment.zip",
+          "type": "application/vnd.allure.playwright-trace"
+        }
+      ],
+      "parameters": [],
+      "start": 1780085328607,
+      "name": "trace",
+      "stop": 1780085328607
+    },
+    {
+      "status": "passed",
+      "statusDetails": {},
+      "stage": "finished",
+      "steps": [
+        {
+          "status": "passed",
+          "statusDetails": {},
+          "stage": "finished",
+          "steps": [],
+          "attachments": [],
+          "parameters": [],
+          "name": "Fixture \"request\"",
+          "start": 1780085328541,
+          "uuid": "0a65cbfc-5937-4cfb-a218-c26d6bed323b",
+          "stop": 1780085328569
+        }
+      ],
+      "attachments": [],
+      "parameters": [],
+      "name": "After Hooks",
+      "start": 1780085328540,
+      "uuid": "1cfc6cc8-70b0-4ae3-bbdc-0d8a5909eb49",
+      "stop": 1780085328580
+    }
+  ],
+  "attachments": [
+    {
+      "name": "stdout",
+      "source": "38abe457-5d97-4b78-89ef-bb1633679946-attachment.txt",
+      "type": "text/plain"
+    }
+  ],
+  "parameters": [{ "name": "Project", "value": "chromium" }],
+  "labels": [
+    { "name": "language", "value": "javascript" },
+    { "name": "framework", "value": "playwright" },
+    { "name": "package", "value": "playwright-automation-framework.api.api-contract.spec.ts" },
+    { "name": "_fallbackTestCaseId", "value": "ad5d457e8fcad4369dda84a16c05bb35" },
+    { "name": "titlePath", "value": " > chromium > api/api-contract.spec.ts > API Contract Tests" },
+    { "name": "tag", "value": "regression" },
+    { "name": "tag", "value": "api" },
+    { "name": "host", "value": "4f366791b977" },
+    { "name": "thread", "value": "pid-9256-worker-1" },
+    { "name": "parentSuite", "value": "chromium" },
+    { "name": "suite", "value": "api/api-contract.spec.ts" },
+    { "name": "subSuite", "value": "API Contract Tests" }
+  ],
+  "links": [],
+  "start": 1780085328475,
+  "testCaseId": "89b4b69861fe6b3dce5e9dbd90ae0282",
+  "fullName": "api/api-contract.spec.ts:57:3",
+  "titlePath": [
+    "playwright-automation-framework",
+    "api",
+    "api-contract.spec.ts",
+    "API Contract Tests"
+  ],
+  "stop": 1780085328555
+}

@@ -1,0 +1,3 @@
+[2026-05-29T20:08:47.277Z] [STEP] [API Unauthorized Access] Step 1: Send request without authentication
+[2026-05-29T20:08:47.297Z] [STEP] [API Unauthorized Access] Step 2: Verify response status is 401
+[2026-05-29T20:08:47.300Z] [INFO] [API Unauthorized Access] Unauthorized access test passed

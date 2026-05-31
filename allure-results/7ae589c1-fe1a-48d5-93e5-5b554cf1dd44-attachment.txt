@@ -1,0 +1,5 @@
+[2026-05-29T20:08:52.448Z] [INFO] [should disable login button when fields are empty @regression] 🧪 Starting test: should disable login button when fields are empty @regression
+[2026-05-29T20:08:52.448Z] [STEP] [should disable login button when fields are empty @regression] Step 1: Verify login button is disabled on page load
+[2026-05-29T20:08:52.483Z] [STEP] [should disable login button when fields are empty @regression] Step 2: Assert login button is disabled
+[2026-05-29T20:08:52.484Z] [INFO] [should disable login button when fields are empty @regression] Empty field validation test completed
+[2026-05-29T20:08:52.485Z] [INFO] [should disable login button when fields are empty @regression] ✅ Finished test: should disable login button when fields are empty @regression - Status: passed

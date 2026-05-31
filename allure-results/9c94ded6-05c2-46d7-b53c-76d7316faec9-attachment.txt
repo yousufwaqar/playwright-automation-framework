@@ -1,0 +1,6 @@
+[2026-05-29T20:06:47.083Z] [INFO] [should open a report tile @regression] 🧪 Starting test: should open a report tile @regression
+[2026-05-29T20:06:47.083Z] [INFO] [should open a report tile @regression] Pre-condition: Login and navigate to dashboard
+[2026-05-29T20:06:47.864Z] [STEP] [should open a report tile @regression] Step 1: Click on the first report tile
+[2026-05-29T20:06:48.247Z] [STEP] [should open a report tile @regression] Step 2: Verify report page is loaded
+[2026-05-29T20:06:48.247Z] [INFO] [should open a report tile @regression] Report open test completed
+[2026-05-29T20:06:48.248Z] [INFO] [should open a report tile @regression] ✅ Finished test: should open a report tile @regression - Status: passed

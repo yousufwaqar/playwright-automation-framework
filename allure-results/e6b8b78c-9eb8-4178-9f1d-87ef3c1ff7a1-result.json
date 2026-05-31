@@ -1,0 +1,142 @@
+{
+  "uuid": "e6b8b78c-9eb8-4178-9f1d-87ef3c1ff7a1",
+  "name": "should validate response schema for reports endpoint @regression @api",
+  "historyId": "89b4b69861fe6b3dce5e9dbd90ae0282:5bd835b0d6b1d4ada3b9f0db936e82c8",
+  "status": "passed",
+  "statusDetails": {},
+  "stage": "finished",
+  "steps": [
+    {
+      "status": "passed",
+      "statusDetails": {},
+      "stage": "finished",
+      "steps": [
+        {
+          "status": "passed",
+          "statusDetails": {},
+          "stage": "finished",
+          "steps": [
+            {
+              "status": "passed",
+              "statusDetails": {},
+              "stage": "finished",
+              "steps": [],
+              "attachments": [],
+              "parameters": [],
+              "name": "Create request context",
+              "start": 1780085346926,
+              "uuid": "cf1c3dc1-2e00-458d-ab2d-a529d2edcce1",
+              "stop": 1780085346927
+            }
+          ],
+          "attachments": [],
+          "parameters": [],
+          "name": "Fixture \"request\"",
+          "start": 1780085346925,
+          "uuid": "8261e793-2c6d-4bdd-b509-5176962ab157",
+          "stop": 1780085346928
+        }
+      ],
+      "attachments": [],
+      "parameters": [],
+      "name": "Before Hooks",
+      "start": 1780085346917,
+      "uuid": "0d831917-5102-4bb1-9e89-6def351c8f0e",
+      "stop": 1780085346928
+    },
+    {
+      "status": "passed",
+      "statusDetails": {},
+      "stage": "finished",
+      "steps": [],
+      "attachments": [],
+      "parameters": [],
+      "start": 1780085346930,
+      "name": "GET \"/api/v1/reports\"",
+      "uuid": "019ce433-e5e4-4370-831c-75aa4dd08df4",
+      "stop": 1780085346938
+    },
+    {
+      "status": "passed",
+      "statusDetails": {},
+      "stage": "finished",
+      "steps": [],
+      "attachments": [],
+      "parameters": [],
+      "start": 1780085346939,
+      "name": "Expect \"toBe\"",
+      "uuid": "927f9c41-2206-45ed-94fc-7d261eee13a1",
+      "stop": 1780085346940
+    },
+    {
+      "status": "passed",
+      "statusDetails": {},
+      "stage": "finished",
+      "steps": [],
+      "attachments": [],
+      "parameters": [],
+      "start": 1780085346942,
+      "name": "Expect \"toBe\"",
+      "uuid": "531ee1b3-cb37-4af2-8258-7a873c294f75",
+      "stop": 1780085346942
+    },
+    {
+      "status": "passed",
+      "statusDetails": {},
+      "stage": "finished",
+      "steps": [
+        {
+          "status": "passed",
+          "statusDetails": {},
+          "stage": "finished",
+          "steps": [],
+          "attachments": [],
+          "parameters": [],
+          "name": "Fixture \"request\"",
+          "start": 1780085346943,
+          "uuid": "36e281c2-7bc2-4726-a68f-c033d2974707",
+          "stop": 1780085346944
+        }
+      ],
+      "attachments": [],
+      "parameters": [],
+      "name": "After Hooks",
+      "start": 1780085346942,
+      "uuid": "c8d3b40f-8053-4e4c-8c21-b437dc090d53",
+      "stop": 1780085346952
+    }
+  ],
+  "attachments": [
+    {
+      "name": "stdout",
+      "source": "f2b6021e-dcad-4471-a8d2-c8ed4925cb1b-attachment.txt",
+      "type": "text/plain"
+    }
+  ],
+  "parameters": [{ "name": "Project", "value": "chromium" }],
+  "labels": [
+    { "name": "language", "value": "javascript" },
+    { "name": "framework", "value": "playwright" },
+    { "name": "package", "value": "playwright-automation-framework.api.api-contract.spec.ts" },
+    { "name": "_fallbackTestCaseId", "value": "ad5d457e8fcad4369dda84a16c05bb35" },
+    { "name": "titlePath", "value": " > chromium > api/api-contract.spec.ts > API Contract Tests" },
+    { "name": "tag", "value": "regression" },
+    { "name": "tag", "value": "api" },
+    { "name": "host", "value": "4f366791b977" },
+    { "name": "thread", "value": "pid-9582-worker-0" },
+    { "name": "parentSuite", "value": "chromium" },
+    { "name": "suite", "value": "api/api-contract.spec.ts" },
+    { "name": "subSuite", "value": "API Contract Tests" }
+  ],
+  "links": [],
+  "start": 1780085346917,
+  "testCaseId": "89b4b69861fe6b3dce5e9dbd90ae0282",
+  "fullName": "api/api-contract.spec.ts:57:3",
+  "titlePath": [
+    "playwright-automation-framework",
+    "api",
+    "api-contract.spec.ts",
+    "API Contract Tests"
+  ],
+  "stop": 1780085346938
+}

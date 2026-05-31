@@ -16,7 +16,7 @@ test.describe("Visual Regression Tests", () => {
   });
 
   test("should match dashboard layout snapshot @visual", async ({ loginPage, dashboardPage }) => {
-    const user = { username: "admin@example.com", password: "password123" };
+    const user = { username: "admin@example.com", password: "AdminPassword123!" };
     await loginPage.goto();
     await loginPage.login(user.username, user.password);
     await dashboardPage.assertDashboardLoaded();

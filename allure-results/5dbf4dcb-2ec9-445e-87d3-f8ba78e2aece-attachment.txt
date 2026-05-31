@@ -1,0 +1,4 @@
+[2026-05-29T20:09:06.964Z] [STEP] [API Performance Check] Step 1: Send request and measure response time
+[2026-05-29T20:09:06.969Z] [STEP] [API Performance Check] Step 2: Response time: 4ms
+[2026-05-29T20:09:06.970Z] [STEP] [API Performance Check] Step 3: Verify response time is within 2000ms threshold
+[2026-05-29T20:09:06.971Z] [INFO] [API Performance Check] Performance test passed. Response time: 4ms

@@ -1,0 +1,5 @@
+[2026-05-29T20:06:51.148Z] [INFO] [should verify login page is loaded correctly @smoke] 🧪 Starting test: should verify login page is loaded correctly @smoke
+[2026-05-29T20:06:51.149Z] [STEP] [should verify login page is loaded correctly @smoke] Step 1: Verify login page elements are visible
+[2026-05-29T20:06:51.173Z] [STEP] [should verify login page is loaded correctly @smoke] Step 2: Assert page is loaded
+[2026-05-29T20:06:51.174Z] [INFO] [should verify login page is loaded correctly @smoke] Page load verification completed
+[2026-05-29T20:06:51.175Z] [INFO] [should verify login page is loaded correctly @smoke] ✅ Finished test: should verify login page is loaded correctly @smoke - Status: passed

@@ -1,0 +1,6 @@
+[2026-05-29T20:09:07.166Z] [INFO] [should search for a specific report @regression] 🧪 Starting test: should search for a specific report @regression
+[2026-05-29T20:09:07.167Z] [INFO] [should search for a specific report @regression] Pre-condition: Login and navigate to dashboard
+[2026-05-29T20:09:07.913Z] [STEP] [should search for a specific report @regression] Step 1: Search for a report
+[2026-05-29T20:09:08.364Z] [STEP] [should search for a specific report @regression] Step 2: Verify search results are displayed
+[2026-05-29T20:09:08.368Z] [INFO] [should search for a specific report @regression] Report search test completed
+[2026-05-29T20:09:08.369Z] [INFO] [should search for a specific report @regression] ✅ Finished test: should search for a specific report @regression - Status: passed

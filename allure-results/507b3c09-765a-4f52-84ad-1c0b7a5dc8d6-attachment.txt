@@ -1,0 +1,6 @@
+[2026-05-29T20:09:08.484Z] [INFO] [should logout successfully @smoke @regression] 🧪 Starting test: should logout successfully @smoke @regression
+[2026-05-29T20:09:08.484Z] [INFO] [should logout successfully @smoke @regression] Pre-condition: Login and navigate to dashboard
+[2026-05-29T20:09:09.255Z] [STEP] [should logout successfully @smoke @regression] Step 1: Click logout
+[2026-05-29T20:09:09.844Z] [STEP] [should logout successfully @smoke @regression] Step 2: Verify redirect to login page
+[2026-05-29T20:09:09.864Z] [INFO] [should logout successfully @smoke @regression] Logout test completed successfully
+[2026-05-29T20:09:09.865Z] [INFO] [should logout successfully @smoke @regression] ✅ Finished test: should logout successfully @smoke @regression - Status: passed
