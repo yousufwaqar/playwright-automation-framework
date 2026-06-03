@@ -4,7 +4,7 @@
 
 ### Enterprise-grade end-to-end test automation built for scale
 
-[![Build Status](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/playwright-ci.yml/badge.svg)](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/playwright-ci.yml)
+[![Quality Gate](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/quality-gate.yml/badge.svg)](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/quality-gate.yml)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Playwright](https://img.shields.io/badge/Playwright-1.45+-45ba4b?logo=playwright&logoColor=white)](https://playwright.dev/)
  [![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
@@ -62,10 +62,16 @@ It is designed to be easy to clone, easy to understand, and easy to extend for r
 - **Mobile viewport projects** (Pixel 7, iPhone 14) ready to enable
 - **API contract validation** alongside UI coverage
 - **Bundled mock application** for fully self-contained CI runs
+- **Accessibility testing** with axe-core (WCAG 2.0/2.1 A & AA)
+- **API & HTTP security suite** — authz, CSP & hardening headers, non-wildcard CORS, safe input handling
+- **Performance smoke tests** — Navigation Timing budgets + API latency/throughput
+- **Visual regression** via Playwright screenshots with platform-aware baselines
+- **Docker + Docker Compose** for reproducible one-command runs
+- **Composite Quality Gate CI** — every quality dimension is its own status check
 - **External demo-site suites** (SauceDemo / The Internet / RESTful Booker) gated behind tags
 - **GitHub Actions workflows** with Chromium runs, artifact upload, and a separate nightly external job
 - **HTML, JSON, screenshot, trace, and video reporting**
-- **Tag-based execution** with `@smoke`, `@regression`, `@api`, `@external`
+- **Tag-based execution** with `@smoke`, `@regression`, `@api`, `@a11y`, `@security`, `@visual`, `@performance`, `@external`
 
 ---
 
@@ -130,6 +136,27 @@ npm run test:regression
 npm run test:api
 ```
 
+### Run individual quality modules
+
+```bash
+npm run test:a11y          # accessibility (axe-core, WCAG 2.0/2.1 A & AA)
+npm run test:security      # API & HTTP security assertions
+npm run test:performance   # performance smoke (Navigation Timing budgets)
+npm run test:visual        # visual regression (uses committed baselines)
+npm run test:visual:update # refresh visual baselines for the current platform
+npm run perf:k6            # k6 API load script (requires k6 installed)
+```
+
+### Run with Docker (no local Node/Playwright needed)
+
+```bash
+docker compose up --build --exit-code-from e2e
+```
+
+This builds the pinned Playwright image, starts the mock app inside the
+container, and runs the deterministic suite. See [docs/architecture.md](./docs/architecture.md).
+
+
 ### Run external demo-site suites (optional)
 
 > External tests hit public practice sites (SauceDemo, The Internet, RESTful Booker). They are excluded from the default CI to keep the badge stable.
@@ -190,12 +217,16 @@ Mock app routes:
 | Login UI (mock)               | Valid login, invalid login, empty field validation, page-load verification      |
 | Dashboard UI (mock)           | Dashboard load, welcome message, report search, report tile interaction, logout |
 | API contracts (mock)          | Health check, unauthorized access, schema validation, response-time threshold   |
+| Accessibility (mock)          | axe-core WCAG 2.0/2.1 A & AA audits on login and dashboard                       |
+| Security (mock API/HTTP)      | Authz enforcement, CSP & hardening headers, non-wildcard CORS, malformed-input handling, info-leak checks |
+| Performance (mock)            | Navigation Timing budgets, API latency percentiles & throughput                 |
+| Visual regression (mock)      | Screenshot baselines for login and dashboard (platform-aware)                   |
 | SauceDemo (external)          | Login, inventory, add-to-cart, full checkout flow                               |
 | The Internet (external)       | Checkboxes, dropdowns, dynamic loading, alerts                                  |
 | RESTful Booker API (external) | Auth token, create / read / update / delete booking, schema validation          |
 | Cross-browser                 | Chromium (CI + local), Firefox & WebKit (local)                                 |
 | Mobile viewports              | Pixel 7, iPhone 14 (configured, opt-in)                                         |
-| Tags                          | `@smoke`, `@regression`, `@api`, `@external`, `@saucedemo`, `@theinternet`      |
+| Tags                          | `@smoke`, `@regression`, `@api`, `@a11y`, `@security`, `@visual`, `@performance`, `@external`, `@saucedemo`, `@theinternet` |
 
 ---
 
@@ -205,7 +236,8 @@ Mock app routes:
 playwright-automation-framework/
 ├── .github/
 │   ├── workflows/
-│   │   ├── playwright-ci.yml          # Default CI (mock app, excludes @external)
+│   │   ├── quality-gate.yml           # Authoritative CI: composite quality gate
+│   │   ├── visual-baseline.yml        # Manual: generate Linux visual baselines
 │   │   └── external-ci.yml            # Nightly external demo-site suite
 │   ├── ISSUE_TEMPLATE/
 │   │   ├── bug_report.md
@@ -213,11 +245,21 @@ playwright-automation-framework/
 │   ├── pull_request_template.md
 │   ├── CODEOWNERS
 │   └── dependabot.yml
+├── docs/
+│   ├── test-strategy.md               # Layers, tagging, principles
+│   ├── architecture.md                # Framework structure & design decisions
+│   └── quality-gates.md               # CI topology, blocking vs non-blocking
 ├── mock-app/
-│   ├── server.js                      # Local mock server for CI/demo runs
-│   └── pages/
-│       ├── login.html                 # Mock login page
-│       └── dashboard.html             # Mock dashboard page
+│   ├── server.js                      # Hardened mock server (headers, CORS, JSON)
+│   ├── pages/
+│   │   ├── login.html                 # Mock login page (no inline scripts)
+│   │   └── dashboard.html             # Mock dashboard page (no inline scripts)
+│   └── public/
+│       ├── login.js                   # Externalised JS (strict-CSP friendly)
+│       └── dashboard.js
+├── performance/
+│   └── k6/
+│       └── api-load.js                # k6 API load script
 ├── src/
 │   ├── fixtures/
 │   │   ├── base.fixture.ts            # Custom Playwright fixtures (mock app)
@@ -235,11 +277,22 @@ playwright-automation-framework/
 │   ├── utils/
 │   │   ├── ConfigManager.ts           # Environment config loader
 │   │   ├── Logger.ts                  # Structured logging utility
-│   │   └── TestDataManager.ts         # Test data accessor
+│   │   ├── TestDataManager.ts         # Test data accessor
+│   │   ├── AccessibilityHelper.ts     # axe-core audit wrapper
+│   │   └── PerformanceHelper.ts       # Navigation Timing + percentiles
 │   └── global.d.ts                    # Ambient type declarations
 ├── tests/
 │   ├── api/
 │   │   └── api-contract.spec.ts       # Mock API contract tests
+│   ├── a11y/
+│   │   └── accessibility.spec.ts      # Accessibility audits
+│   ├── security/
+│   │   └── api-security.spec.ts       # API & HTTP security assertions
+│   ├── performance/
+│   │   └── perf-smoke.spec.ts         # Performance smoke tests
+│   ├── visual/
+│   │   ├── visual.spec.ts             # Visual regression tests
+│   │   └── visual.spec.ts-snapshots/  # Committed baselines
 │   ├── external/
 │   │   ├── saucedemo/
 │   │   │   ├── login.spec.ts
@@ -254,6 +307,9 @@ playwright-automation-framework/
 │   │   └── external-sites.json        # Credentials/URLs for demo sites
 │   ├── dashboard.spec.ts              # Dashboard UI tests
 │   └── login.spec.ts                  # Login UI tests
+├── Dockerfile                         # Pinned Playwright image
+├── docker-compose.yml                 # One-command containerised run
+├── .dockerignore
 ├── .nvmrc                             # Pinned Node version
 ├── CONTRIBUTING.md
 ├── playwright.config.ts               # Playwright configuration
@@ -326,32 +382,36 @@ npm run report
 
 ## CI/CD
 
-Two separate GitHub Actions workflows keep the public demo signal clean:
+CI is a **composite Quality Gate**: every quality dimension runs as its own job
+and produces an independent status check. Full details in
+[docs/quality-gates.md](./docs/quality-gates.md).
 
-### `playwright-ci.yml` — default workflow
+### `quality-gate.yml` — authoritative workflow
 
-Runs on:
+Runs on push to `main`/`develop`, pull requests targeting `main`, and a daily
+schedule. Test jobs run inside `mcr.microsoft.com/playwright:v1.59.1-jammy`, so
+browsers are preinstalled.
 
-- Push to `main` or `develop`
-- Pull requests targeting `main`
-- Daily scheduled run
+**Blocking** (gate the merge): `lint-typecheck`, `functional`, `accessibility`,
+`security`. These are aggregated by a final `quality-gate` job via `needs`.
 
-Runs on Chromium (Firefox and WebKit are skipped in CI due to missing system libraries on the Ubuntu runner; both work locally):
+**Non-blocking** (`continue-on-error: true`, informational): `performance`,
+`visual`, `k6-load`. A red performance/visual run stays visible without blocking
+a merge.
 
-```yaml
-- name: Start mock application
-  run: |
-    node mock-app/server.js &
-    sleep 2
-    curl -f http://localhost:3000/api/v1/health || exit 1
+> Branch protection should require the **Quality Gate** status check (the older
+> "Playwright Tests" check was removed with `playwright-ci.yml`).
 
-- name: Run Playwright tests
-  run: npx playwright test --project=chromium --grep-invert @external
-```
+### `visual-baseline.yml` — Linux baselines
+
+Playwright screenshot baselines are platform-specific. Windows baselines are
+committed for local dev; run this `workflow_dispatch` once to generate and commit
+the Linux baselines so the CI `visual` job goes green.
 
 ### `external-ci.yml` — nightly external workflow
 
-Runs the SauceDemo, The Internet, and RESTful Booker suites on a nightly schedule and on manual dispatch only. Failures here do not affect the main badge.
+Runs the SauceDemo, The Internet, and RESTful Booker suites on a nightly schedule
+and on manual dispatch only. Failures here do not affect the main badge.
 
 ---
 
@@ -359,7 +419,9 @@ Runs the SauceDemo, The Internet, and RESTful Booker suites on a nightly schedul
 
 | Command                     | Description                           |
 | ---                         | ---                                   |
-| `npm run test`              | Run all non-external tests            |
+| `npm run test`              | Run deterministic suite (excludes external, visual, performance) |
+| `npm run test:functional`   | Functional + API only (excludes a11y/security/visual/perf) |
+| `npm run test:quality`      | Run all non-external tests (every quality module) |
 | `npm run test:headed`       | Run tests with visible browser        |
 | `npm run test:chrome`       | Run Chromium project                  |
 | `npm run test:firefox`      | Run Firefox project (local only)      |
@@ -367,6 +429,13 @@ Runs the SauceDemo, The Internet, and RESTful Booker suites on a nightly schedul
 | `npm run test:api`          | Run mock API contract tests           |
 | `npm run test:smoke`        | Run smoke tests                       |
 | `npm run test:regression`   | Run regression tests                  |
+| `npm run test:a11y`         | Run accessibility audits              |
+| `npm run test:security`     | Run API & HTTP security tests         |
+| `npm run test:performance`  | Run performance smoke tests           |
+| `npm run test:visual`       | Run visual regression tests           |
+| `npm run test:visual:update`| Refresh visual baselines (current platform) |
+| `npm run perf:k6`           | Run k6 API load script (requires k6)  |
+| `npm run typecheck`         | Type-check without emitting           |
 | `npm run test:external`     | Run all external demo-site suites     |
 | `npm run test:saucedemo`    | Run SauceDemo external suite          |
 | `npm run test:theinternet`  | Run The Internet external suite       |
@@ -377,13 +446,21 @@ Runs the SauceDemo, The Internet, and RESTful Booker suites on a nightly schedul
 
 ## Roadmap
 
+Recently delivered:
+
+- ✅ Accessibility testing with axe-core
+- ✅ API & HTTP security suite
+- ✅ Performance smoke tests + k6 load script
+- ✅ Visual regression testing
+- ✅ Docker support for consistent local execution
+- ✅ Composite Quality Gate CI with per-module status checks
+
+Planned:
+
 - Add Allure reporting integration
 - Publish Playwright HTML reports to GitHub Pages
-- Add Docker support for consistent local execution
-- Add visual regression testing
-- Add accessibility testing with axe-core
+- Promote the visual job to blocking once Linux baselines are seeded
 - Add reusable GitHub Actions workflow templates
-- Add example pull request quality gates
 
 ---
 
