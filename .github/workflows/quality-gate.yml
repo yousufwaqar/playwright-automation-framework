@@ -47,7 +47,7 @@ jobs:
   functional:
     name: Functional & API
     runs-on: ubuntu-latest
-    container: mcr.microsoft.com/playwright:v1.59.1-jammy
+    container: mcr.microsoft.com/playwright:v1.60.0-jammy
     steps:
       - uses: actions/checkout@v6
       - run: npm ci
@@ -63,7 +63,7 @@ jobs:
   accessibility:
     name: Accessibility (a11y)
     runs-on: ubuntu-latest
-    container: mcr.microsoft.com/playwright:v1.59.1-jammy
+    container: mcr.microsoft.com/playwright:v1.60.0-jammy
     steps:
       - uses: actions/checkout@v6
       - run: npm ci
@@ -79,7 +79,7 @@ jobs:
   security:
     name: API & HTTP Security
     runs-on: ubuntu-latest
-    container: mcr.microsoft.com/playwright:v1.59.1-jammy
+    container: mcr.microsoft.com/playwright:v1.60.0-jammy
     steps:
       - uses: actions/checkout@v6
       - run: npm ci
@@ -97,7 +97,7 @@ jobs:
   performance:
     name: Performance Smoke (non-blocking)
     runs-on: ubuntu-latest
-    container: mcr.microsoft.com/playwright:v1.59.1-jammy
+    container: mcr.microsoft.com/playwright:v1.60.0-jammy
     continue-on-error: true
     steps:
       - uses: actions/checkout@v6
@@ -108,7 +108,7 @@ jobs:
   visual:
     name: Visual Regression (non-blocking)
     runs-on: ubuntu-latest
-    container: mcr.microsoft.com/playwright:v1.59.1-jammy
+    container: mcr.microsoft.com/playwright:v1.60.0-jammy
     # Non-blocking until Linux baselines are generated via the
     # "Update Visual Baselines" workflow (visual-baseline.yml).
     continue-on-error: true
