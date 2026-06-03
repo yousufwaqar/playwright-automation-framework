@@ -62,7 +62,10 @@
     "TestRail", "Xray", "Zephyr", "BrowserStack", "Sauce",
     "Lambdatest", "Storybook", "Chromatic", "Percy", "Applitools",
     "Webhooks", "webhook", "webhooks", "Webhook", "rgba", "rgb",
-    "hsl", "hsla", "hex"
+    "hsl", "hsla", "hex",
+    "nosniff", "referrer", "Referrer", "externalised", "Externalised",
+    "antialiasing", "aria", "haspopup", "fingerprinting", "Navigation",
+    "percentile", "Lighthouse", "deterministic"
   ],
   "flagWords": [],
   "allowCompoundWords": true
