@@ -1,6 +1,6 @@
 {
   "name": "playwright-automation-framework",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Enterprise-grade Playwright + TypeScript test automation framework with POM, parallel execution, and CI/CD integration",
   "author": "Yousuf Waqar <yousufwaqar7@gmail.com>",
   "license": "MIT",
