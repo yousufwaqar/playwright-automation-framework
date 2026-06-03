@@ -103,6 +103,10 @@ test-results/
 playwright-report/
 playwright/.cache/
 
+# Allure
+allure-results/
+allure-report/
+
 # OS generated files
 .DS_Store
 .DS_Store?
