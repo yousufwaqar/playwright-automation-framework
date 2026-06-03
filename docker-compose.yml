@@ -1,0 +1,28 @@
+# Docker Compose for the Playwright framework.
+#
+# The `e2e` service builds the test image and runs the suite. The mock app is
+# started inside the container by Playwright's webServer, so a single service is
+# enough for a reproducible, one-command run:
+#
+#   docker compose up --build --exit-code-from e2e
+#
+# Run a specific suite (override the command), e.g. security only:
+#   docker compose run --rm e2e npm run test:security
+#
+# Generate Linux visual baselines (writes *-chromium-linux.png into the repo):
+#   docker compose run --rm e2e npm run test:visual:update
+
+services:
+  e2e:
+    build: .
+    container_name: paf-e2e
+    environment:
+      CI: "true"
+      BASE_URL: http://localhost:3000
+      API_BASE_URL: http://localhost:3000/api/v1
+      API_TOKEN: mock-jwt-token-12345
+    volumes:
+      # Surface reports and any (re)generated snapshots back on the host.
+      - ./playwright-report:/app/playwright-report
+      - ./test-results:/app/test-results
+      - ./tests/visual:/app/tests/visual

@@ -1,0 +1,154 @@
+name: Quality Gate
+
+# Single authoritative CI pipeline. Runs each test module as its own job so every
+# quality dimension is an independent, visible check, then aggregates the blocking
+# ones into a final `quality-gate` status. Replaces the old playwright-ci.yml to
+# avoid running the same tests twice.
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: "0 6 * * *"
+
+permissions:
+  contents: read
+
+# Cancel superseded runs on the same ref to save CI minutes.
+concurrency:
+  group: quality-gate-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CI: "true"
+  BASE_URL: http://localhost:3000
+  API_BASE_URL: http://localhost:3000/api/v1
+  TEST_ENV: ci
+  API_TOKEN: mock-jwt-token-12345
+
+jobs:
+  lint-typecheck:
+    name: Lint & Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+      - run: npm ci
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Spell check
+        run: npx cspell "**/*.{ts,js,md}" --no-progress || true
+
+  functional:
+    name: Functional & API
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/playwright:v1.59.1-jammy
+    steps:
+      - uses: actions/checkout@v6
+      - run: npm ci
+      - name: Run functional + API tests
+        run: npm run test:functional
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: report-functional
+          path: playwright-report/
+          retention-days: 14
+
+  accessibility:
+    name: Accessibility (a11y)
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/playwright:v1.59.1-jammy
+    steps:
+      - uses: actions/checkout@v6
+      - run: npm ci
+      - name: Run axe-core WCAG audits
+        run: npm run test:a11y
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: report-a11y
+          path: playwright-report/
+          retention-days: 14
+
+  security:
+    name: API & HTTP Security
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/playwright:v1.59.1-jammy
+    steps:
+      - uses: actions/checkout@v6
+      - run: npm ci
+      - name: Run security tests
+        run: npm run test:security
+      - name: Dependency vulnerability audit
+        run: npm audit --omit=dev --audit-level=high
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: report-security
+          path: playwright-report/
+          retention-days: 14
+
+  performance:
+    name: Performance Smoke (non-blocking)
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/playwright:v1.59.1-jammy
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v6
+      - run: npm ci
+      - name: Run performance smoke tests
+        run: npm run test:performance
+
+  visual:
+    name: Visual Regression (non-blocking)
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/playwright:v1.59.1-jammy
+    # Non-blocking until Linux baselines are generated via the
+    # "Update Visual Baselines" workflow (visual-baseline.yml).
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v6
+      - run: npm ci
+      - name: Run visual regression tests
+        run: npm run test:visual
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: report-visual
+          path: playwright-report/
+          retention-days: 14
+
+  k6-load:
+    name: k6 API Load (non-blocking)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: ".nvmrc"
+      - run: npm ci
+      - name: Start mock app
+        run: |
+          node mock-app/server.js &
+          sleep 2
+          curl -f http://localhost:3000/api/v1/health
+      - name: Install k6
+        uses: grafana/setup-k6-action@v1
+      - name: Run k6 load test
+        run: k6 run performance/k6/api-load.js
+
+  quality-gate:
+    name: Quality Gate
+    runs-on: ubuntu-latest
+    # Only the deterministic, blocking modules are required to pass.
+    needs: [lint-typecheck, functional, accessibility, security]
+    steps:
+      - name: All required quality checks passed
+        run: echo "✅ Functional, accessibility, security and lint/typecheck all green."
