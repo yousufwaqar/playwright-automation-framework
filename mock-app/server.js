@@ -22,6 +22,17 @@ function serveFile(res, filePath, contentType) {
   res.end(content);
 }
 
+function serveStatic(res, filePath, contentType) {
+  try {
+    const fullPath = path.join(__dirname, filePath);
+    const content = fs.readFileSync(fullPath, "utf-8");
+    res.writeHead(200, { "Content-Type": contentType });
+    res.end(content);
+  } catch {
+    jsonResponse(res, 404, { error: "Not Found" });
+  }
+}
+
 function jsonResponse(res, statusCode, data) {
   res.writeHead(statusCode, { "Content-Type": "application/json" });
   res.end(JSON.stringify(data));
@@ -32,8 +43,12 @@ function parseBody(req) {
     let body = "";
     req.on("data", (chunk) => (body += chunk));
     req.on("end", () => {
-      try { resolve(JSON.parse(body)); }
-      catch { resolve({}); }
+      if (body === "") return resolve({ valid: true, data: {} });
+      try {
+        resolve({ valid: true, data: JSON.parse(body) });
+      } catch {
+        resolve({ valid: false, data: {} });
+      }
     });
   });
 }
@@ -42,9 +57,34 @@ const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://localhost:${PORT}`);
   const pathname = url.pathname;
 
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  // --- Security headers (applied to every response) ---
+  // NOTE: HSTS is intentionally omitted — this mock app is served over plain
+  // HTTP on localhost, where Strict-Transport-Security is not meaningful.
+  const allowedOrigin = process.env.ALLOWED_ORIGIN || `http://localhost:${PORT}`;
+  res.setHeader("Access-Control-Allow-Origin", allowedOrigin);
+  res.setHeader("Vary", "Origin");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "DENY");
+  res.setHeader("Referrer-Policy", "no-referrer");
+  res.setHeader(
+    "Permissions-Policy",
+    "geolocation=(), microphone=(), camera=()"
+  );
+  res.setHeader(
+    "Content-Security-Policy",
+    [
+      "default-src 'self'",
+      "script-src 'self'",
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' data:",
+      "object-src 'none'",
+      "base-uri 'self'",
+      "frame-ancestors 'none'",
+      "form-action 'self'",
+    ].join("; ")
+  );
 
   if (req.method === "OPTIONS") {
     res.writeHead(204);
@@ -52,10 +92,21 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (pathname === "/" || pathname === "/login") {
-    return serveFile(res, "pages/login.html", "text/html");
+    return serveFile(res, "pages/login.html", "text/html; charset=utf-8");
   }
   if (pathname === "/dashboard") {
-    return serveFile(res, "pages/dashboard.html", "text/html");
+    return serveFile(res, "pages/dashboard.html", "text/html; charset=utf-8");
+  }
+
+  // Static JS assets. path.basename strips any directory component to prevent
+  // path-traversal (e.g. /public/../../etc/passwd).
+  if (pathname.startsWith("/public/") && pathname.endsWith(".js")) {
+    const safeName = path.basename(pathname);
+    return serveStatic(
+      res,
+      path.join("public", safeName),
+      "application/javascript; charset=utf-8"
+    );
   }
 
   if (pathname === "/api/v1/health") {
@@ -71,8 +122,14 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (pathname === "/api/login" && req.method === "POST") {
-    const body = await parseBody(req);
-    const { email, password } = body;
+    const { valid, data } = await parseBody(req);
+    if (!valid) {
+      return jsonResponse(res, 400, {
+        success: false,
+        message: "Invalid request body",
+      });
+    }
+    const { email, password } = data;
     if (VALID_USERS[email] && VALID_USERS[email] === password) {
       return jsonResponse(res, 200, { success: true, token: "mock-jwt-token-12345" });
     }
