@@ -30,14 +30,14 @@
     <h1>Sign In</h1>
     <div data-testid="error-message" class="error-message" id="errorMsg"></div>
     <div data-testid="loading-spinner" class="spinner" id="spinner">Loading...</div>
-    <form id="loginForm" onsubmit="handleLogin(event)">
+    <form id="loginForm">
       <div class="form-group">
         <label for="email">Email</label>
-        <input data-testid="email-input" type="email" id="email" placeholder="Enter your email" oninput="toggleButton()">
+        <input data-testid="email-input" type="email" id="email" placeholder="Enter your email">
       </div>
       <div class="form-group">
         <label for="password">Password</label>
-        <input data-testid="password-input" type="password" id="password" placeholder="Enter your password" oninput="toggleButton()">
+        <input data-testid="password-input" type="password" id="password" placeholder="Enter your password">
       </div>
       <div class="checkbox-group">
         <input data-testid="remember-me-checkbox" type="checkbox" id="rememberMe">
@@ -51,46 +51,6 @@
     </div>
   </div>
 
-  <script>
-    function toggleButton() {
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value.trim();
-      document.getElementById('loginBtn').disabled = !(email && password);
-    }
-
-    async function handleLogin(e) {
-      e.preventDefault();
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const errorEl = document.getElementById('errorMsg');
-      const spinner = document.getElementById('spinner');
-
-      errorEl.classList.remove('visible');
-      spinner.classList.add('visible');
-
-      try {
-        const res = await fetch('/api/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password })
-        });
-        const data = await res.json();
-
-        spinner.classList.remove('visible');
-
-        if (data.success) {
-          localStorage.setItem('authToken', data.token);
-          window.location.href = '/dashboard';
-        } else {
-          errorEl.textContent = data.message;
-          errorEl.classList.add('visible');
-        }
-      } catch (err) {
-        spinner.classList.remove('visible');
-        errorEl.textContent = 'Network error. Please try again.';
-        errorEl.classList.add('visible');
-      }
-    }
-  </script>
+  <script src="/public/login.js" defer></script>
 </body>
 </html>

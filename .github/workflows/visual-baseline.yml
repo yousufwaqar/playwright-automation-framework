@@ -1,0 +1,40 @@
+name: Update Visual Baselines
+
+# Manually-triggered workflow that (re)generates the Linux visual-regression
+# baselines and commits them back to the branch. Run this once after enabling
+# the visual module so the Quality Gate's visual job has Linux snapshots to
+# compare against. Linux baselines are stored separately from the local Windows
+# baselines (Playwright suffixes them per-platform), so both coexist.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-baselines:
+    name: Generate & commit Linux baselines
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/playwright:v1.59.1-jammy
+    env:
+      CI: "true"
+      BASE_URL: http://localhost:3000
+      API_BASE_URL: http://localhost:3000/api/v1
+      API_TOKEN: mock-jwt-token-12345
+    steps:
+      - uses: actions/checkout@v6
+      - run: npm ci
+      - name: Update visual snapshots
+        run: npm run test:visual:update
+      - name: Commit updated baselines
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git status --porcelain tests/visual)" ]; then
+            git add tests/visual/**/*-linux.png
+            git commit -m "chore: update Linux visual baselines [skip ci]"
+            git push
+          else
+            echo "No baseline changes to commit."
+          fi
