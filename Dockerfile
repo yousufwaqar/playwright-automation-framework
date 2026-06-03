@@ -2,8 +2,8 @@
 #
 # Uses the official Playwright image (free), which ships the matching browser
 # binaries and OS dependencies, so no `playwright install` step is needed. The
-# image tag is pinned to the Playwright version in package.json (1.59.1).
-FROM mcr.microsoft.com/playwright:v1.59.1-jammy
+# image tag is pinned to the Playwright version in package.json (1.60.0).
+FROM mcr.microsoft.com/playwright:v1.60.0-jammy
 
 WORKDIR /app
 
