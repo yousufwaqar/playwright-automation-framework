@@ -16,7 +16,7 @@ jobs:
   update-baselines:
     name: Generate & commit Linux baselines
     runs-on: ubuntu-latest
-    container: mcr.microsoft.com/playwright:v1.59.1-jammy
+    container: mcr.microsoft.com/playwright:v1.60.0-jammy
     env:
       CI: "true"
       BASE_URL: http://localhost:3000
