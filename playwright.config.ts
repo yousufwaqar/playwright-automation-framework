@@ -19,6 +19,13 @@ export default defineConfig({
 
   expect: {
     timeout: config.getExpectTimeout(),
+    toHaveScreenshot: {
+      // Small tolerance to absorb sub-pixel antialiasing differences. Baselines
+      // are platform-suffixed by Playwright (…-win32.png / …-linux.png) so local
+      // (Windows) and CI (Linux) baselines coexist without clashing.
+      maxDiffPixelRatio: 0.02,
+      animations: "disabled",
+    },
   },
 
   fullyParallel: true,

@@ -30,6 +30,7 @@
     .side-panel { position: fixed; right: -300px; top: 0; width: 300px; height: 100vh; background: white; box-shadow: -2px 0 8px rgba(0,0,0,0.1); padding: 20px; transition: right 0.3s; z-index: 200; }
     .side-panel.visible { right: 0; }
     .create-btn { background: #1976d2; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 14px; }
+    .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
   </style>
 </head>
 <body>
@@ -42,13 +43,14 @@
       </nav>
     </div>
     <div class="header-right">
-      <input data-testid="search-input" type="text" class="search-box" placeholder="Search reports..." id="searchInput">
+      <label for="searchInput" class="visually-hidden">Search reports</label>
+      <input data-testid="search-input" type="text" class="search-box" placeholder="Search reports..." id="searchInput" aria-label="Search reports">
       <button data-testid="create-new-btn" class="create-btn">+ Create</button>
-      <button data-testid="notification-bell" class="icon-btn" onclick="toggleNotifications()">&#x1F514;</button>
+      <button data-testid="notification-bell" class="icon-btn" aria-label="Notifications">&#x1F514;</button>
       <div class="dropdown">
-        <button data-testid="user-profile" class="icon-btn" onclick="toggleProfileMenu()">&#x1F464;</button>
+        <button data-testid="user-profile" class="icon-btn" aria-label="User profile menu" aria-haspopup="true">&#x1F464;</button>
         <div class="dropdown-content" id="profileMenu">
-          <button data-testid="logout-button" onclick="logout()">Sign Out</button>
+          <button data-testid="logout-button">Sign Out</button>
         </div>
       </div>
     </div>
@@ -57,15 +59,15 @@
   <main class="main">
     <div data-testid="welcome-message" class="welcome">Welcome back, Test User!</div>
     <div class="tiles-grid" id="tilesGrid">
-      <div data-testid="report-tile" class="report-tile" onclick="openReport('1')">
+      <div data-testid="report-tile" class="report-tile" data-report-id="1">
         <h3>Sales Report</h3>
         <p>Last updated: Jan 15, 2026</p>
       </div>
-      <div data-testid="report-tile" class="report-tile" onclick="openReport('2')">
+      <div data-testid="report-tile" class="report-tile" data-report-id="2">
         <h3>Marketing Dashboard</h3>
         <p>Last updated: Feb 20, 2026</p>
       </div>
-      <div data-testid="report-tile" class="report-tile" onclick="openReport('3')">
+      <div data-testid="report-tile" class="report-tile" data-report-id="3">
         <h3>Finance Overview</h3>
         <p>Last updated: Mar 10, 2026</p>
       </div>
@@ -77,34 +79,6 @@
     <p>No new notifications</p>
   </div>
 
-  <script>
-    function toggleProfileMenu() {
-      document.getElementById('profileMenu').classList.toggle('visible');
-    }
-
-    function toggleNotifications() {
-      document.getElementById('sidePanel').classList.toggle('visible');
-    }
-
-    function logout() {
-      localStorage.removeItem('authToken');
-      window.location.href = '/login';
-    }
-
-    function openReport(id) {
-      document.title = 'Report ' + id + ' - Demo App';
-    }
-
-    document.getElementById('searchInput').addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        const query = this.value.toLowerCase();
-        const tiles = document.querySelectorAll('[data-testid="report-tile"]');
-        tiles.forEach(tile => {
-          const name = tile.querySelector('h3').textContent.toLowerCase();
-          tile.style.display = name.includes(query) ? 'block' : 'none';
-        });
-      }
-    });
-  </script>
+  <script src="/public/dashboard.js" defer></script>
 </body>
 </html>
