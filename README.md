@@ -6,7 +6,7 @@
 
 [![Quality Gate](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/quality-gate.yml/badge.svg)](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/quality-gate.yml)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Playwright](https://img.shields.io/badge/Playwright-1.45+-45ba4b?logo=playwright&logoColor=white)](https://playwright.dev/)
+[![Playwright](https://img.shields.io/badge/Playwright-1.60+-45ba4b?logo=playwright&logoColor=white)](https://playwright.dev/)
  [![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
  [![License](https://img.shields.io/github/license/yousufwaqar/playwright-automation-framework?color=yellow)](./LICENSE)
  [![Tests](https://img.shields.io/badge/UI%20%2B%20API-Covered-success)](#test-coverage)
@@ -29,6 +29,20 @@
 engineering skills this repo demonstrates and how to reach me.
 
  </div>
+
+</div>
+
+---
+
+## Preview
+
+<div align="center">
+
+The framework drives, screenshots, and visually diffs a bundled mock BI app on every run — so the suite is fully self-contained and the visual baselines live in version control.
+
+<img src="tests/visual/visual.spec.ts-snapshots/dashboard-page-chromium-win32.png" alt="Mock BI dashboard exercised by the framework" width="720"/>
+
+<sub><em>Committed visual-regression baseline (dashboard). A matching login baseline sits alongside it; the Quality Gate CI fails on any unintended pixel drift.</em></sub>
 
 </div>
 
