@@ -10,6 +10,19 @@ name: Update Visual Baselines
 # protection. Instead it pushes the new baselines to a unique side branch and
 # opens a pull request back into the dispatched branch, so the change goes
 # through the normal review + Quality Gate flow.
+#
+# AUTO-CI: To make the auto-created PR trigger its required status checks
+# automatically, add an optional repository secret `BASELINE_PAT`. GitHub
+# suppresses workflow runs for events authenticated with the built-in
+# GITHUB_TOKEN (anti-recursion), so a PR opened with GITHUB_TOKEN never starts
+# the Quality Gate checks and stays blocked until you Close -> Reopen it. A PAT
+# is a real user/bot token, so the push and PR it creates DO trigger CI.
+#   * Recommended: a fine-grained PAT scoped to THIS repository only, with
+#     Contents: read/write and Pull requests: read/write. (No `workflow` scope
+#     is needed: the side branch only changes baseline PNGs.)
+#   * Prefer a bot/service account that cannot bypass branch protection.
+#   * If `BASELINE_PAT` is unset, the workflow still works via GITHUB_TOKEN, but
+#     you must Close -> Reopen the PR once to start its checks.
 
 on:
   workflow_dispatch:
@@ -30,13 +43,20 @@ jobs:
       API_TOKEN: mock-jwt-token-12345
     steps:
       - uses: actions/checkout@v6
+        with:
+          # Use a PAT when available so the side-branch push and the PR it opens
+          # are attributed to a real user and therefore trigger CI. Falls back
+          # to GITHUB_TOKEN (no auto-CI) when BASELINE_PAT is not configured.
+          token: ${{ secrets.BASELINE_PAT || secrets.GITHUB_TOKEN }}
+          persist-credentials: true
       - run: npm ci
       - name: Update visual snapshots
         run: npm run test:visual:update
       - name: Push baselines to a side branch and open a PR
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.BASELINE_PAT || secrets.GITHUB_TOKEN }}
           BASE_BRANCH: ${{ github.ref_name }}
+          USING_PAT: ${{ secrets.BASELINE_PAT != '' }}
         run: |
           set -e
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
@@ -68,8 +88,16 @@ jobs:
           if [ "$HTTP_CODE" = "201" ]; then
             echo "Opened pull request:"
             grep -o '"html_url"[^,]*' /tmp/pr.json | head -1
+            if [ "$USING_PAT" = "true" ]; then
+              echo "Authenticated with BASELINE_PAT: Quality Gate checks will start automatically."
+            else
+              echo "Authenticated with GITHUB_TOKEN: checks are suppressed by GitHub. Close and Reopen the PR once to start them (or set the BASELINE_PAT secret to automate this)."
+            fi
           else
             echo "Could not auto-create the PR (HTTP ${HTTP_CODE}). The baselines were pushed."
+            echo "API response:"
+            cat /tmp/pr.json || true
+            echo
             echo "Open the PR manually:"
             echo "  https://github.com/${GITHUB_REPOSITORY}/compare/${BASE_BRANCH}...${BRANCH}?expand=1"
           fi
