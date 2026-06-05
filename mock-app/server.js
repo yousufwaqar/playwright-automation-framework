@@ -16,10 +16,14 @@ const REPORTS = [
 ];
 
 function serveFile(res, filePath, contentType) {
-  const fullPath = path.join(__dirname, filePath);
-  const content = fs.readFileSync(fullPath, "utf-8");
-  res.writeHead(200, { "Content-Type": contentType });
-  res.end(content);
+  try {
+    const fullPath = path.join(__dirname, filePath);
+    const content = fs.readFileSync(fullPath, "utf-8");
+    res.writeHead(200, { "Content-Type": contentType });
+    res.end(content);
+  } catch {
+    jsonResponse(res, 404, { error: "Not Found" });
+  }
 }
 
 function serveStatic(res, filePath, contentType) {
@@ -115,7 +119,8 @@ const server = http.createServer(async (req, res) => {
 
   if (pathname === "/api/v1/reports") {
     const authHeader = req.headers.authorization || "";
-    if (!authHeader.startsWith("Bearer ") || authHeader === "Bearer invalid-token") {
+    const expectedToken = `Bearer ${process.env.API_TOKEN || "mock-jwt-token-12345"}`;
+    if (authHeader !== expectedToken) {
       return jsonResponse(res, 401, { error: "Unauthorized", message: "Invalid or missing token" });
     }
     return jsonResponse(res, 200, { data: REPORTS, total: REPORTS.length });

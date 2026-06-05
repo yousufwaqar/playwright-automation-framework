@@ -1,4 +1,5 @@
 import { test, expect } from "../src/fixtures/base.fixture";
+import type { Page } from "@playwright/test";
 import { TestDataManager } from "../src/utils/TestDataManager";
 import type { LoginPage } from "../src/pages/LoginPage";
 import type { DashboardPage } from "../src/pages/DashboardPage";
@@ -57,12 +58,12 @@ test.describe("Dashboard Feature Tests", () => {
 
   test(
     "should open a report tile @regression",
-    async ({ dashboardPage, logger }: { dashboardPage: DashboardPage; logger: Logger }) => {
+    async ({ dashboardPage, page, logger }: { dashboardPage: DashboardPage; page: Page; logger: Logger }) => {
       logger.step(1, "Click on the first report tile");
       await dashboardPage.openReport(0);
 
-      logger.step(2, "Verify report page is loaded");
-      // Report-specific assertions would go here
+      logger.step(2, "Verify the report view is activated");
+      await expect(page).toHaveTitle(/Report 1/);
 
       logger.info("Report open test completed");
     }

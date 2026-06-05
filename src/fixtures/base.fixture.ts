@@ -85,10 +85,9 @@ export const test = base.extend<CustomFixtures>({
           `Test will be skipped to prevent cascading failures.`
       );
 
-      // Skip the test with descriptive message
+      // Skip the test with a descriptive message. testInfo.skip() throws to abort
+      // the fixture, so no use() call runs (or is needed) on this path.
       testInfo.skip(true, `Setup failed: Could not authenticate user - ${errorMessage}`);
-
-      await use(dashboardPage); // Required even after skip
     }
   },
 });

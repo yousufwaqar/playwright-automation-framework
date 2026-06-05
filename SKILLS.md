@@ -84,7 +84,7 @@ Click any link to see the actual implementation.
 |---|---|
 | **Playwright config — projects, parallelism, retries, reporters** | [`playwright.config.ts`](playwright.config.ts) |
 | **Multi-browser project setup** (Chromium / Firefox / WebKit) | [`playwright.config.ts`](playwright.config.ts) |
-| **Mobile viewport projects** (Pixel 7, iPhone 14) | [`playwright.config.ts`](playwright.config.ts) |
+| **Mobile viewport projects** (Pixel 7, iPhone 14 — configured, opt-in) | [`playwright.config.ts`](playwright.config.ts) |
 | **Tag-based test execution** (`@smoke`, `@regression`, `@api`, `@external`) | [`tests/`](tests/) |
 | **Trace, screenshot, video on failure** | [`playwright.config.ts`](playwright.config.ts) |
 
@@ -115,7 +115,7 @@ Click any link to see the actual implementation.
 
 | Pipeline | File |
 |---|---|
-| **Main Playwright CI** (PR validation, scheduled runs) | [`.github/workflows/playwright-ci.yml`](.github/workflows/playwright-ci.yml) |
+| **Main quality-gate CI** (per-module checks, PR validation, scheduled runs) | [`.github/workflows/quality-gate.yml`](.github/workflows/quality-gate.yml) |
 | **External-site nightly suite** (isolated from main badge) | [`.github/workflows/external-ci.yml`](.github/workflows/external-ci.yml) |
 | **Automated Playwright version updates** | [`.github/workflows/playwright-update.yml`](.github/workflows/playwright-update.yml) |
 | **Release Drafter** (auto-generated changelogs) | [`.github/workflows/release-drafter.yml`](.github/workflows/release-drafter.yml) |
@@ -171,4 +171,4 @@ Open to **Senior SDET, QA Architect, or Test Engineering Lead** roles — remote
 - 🔗 [LinkedIn](https://linkedin.com/in/yousuf-waqar/)
 - 🌐 [GitHub](https://github.com/yousufwaqar)
 
-If you're a recruiter or hiring manager evaluating my work — start with [`src/pages/BasePage.ts`](src/pages/BasePage.ts), [`playwright.config.ts`](playwright.config.ts), and [`.github/workflows/playwright-ci.yml`](.github/workflows/playwright-ci.yml). Those three files capture how I think.
+If you're a recruiter or hiring manager evaluating my work — start with [`src/pages/BasePage.ts`](src/pages/BasePage.ts), [`playwright.config.ts`](playwright.config.ts), and [`.github/workflows/quality-gate.yml`](.github/workflows/quality-gate.yml). Those three files capture how I think.

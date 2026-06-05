@@ -57,7 +57,7 @@ It is designed to be easy to clone, easy to understand, and easy to extend for r
 | What it solves             | How it helps                                                                 |
 | ---                        | ---                                                                          |
 | Maintainable UI automation | Page Object Model keeps selectors and page actions isolated from tests       |
-| Fast feedback              | Parallel execution on Chromium in CI, with Firefox and WebKit available locally |
+| Fast feedback              | Parallel execution on Chromium as the blocking CI gate, with Firefox and WebKit runnable locally and in an optional CI job |
 | Reliable CI runs           | A lightweight bundled mock app removes external system dependencies          |
 | API confidence             | Contract tests validate health, auth behavior, schema, and response time     |
 | Environment flexibility    | Centralized JSON config supports CI, dev, staging, and production targets    |
@@ -72,7 +72,7 @@ It is designed to be easy to clone, easy to understand, and easy to extend for r
 - **Page Object Model** with shared `BasePage` for clean separation of concerns
 - **Custom fixtures** for shared page objects and structured logging
 - **Data-driven testing** through JSON test data files
-- **Cross-browser ready** — Chromium runs in CI; Firefox and WebKit are configured and run locally
+- **Cross-browser** — Chromium is the blocking CI gate; Firefox and WebKit are enabled projects you run via `npm run test:firefox` / `test:webkit` / `test:cross-browser` (and an optional non-blocking CI job)
 - **Mobile viewport projects** (Pixel 7, iPhone 14) ready to enable
 - **API contract validation** alongside UI coverage
 - **Bundled mock application** for fully self-contained CI runs
@@ -136,11 +136,12 @@ npm run test
 
 ```bash
 npm run test:chrome
-npm run test:firefox   # local only
-npm run test:webkit    # local only
+npm run test:firefox
+npm run test:webkit
+npm run test:cross-browser   # Chromium + Firefox + WebKit
 ```
 
-> **Note:** CI runs Chromium only. Firefox and WebKit work locally but are skipped in GitHub Actions because the Ubuntu runner image is missing required system libraries for those engines.
+> **Note:** Chromium is the blocking CI gate for fast, deterministic feedback. Firefox and WebKit are configured projects — run them locally (after `npx playwright install` pulls the engines) or via the optional non-blocking cross-browser CI job, which uses the official Playwright container where all engines are preinstalled.
 
 ### Run focused suites
 
@@ -238,7 +239,7 @@ Mock app routes:
 | SauceDemo (external)          | Login, inventory, add-to-cart, full checkout flow                               |
 | The Internet (external)       | Checkboxes, dropdowns, dynamic loading, alerts                                  |
 | RESTful Booker API (external) | Auth token, create / read / update / delete booking, schema validation          |
-| Cross-browser                 | Chromium (CI + local), Firefox & WebKit (local)                                 |
+| Cross-browser                 | Chromium (blocking CI + local), Firefox & WebKit (local + optional non-blocking CI)                 |
 | Mobile viewports              | Pixel 7, iPhone 14 (configured, opt-in)                                         |
 | Tags                          | `@smoke`, `@regression`, `@api`, `@a11y`, `@security`, `@visual`, `@performance`, `@external`, `@saucedemo`, `@theinternet` |
 
@@ -438,8 +439,9 @@ and on manual dispatch only. Failures here do not affect the main badge.
 | `npm run test:quality`      | Run all non-external tests (every quality module) |
 | `npm run test:headed`       | Run tests with visible browser        |
 | `npm run test:chrome`       | Run Chromium project                  |
-| `npm run test:firefox`      | Run Firefox project (local only)      |
-| `npm run test:webkit`       | Run WebKit project (local only)       |
+| `npm run test:firefox`      | Run Firefox project                   |
+| `npm run test:webkit`       | Run WebKit project                    |
+| `npm run test:cross-browser`| Run Chromium + Firefox + WebKit       |
 | `npm run test:api`          | Run mock API contract tests           |
 | `npm run test:smoke`        | Run smoke tests                       |
 | `npm run test:regression`   | Run regression tests                  |
@@ -450,6 +452,7 @@ and on manual dispatch only. Failures here do not affect the main badge.
 | `npm run test:visual:update`| Refresh visual baselines (current platform) |
 | `npm run perf:k6`           | Run k6 API load script (requires k6)  |
 | `npm run typecheck`         | Type-check without emitting           |
+| `npm run lint`              | Lint with ESLint (typescript-eslint + playwright rules) |
 | `npm run test:external`     | Run all external demo-site suites     |
 | `npm run test:saucedemo`    | Run SauceDemo external suite          |
 | `npm run test:theinternet`  | Run The Internet external suite       |
