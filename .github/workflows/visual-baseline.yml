@@ -1,20 +1,26 @@
 name: Update Visual Baselines
 
 # Manually-triggered workflow that (re)generates the Linux visual-regression
-# baselines and commits them back to the branch. Run this once after enabling
-# the visual module so the Quality Gate's visual job has Linux snapshots to
-# compare against. Linux baselines are stored separately from the local Windows
-# baselines (Playwright suffixes them per-platform), so both coexist.
+# baselines. The Linux runner produces snapshots that differ from the locally
+# committed Windows baselines (Playwright suffixes them per-platform), so both
+# coexist.
+#
+# It NEVER pushes to the dispatched branch directly: that branch is usually the
+# protected default branch, where direct pushes are rejected by branch
+# protection. Instead it pushes the new baselines to a unique side branch and
+# opens a pull request back into the dispatched branch, so the change goes
+# through the normal review + Quality Gate flow.
 
 on:
   workflow_dispatch:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   update-baselines:
-    name: Generate & commit Linux baselines
+    name: Regenerate Linux baselines and open a PR
     runs-on: ubuntu-latest
     container: mcr.microsoft.com/playwright:v1.60.0-jammy
     env:
@@ -27,15 +33,43 @@ jobs:
       - run: npm ci
       - name: Update visual snapshots
         run: npm run test:visual:update
-      - name: Commit updated baselines
+      - name: Push baselines to a side branch and open a PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BASE_BRANCH: ${{ github.ref_name }}
         run: |
+          set -e
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if [ -n "$(git status --porcelain tests/visual)" ]; then
-            git add tests/visual
-            git commit -m "chore: update Linux visual baselines [skip ci]"
-            git push
+
+          if [ -z "$(git status --porcelain tests/visual)" ]; then
+            echo "No baseline changes to commit. Nothing to do."
+            exit 0
+          fi
+
+          BRANCH="chore/linux-visual-baselines-${GITHUB_RUN_ID}"
+          git checkout -b "$BRANCH"
+          git add tests/visual
+          git commit -m "chore: update Linux visual baselines"
+          git push origin "$BRANCH"
+
+          # Open a PR via the REST API. This requires "Allow GitHub Actions to
+          # create and approve pull requests" to be enabled for the repo. If it
+          # is not, the push above still succeeded, so we just print a compare
+          # link for a one-click manual PR.
+          BODY="Regenerated Linux visual-regression baselines via the Update Visual Baselines workflow. Review the snapshot diffs before merging."
+          HTTP_CODE=$(curl -sS -o /tmp/pr.json -w "%{http_code}" -X POST \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls" \
+            -d "{\"title\":\"chore: update Linux visual baselines\",\"head\":\"${BRANCH}\",\"base\":\"${BASE_BRANCH}\",\"body\":\"${BODY}\"}" || true)
+
+          if [ "$HTTP_CODE" = "201" ]; then
+            echo "Opened pull request:"
+            grep -o '"html_url"[^,]*' /tmp/pr.json | head -1
           else
-            echo "No baseline changes to commit."
+            echo "Could not auto-create the PR (HTTP ${HTTP_CODE}). The baselines were pushed."
+            echo "Open the PR manually:"
+            echo "  https://github.com/${GITHUB_REPOSITORY}/compare/${BASE_BRANCH}...${BRANCH}?expand=1"
           fi
