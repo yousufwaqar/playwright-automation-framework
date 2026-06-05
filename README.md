@@ -7,7 +7,7 @@
 [![Quality Gate](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/quality-gate.yml/badge.svg)](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/quality-gate.yml)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Playwright](https://img.shields.io/badge/Playwright-1.60+-45ba4b?logo=playwright&logoColor=white)](https://playwright.dev/)
- [![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+ [![Node.js](https://img.shields.io/badge/Node.js-20+-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
  [![License](https://img.shields.io/github/license/yousufwaqar/playwright-automation-framework?color=yellow)](./LICENSE)
  [![Tests](https://img.shields.io/badge/UI%20%2B%20API-Covered-success)](#test-coverage)
  [![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen.svg)](./CONTRIBUTING.md)
@@ -257,16 +257,28 @@ playwright-automation-framework/
 │   │   ├── quality-gate.yml           # Authoritative CI: composite quality gate
 │   │   ├── copilot-setup-steps.yml    # Copilot coding agent environment setup
 │   │   ├── visual-baseline.yml        # Manual: generate Linux visual baselines
-│   │   └── external-ci.yml            # Nightly external demo-site suite
-│   ├── instructions/                  # Path-scoped agent rules (src/**, tests/**)
+│   │   ├── external-ci.yml            # Nightly external demo-site suite
+│   │   ├── playwright-update.yml      # Automated Playwright version bumps
+│   │   ├── cspell.yml                 # Spell-check workflow
+│   │   ├── link-check.yml             # Markdown link checker
+│   │   ├── release-drafter.yml        # Drafts release notes from merged PRs
+│   │   └── stale.yml                  # Marks stale issues and PRs
+│   ├── instructions/                  # Path-scoped agent rules
+│   │   ├── pages.instructions.md      # Rules for src/pages/**
+│   │   └── tests.instructions.md      # Rules for tests/**
 │   ├── prompts/                       # Reusable Copilot task recipes
+│   │   ├── new-page-object.prompt.md
+│   │   ├── write-test.prompt.md
+│   │   ├── fix-failing-test.prompt.md
+│   │   ├── add-a11y.prompt.md
+│   │   ├── add-security-check.prompt.md
+│   │   └── review-before-pr.prompt.md
 │   ├── ISSUE_TEMPLATE/
 │   │   ├── bug_report.md
 │   │   └── feature_request.md
 │   ├── copilot-instructions.md        # Repo ruleset for the Copilot agent
-│   ├── pull_request_template.md
-│   ├── CODEOWNERS
-│   └── dependabot.yml
+│   ├── dependabot.yml
+│   └── release-drafter.yml            # Release Drafter config
 ├── docs/
 │   ├── test-strategy.md               # Layers, tagging, principles
 │   ├── architecture.md                # Framework structure & design decisions
@@ -329,16 +341,28 @@ playwright-automation-framework/
 │   │   └── external-sites.json        # Credentials/URLs for demo sites
 │   ├── dashboard.spec.ts              # Dashboard UI tests
 │   └── login.spec.ts                  # Login UI tests
+├── reports/                           # Generated reports (kept via .gitkeep)
+├── .vscode/
+│   └── tasks.json                     # Editor task shortcuts
+├── AGENTS.md                          # Operating manual for AI coding agents
+├── SKILLS.md                          # Guided tour of the skills this repo shows
+├── CONTRIBUTING.md
+├── CODEOWNERS                         # Review ownership
+├── pull_request_template.md
+├── LICENSE
 ├── Dockerfile                         # Pinned Playwright image
 ├── docker-compose.yml                 # One-command containerised run
 ├── .dockerignore
-├── .nvmrc                             # Pinned Node version
-├── AGENTS.md                          # Operating manual for AI coding agents
+├── .gitignore
+├── .nvmrc                             # Pinned Node version (22)
+├── .mergify.yml                       # Mergify merge automation
 ├── eslint.config.mjs                  # ESLint flat config (ts + playwright rules)
-├── CONTRIBUTING.md
 ├── playwright.config.ts               # Playwright configuration
 ├── package.json                       # Scripts and dependencies
+├── package-lock.json
 ├── tsconfig.json                      # TypeScript configuration
+├── cspell.json                        # Spell-check dictionary/config
+├── renovate.json                      # Renovate dependency config
 └── README.md
 ```
 
