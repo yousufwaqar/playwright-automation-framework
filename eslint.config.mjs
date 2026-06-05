@@ -40,6 +40,15 @@ export default tseslint.config(
       // authentication fixture, so do not flag conditional skips.
       "playwright/no-skipped-test": "off",
       "playwright/no-conditional-in-test": "off",
+      // Tests assert through Page Object helpers named assert* (for example
+      // assertLoginSuccess, assertNotificationsOpen). Teach the rule that those
+      // helpers are assertions via a name pattern, so genuine no-assertion tests
+      // still fail but POM-style ones are recognised. Promoted to error to
+      // enforce the "every test asserts" rule from AGENTS.md.
+      "playwright/expect-expect": [
+        "error",
+        { assertFunctionPatterns: ["^assert"] },
+      ],
     },
   },
   {
