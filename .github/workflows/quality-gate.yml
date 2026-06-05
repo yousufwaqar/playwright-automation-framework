@@ -150,6 +150,11 @@ jobs:
     name: Cross-browser FF/WebKit (non-blocking)
     runs-on: ubuntu-latest
     container: mcr.microsoft.com/playwright:v1.60.0-jammy
+    # Firefox refuses to launch when $HOME is not owned by the current user.
+    # GitHub Actions sets HOME=/github/home inside containers; point it at the
+    # root-owned /root so Firefox launches in the Playwright image.
+    env:
+      HOME: /root
     # Chromium is the blocking gate (see the `functional` job). Firefox and WebKit
     # run here as an optional signal; the Playwright container ships both engines.
     continue-on-error: true
