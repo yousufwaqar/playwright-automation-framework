@@ -70,6 +70,7 @@ It is designed to be easy to clone, easy to understand, and easy to extend for r
 
 - **Playwright + TypeScript** foundation for modern E2E automation
 - **Page Object Model** with shared `BasePage` for clean separation of concerns
+- **AI agent toolkit** — committed `AGENTS.md`, path-scoped instructions, and prompt recipes so GitHub Copilot agents can write and fix tests, verified by the Quality Gate
 - **Custom fixtures** for shared page objects and structured logging
 - **Data-driven testing** through JSON test data files
 - **Cross-browser** — Chromium is the blocking CI gate; Firefox and WebKit are enabled projects you run via `npm run test:firefox` / `test:webkit` / `test:cross-browser` (and an optional non-blocking CI job)
@@ -82,6 +83,7 @@ It is designed to be easy to clone, easy to understand, and easy to extend for r
 - **Visual regression** via Playwright screenshots with platform-aware baselines
 - **Docker + Docker Compose** for reproducible one-command runs
 - **Composite Quality Gate CI** — every quality dimension is its own status check
+- **ESLint** (typescript-eslint + eslint-plugin-playwright) enforced in CI alongside type-checking
 - **External demo-site suites** (SauceDemo / The Internet / RESTful Booker) gated behind tags
 - **GitHub Actions workflows** with Chromium runs, artifact upload, and a separate nightly external job
 - **HTML, JSON, screenshot, trace, and video reporting**
@@ -95,8 +97,9 @@ It is designed to be easy to clone, easy to understand, and easy to extend for r
 | ---                                           | ---                                            |
 | [Playwright](https://playwright.dev/)         | Browser automation and API testing             |
 | [TypeScript](https://www.typescriptlang.org/) | Type-safe test development                     |
-| [Node.js](https://nodejs.org/)                | Runtime environment (18+)                      |
+| [Node.js](https://nodejs.org/)                | Runtime environment (20.19+)                   |
 | [tsx](https://github.com/privatenumber/tsx)   | Native TypeScript loader for fixtures          |
+| [ESLint](https://eslint.org/) + [typescript-eslint](https://typescript-eslint.io/) | Linting with `eslint-plugin-playwright` rules |
 | GitHub Actions                                | CI pipeline (Chromium) and scheduled external runs |
 | Playwright HTML Reporter                      | Interactive report for debugging test runs     |
 | JSON test data                                | Environment and user data management           |
@@ -252,11 +255,15 @@ playwright-automation-framework/
 ├── .github/
 │   ├── workflows/
 │   │   ├── quality-gate.yml           # Authoritative CI: composite quality gate
+│   │   ├── copilot-setup-steps.yml    # Copilot coding agent environment setup
 │   │   ├── visual-baseline.yml        # Manual: generate Linux visual baselines
 │   │   └── external-ci.yml            # Nightly external demo-site suite
+│   ├── instructions/                  # Path-scoped agent rules (src/**, tests/**)
+│   ├── prompts/                       # Reusable Copilot task recipes
 │   ├── ISSUE_TEMPLATE/
 │   │   ├── bug_report.md
 │   │   └── feature_request.md
+│   ├── copilot-instructions.md        # Repo ruleset for the Copilot agent
 │   ├── pull_request_template.md
 │   ├── CODEOWNERS
 │   └── dependabot.yml
@@ -326,6 +333,8 @@ playwright-automation-framework/
 ├── docker-compose.yml                 # One-command containerised run
 ├── .dockerignore
 ├── .nvmrc                             # Pinned Node version
+├── AGENTS.md                          # Operating manual for AI coding agents
+├── eslint.config.mjs                  # ESLint flat config (ts + playwright rules)
 ├── CONTRIBUTING.md
 ├── playwright.config.ts               # Playwright configuration
 ├── package.json                       # Scripts and dependencies
@@ -404,15 +413,16 @@ and produces an independent status check. Full details in
 ### `quality-gate.yml` — authoritative workflow
 
 Runs on push to `main`/`develop`, pull requests targeting `main`, and a daily
-schedule. Test jobs run inside `mcr.microsoft.com/playwright:v1.59.1-jammy`, so
+schedule. Test jobs run inside `mcr.microsoft.com/playwright:v1.60.0-jammy`, so
 browsers are preinstalled.
 
-**Blocking** (gate the merge): `lint-typecheck`, `functional`, `accessibility`,
-`security`. These are aggregated by a final `quality-gate` job via `needs`.
+**Blocking** (gate the merge): `lint-typecheck` (ESLint + `tsc`), `functional`,
+`accessibility`, `security`. These are aggregated by a final `quality-gate` job
+via `needs`.
 
 **Non-blocking** (`continue-on-error: true`, informational): `performance`,
-`visual`, `k6-load`. A red performance/visual run stays visible without blocking
-a merge.
+`visual`, `k6-load`, `cross-browser` (Firefox/WebKit). A red non-blocking run
+stays visible without blocking a merge.
 
 > Branch protection should require the **Quality Gate** status check (the older
 > "Playwright Tests" check was removed with `playwright-ci.yml`).
@@ -427,6 +437,38 @@ the Linux baselines so the CI `visual` job goes green.
 
 Runs the SauceDemo, The Internet, and RESTful Booker suites on a nightly schedule
 and on manual dispatch only. Failures here do not affect the main badge.
+
+### `copilot-setup-steps.yml` — Copilot coding agent environment
+
+Pre-installs Node and the Playwright browsers so the GitHub Copilot coding agent
+can install dependencies and run the suite (and the Quality Gate) to verify its
+own changes before opening a pull request.
+
+---
+
+## AI agent toolkit
+
+This repository is set up so AI coding agents (the GitHub Copilot CLI and the
+Copilot coding agent) can extend and maintain it safely. The conventions live in
+version control and load automatically, so an agent can scaffold a page object,
+write a test, or fix a failing one, and the Quality Gate verifies the result.
+
+| File | Role |
+| --- | --- |
+| [`AGENTS.md`](AGENTS.md) | Operating manual: POM conventions, tag taxonomy, mock contract, commands, and a Definition of Done. Loaded automatically by Copilot. |
+| [`.github/copilot-instructions.md`](.github/copilot-instructions.md) | Short ruleset for the Copilot coding agent and github.com. |
+| [`.github/instructions/`](.github/instructions/) | Path-scoped rules applied automatically when editing `src/**` or `tests/**`. |
+| [`.github/prompts/`](.github/prompts/) | Reusable task recipes: `new-page-object`, `write-test`, `fix-failing-test`, `add-a11y`, `add-security-check`, `review-before-pr`. |
+| [`.github/workflows/copilot-setup-steps.yml`](.github/workflows/copilot-setup-steps.yml) | Pre-installs Node and Playwright browsers so the agent can run and verify the suite. |
+
+**Guardrails the toolkit enforces:** `data-testid` locators, every test asserts
+an observable outcome, never weaken assertions to go green, no flaky
+`networkidle` / `waitForTimeout`, honest cross-browser claims, and
+`lint` + `typecheck` + `test:functional` as the Definition of Done.
+
+The framework's own Quality Gate is the agent's verification harness: file an
+issue (or use `/delegate`), the agent opens a pull request, and it must pass the
+same blocking checks as any human contributor.
 
 ---
 
@@ -471,6 +513,8 @@ Recently delivered:
 - ✅ Visual regression testing
 - ✅ Docker support for consistent local execution
 - ✅ Composite Quality Gate CI with per-module status checks
+- ✅ ESLint (typescript-eslint + eslint-plugin-playwright) in CI
+- ✅ Repo-committed AI agent toolkit (AGENTS.md, prompt recipes, Copilot setup steps)
 
 Planned:
 
@@ -496,6 +540,8 @@ github-actions
 qa-automation
 ci-cd
 sdet
+github-copilot
+ai-agents
 ```
 
 ---
