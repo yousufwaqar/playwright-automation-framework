@@ -25,7 +25,7 @@
  SDET & QA Automation Lead | 11+ years of experience
  <br/><br/>
 
- 👋 <strong>Hiring or evaluating my work?</strong> See <a href="./SKILLS.md"><strong>SKILLS.md</strong></a> — a guided tour of the
+ 👋 <strong>Hiring or evaluating my work?</strong> See <a href="./SKILLS.md"><strong>SKILLS.md</strong></a>: a guided tour of the
 engineering skills this repo demonstrates and how to reach me.
 
  </div>
@@ -38,7 +38,7 @@ engineering skills this repo demonstrates and how to reach me.
 
 <div align="center">
 
-The framework drives, screenshots, and visually diffs a bundled mock BI app on every run — so the suite is fully self-contained and the visual baselines live in version control.
+The framework drives, screenshots, and visually diffs a bundled mock BI app on every run, so the suite is fully self-contained and the visual baselines live in version control.
 
 <img src="tests/visual/dashboard.visual.spec.ts-snapshots/dashboard-page-chromium-win32.png" alt="Mock BI dashboard exercised by the framework" width="720"/>
 
@@ -70,19 +70,19 @@ It is designed to be easy to clone, easy to understand, and easy to extend for r
 
 - **Playwright + TypeScript** foundation for modern E2E automation
 - **Page Object Model** with shared `BasePage` for clean separation of concerns
-- **AI agent toolkit** — committed `AGENTS.md`, path-scoped instructions, and prompt recipes so GitHub Copilot agents can write and fix tests, verified by the Quality Gate
+- **AI agent toolkit**: committed `AGENTS.md`, path-scoped instructions, and prompt recipes so GitHub Copilot agents can write and fix tests, verified by the Quality Gate
 - **Custom fixtures** for shared page objects and structured logging
 - **Data-driven testing** through JSON test data files
-- **Cross-browser** — Chromium is the blocking CI gate; Firefox and WebKit are enabled projects you run via `npm run test:firefox` / `test:webkit` / `test:cross-browser` (and an optional non-blocking CI job)
+- **Cross-browser**: Chromium is the blocking CI gate; Firefox and WebKit are enabled projects you run via `npm run test:firefox` / `test:webkit` / `test:cross-browser` (and an optional non-blocking CI job)
 - **Mobile viewport projects** (Pixel 7, iPhone 14) ready to enable
 - **API contract validation** alongside UI coverage
 - **Bundled mock application** for fully self-contained CI runs
 - **Accessibility testing** with axe-core (WCAG 2.0/2.1 A & AA)
-- **API & HTTP security suite** — authz, CSP & hardening headers, non-wildcard CORS, safe input handling
-- **Performance smoke tests** — Navigation Timing budgets + API latency/throughput
+- **API & HTTP security suite**: authz, CSP & hardening headers, non-wildcard CORS, safe input handling
+- **Performance smoke tests**: Navigation Timing budgets + API latency/throughput
 - **Visual regression** via Playwright screenshots with platform-aware baselines
 - **Docker + Docker Compose** for reproducible one-command runs
-- **Composite Quality Gate CI** — every quality dimension is its own status check
+- **Composite Quality Gate CI**: every quality dimension is its own status check
 - **ESLint** (typescript-eslint + eslint-plugin-playwright) enforced in CI alongside type-checking
 - **External demo-site suites** (SauceDemo / The Internet / RESTful Booker) gated behind tags
 - **GitHub Actions workflows** with Chromium runs, artifact upload, and a separate nightly external job
@@ -144,7 +144,7 @@ npm run test:webkit
 npm run test:cross-browser   # Chromium + Firefox + WebKit
 ```
 
-> **Note:** Chromium is the blocking CI gate for fast, deterministic feedback. Firefox and WebKit are configured projects — run them locally (after `npx playwright install` pulls the engines) or via the optional non-blocking cross-browser CI job, which uses the official Playwright container where all engines are preinstalled.
+> **Note:** Chromium is the blocking CI gate for fast, deterministic feedback. Firefox and WebKit are configured projects; run them locally (after `npx playwright install` pulls the engines) or via the optional non-blocking cross-browser CI job, which uses the official Playwright container where all engines are preinstalled.
 
 ### Run focused suites
 
@@ -438,7 +438,7 @@ CI is a **composite Quality Gate**: every quality dimension runs as its own job
 and produces an independent status check. Full details in
 [docs/quality-gates.md](./docs/quality-gates.md).
 
-### `quality-gate.yml` — authoritative workflow
+### `quality-gate.yml` - authoritative workflow
 
 Runs on push to `main`/`develop`, pull requests targeting `main`, and a daily
 schedule. Test jobs run inside `mcr.microsoft.com/playwright:v1.60.0-jammy`, so
@@ -455,18 +455,18 @@ stays visible without blocking a merge.
 > Branch protection should require the **Quality Gate** status check (the older
 > "Playwright Tests" check was removed with `playwright-ci.yml`).
 
-### `visual-baseline.yml` — Linux baselines
+### `visual-baseline.yml` - Linux baselines
 
 Playwright screenshot baselines are platform-specific. Windows baselines are
 committed for local dev; run this `workflow_dispatch` once to generate and commit
 the Linux baselines so the CI `visual` job goes green.
 
-### `external-ci.yml` — nightly external workflow
+### `external-ci.yml` - nightly external workflow
 
 Runs the SauceDemo, The Internet, and RESTful Booker suites on a nightly schedule
 and on manual dispatch only. Failures here do not affect the main badge.
 
-### `copilot-setup-steps.yml` — Copilot coding agent environment
+### `copilot-setup-steps.yml` - Copilot coding agent environment
 
 Pre-installs Node and the Playwright browsers so the GitHub Copilot coding agent
 can install dependencies and run the suite (and the Quality Gate) to verify its
