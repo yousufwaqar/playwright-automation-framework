@@ -11,7 +11,9 @@ export default defineConfig({
     command: 'node mock-app/server.js',
     url: 'http://localhost:3000',
     timeout: 120 * 1000,
-    reuseExistingServer: true,
+    // Locally, reuse a mock server you already have running; on CI always start
+    // a fresh one so runs are hermetic.
+    reuseExistingServer: !process.env.CI,
   },
   testDir: "./tests",
   testMatch: "**/*.spec.ts",
@@ -30,7 +32,7 @@ export default defineConfig({
 
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 1,
+  retries: config.getRetries(),
   workers: process.env.CI ? 4 : 2,
 
   reporter: [

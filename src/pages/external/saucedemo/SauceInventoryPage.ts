@@ -8,6 +8,7 @@ import { BasePage } from "../../BasePage";
  */
 export class SauceInventoryPage extends BasePage {
   private readonly inventoryItems: Locator;
+  private readonly itemPrices: Locator;
   private readonly cartIcon: Locator;
   private readonly cartBadge: Locator;
   private readonly sortDropdown: Locator;
@@ -17,6 +18,7 @@ export class SauceInventoryPage extends BasePage {
   constructor(page: Page) {
     super(page);
     this.inventoryItems = page.locator(".inventory_item");
+    this.itemPrices = page.locator(".inventory_item_price");
     this.cartIcon = page.locator(".shopping_cart_link");
     this.cartBadge = page.locator(".shopping_cart_badge");
     this.sortDropdown = page.locator('[data-test="product-sort-container"]');
@@ -26,6 +28,15 @@ export class SauceInventoryPage extends BasePage {
 
   async getProductCount(): Promise<number> {
     return this.inventoryItems.count();
+  }
+
+  /**
+   * Read the rendered product prices in DOM order as numbers (e.g. "$29.99" ->
+   * 29.99), so a test can assert the active sort actually reordered the list.
+   */
+  async getProductPrices(): Promise<number[]> {
+    const texts = await this.itemPrices.allTextContents();
+    return texts.map((t) => parseFloat(t.replace(/[^0-9.]/g, "")));
   }
 
   async addProductToCart(productName: string): Promise<void> {

@@ -1,34 +1,16 @@
 queue_rules:
   - name: default
     queue_conditions:
-      - check-success=Lint and Test (chromium)
-      - check-success=Lint and Test (firefox)
-      - check-success=Lint and Test (webkit)
+      - check-success=Quality Gate
     merge_conditions:
-      - check-success=Lint and Test (chromium)
-      - check-success=Lint and Test (firefox)
-      - check-success=Lint and Test (webkit)
+      - check-success=Quality Gate
     merge_method: squash
 
 pull_request_rules:
-  - name: Auto-merge Renovate non-major PRs
-    conditions:
-      - author=renovate[bot]
-      - check-success=Lint and Test (chromium)
-      - check-success=Lint and Test (firefox)
-      - check-success=Lint and Test (webkit)
-      - -label=major-bump
-      - -label=needs-review
-    actions:
-      queue:
-        name: default
-
   - name: Auto-merge Dependabot non-major PRs
     conditions:
       - author=dependabot[bot]
-      - check-success=Lint and Test (chromium)
-      - check-success=Lint and Test (firefox)
-      - check-success=Lint and Test (webkit)
+      - check-success=Quality Gate
       - -title~=major
     actions:
       queue:
@@ -37,7 +19,6 @@ pull_request_rules:
   - name: Welcome first-time contributors
     conditions:
       - author!=dependabot[bot]
-      - author!=renovate[bot]
       - author!=yousufwaqar
     actions:
       comment:
@@ -51,9 +32,7 @@ pull_request_rules:
 
   - name: Label dependency PRs
     conditions:
-      - or:
-          - author=dependabot[bot]
-          - author=renovate[bot]
+      - author=dependabot[bot]
     actions:
       label:
         add:

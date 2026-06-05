@@ -19,6 +19,16 @@ function openReport(id) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  // Mock client-side route guard. This demo stores its session token in
+  // localStorage, so an unauthenticated visitor (missing or unrecognised token)
+  // is bounced to the login page. This is test-realistic behaviour, NOT real
+  // security: the server still returns the HTML, so a real app must also enforce
+  // auth server-side.
+  if (localStorage.getItem("authToken") !== "mock-jwt-token-12345") {
+    window.location.replace("/login");
+    return;
+  }
+
   document
     .querySelector('[data-testid="notification-bell"]')
     .addEventListener("click", toggleNotifications);

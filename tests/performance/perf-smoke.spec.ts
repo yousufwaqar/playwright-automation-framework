@@ -46,24 +46,6 @@ test.describe("Performance Smoke @performance", () => {
     expect(timing.load).toBeLessThan(PAGE_LOAD_BUDGET_MS);
   });
 
-  test("dashboard page loads within performance budget @performance @regression", async ({
-    page,
-  }) => {
-    const logger = new Logger("Perf: dashboard page");
-
-    logger.step(1, "Navigate directly to dashboard and wait for load");
-    await page.goto("/dashboard", { waitUntil: "load" });
-
-    logger.step(2, "Read Navigation Timing metrics");
-    const timing = await PerformanceHelper.getNavigationTiming(page);
-    logger.info(
-      `dashboard DCL=${timing.domContentLoaded.toFixed(0)}ms load=${timing.load.toFixed(0)}ms`
-    );
-
-    expect(timing.domContentLoaded).toBeLessThan(DOM_CONTENT_LOADED_BUDGET_MS);
-    expect(timing.load).toBeLessThan(PAGE_LOAD_BUDGET_MS);
-  });
-
   test("health API stays healthy and fast under light concurrency @performance @regression", async ({
     request,
   }) => {

@@ -65,8 +65,11 @@ test.describe("SauceDemo - Checkout flow @external @saucedemo @regression", () =
     logger.step(1, "Sort products by price low to high");
     await sauceInventoryPage.sortBy("lohi");
 
-    logger.step(2, "Verify product list is still populated");
-    expect(await sauceInventoryPage.getProductCount()).toBeGreaterThan(0);
+    logger.step(2, "Verify prices are rendered in ascending order");
+    const prices = await sauceInventoryPage.getProductPrices();
+    expect(prices.length).toBeGreaterThan(0);
+    const ascending = [...prices].sort((a, b) => a - b);
+    expect(prices).toEqual(ascending);
   });
 
   test("should logout successfully", async ({

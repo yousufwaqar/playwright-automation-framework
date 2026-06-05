@@ -40,9 +40,9 @@ engineering skills this repo demonstrates and how to reach me.
 
 The framework drives, screenshots, and visually diffs a bundled mock BI app on every run — so the suite is fully self-contained and the visual baselines live in version control.
 
-<img src="tests/visual/visual.spec.ts-snapshots/dashboard-page-chromium-win32.png" alt="Mock BI dashboard exercised by the framework" width="720"/>
+<img src="tests/visual/dashboard.visual.spec.ts-snapshots/dashboard-page-chromium-win32.png" alt="Mock BI dashboard exercised by the framework" width="720"/>
 
-<sub><em>Committed visual-regression baseline (dashboard). A matching login baseline sits alongside it; the Quality Gate CI fails on any unintended pixel drift.</em></sub>
+<sub><em>Committed visual-regression baseline (dashboard). A matching login baseline sits alongside it; the `visual` CI job reports any unintended pixel drift (advisory / non-blocking until promoted, see CI section).</em></sub>
 
 </div>
 
@@ -60,7 +60,7 @@ It is designed to be easy to clone, easy to understand, and easy to extend for r
 | Fast feedback              | Parallel execution on Chromium as the blocking CI gate, with Firefox and WebKit runnable locally and in an optional CI job |
 | Reliable CI runs           | A lightweight bundled mock app removes external system dependencies          |
 | API confidence             | Contract tests validate health, auth behavior, schema, and response time     |
-| Environment flexibility    | Centralized JSON config supports CI, dev, staging, and production targets    |
+| Environment flexibility    | Centralized JSON config drives per-environment timeout and retry profiles (local + ci)    |
 | Debuggability              | HTML reports, screenshots, traces, videos, and structured logs               |
 | Real-world examples        | Optional external suites against SauceDemo, The Internet, and RESTful Booker |
 
@@ -296,7 +296,8 @@ playwright-automation-framework/
 │       └── api-load.js                # k6 API load script
 ├── src/
 │   ├── fixtures/
-│   │   ├── base.fixture.ts            # Custom Playwright fixtures (mock app)
+│   │   ├── base.fixture.ts            # Page objects + logger (logged-out)
+│   │   ├── authenticated.fixture.ts   # storageState-seeded login (protected pages)
 │   │   └── saucedemo.fixture.ts       # Fixtures for SauceDemo external suite
 │   ├── pages/
 │   │   ├── BasePage.ts                # Shared page actions and assertions
@@ -319,14 +320,18 @@ playwright-automation-framework/
 │   ├── api/
 │   │   └── api-contract.spec.ts       # Mock API contract tests
 │   ├── a11y/
-│   │   └── accessibility.spec.ts      # Accessibility audits
+│   │   ├── accessibility.spec.ts      # Login-page accessibility audit
+│   │   └── dashboard.a11y.spec.ts     # Dashboard audit (authenticated)
 │   ├── security/
 │   │   └── api-security.spec.ts       # API & HTTP security assertions
 │   ├── performance/
-│   │   └── perf-smoke.spec.ts         # Performance smoke tests
+│   │   ├── perf-smoke.spec.ts         # Login + API performance smoke
+│   │   └── dashboard.perf.spec.ts     # Dashboard load budget (authenticated)
 │   ├── visual/
-│   │   ├── visual.spec.ts             # Visual regression tests
-│   │   └── visual.spec.ts-snapshots/  # Committed baselines
+│   │   ├── visual.spec.ts             # Login-page visual regression
+│   │   ├── visual.spec.ts-snapshots/  # Committed login baseline
+│   │   ├── dashboard.visual.spec.ts   # Dashboard visual regression (authenticated)
+│   │   └── dashboard.visual.spec.ts-snapshots/  # Committed dashboard baseline
 │   ├── external/
 │   │   ├── saucedemo/
 │   │   │   ├── login.spec.ts
@@ -336,7 +341,7 @@ playwright-automation-framework/
 │   │   └── api/
 │   │       └── restful-booker.spec.ts
 │   ├── test-data/
-│   │   ├── environments.json          # CI/dev/staging/prod config
+│   │   ├── environments.json          # local + ci timeout/retry profiles
 │   │   ├── users.json                 # Test users
 │   │   └── external-sites.json        # Credentials/URLs for demo sites
 │   ├── dashboard.spec.ts              # Dashboard UI tests
@@ -362,7 +367,6 @@ playwright-automation-framework/
 ├── package-lock.json
 ├── tsconfig.json                      # TypeScript configuration
 ├── cspell.json                        # Spell-check dictionary/config
-├── renovate.json                      # Renovate dependency config
 └── README.md
 ```
 
@@ -399,7 +403,7 @@ test("should login successfully", async ({ loginPage, logger }) => {
 tests/test-data/environments.json
 ```
 
-This supports clean switching between `ci`, `dev`, `staging`, and `production` through:
+This supports clean switching between the `local` and `ci` timeout/retry profiles through:
 
 ```bash
 TEST_ENV=ci

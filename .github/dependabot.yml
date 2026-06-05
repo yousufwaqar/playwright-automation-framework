@@ -10,6 +10,11 @@ updates:
       include: "scope"
     labels:
       - "dependencies"
+    # @playwright/test is bumped together with the Docker image tag by the
+    # "Check for Playwright updates" workflow (playwright-update.yml), so let that
+    # own it to avoid duplicate, conflicting PRs.
+    ignore:
+      - dependency-name: "@playwright/test"
 
   - package-ecosystem: "github-actions"
     directory: "/"

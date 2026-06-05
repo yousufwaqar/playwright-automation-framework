@@ -30,7 +30,16 @@ export class ConfigManager {
     const rawData = fs.readFileSync(configPath, "utf-8");
     this.config = JSON.parse(rawData);
     this.currentEnv =
-      process.env.TEST_ENV || this.config.defaultEnvironment || "staging";
+      process.env.TEST_ENV || this.config.defaultEnvironment || "local";
+
+    // Fail fast on a typo'd TEST_ENV rather than silently falling back, which
+    // would run with the wrong timeouts/retries and hide the mistake.
+    if (process.env.TEST_ENV && !this.config.environments[process.env.TEST_ENV]) {
+      const known = Object.keys(this.config.environments).join(", ");
+      throw new Error(
+        `Unknown TEST_ENV "${process.env.TEST_ENV}". Known environments: ${known}.`
+      );
+    }
   }
 
   static getInstance(): ConfigManager {
@@ -83,6 +92,10 @@ export class ConfigManager {
 
   getExpectTimeout(): number {
     return this.getEnvironment().expectTimeout;
+  }
+
+  getRetries(): number {
+    return this.getEnvironment().retries;
   }
 
   getEnvironmentName(): string {

@@ -22,6 +22,7 @@ ENV CI=true \
     API_BASE_URL=http://localhost:3000/api/v1 \
     API_TOKEN=mock-jwt-token-12345
 
-# Default: run the functional + a11y + security suite (visual baselines are
-# platform-specific; generate them with `npm run test:visual:update`).
+# Default: run the standard suite on Chromium (functional, a11y, security and
+# API). @external, @visual and @performance are excluded; generate visual
+# baselines with `npm run test:visual:update`.
 CMD ["npm", "test"]

@@ -1,6 +1,5 @@
-import { test, expect } from "../src/fixtures/base.fixture";
+import { test, expect } from "../src/fixtures/authenticated.fixture";
 import type { Page } from "@playwright/test";
-import { TestDataManager } from "../src/utils/TestDataManager";
 import type { LoginPage } from "../src/pages/LoginPage";
 import type { DashboardPage } from "../src/pages/DashboardPage";
 import type { Logger } from "../src/utils/Logger";
@@ -15,17 +14,16 @@ import type { Logger } from "../src/utils/Logger";
  * - Navigation menu validation
  * - Logout functionality
  *
+ * Authenticated via storageState (see authenticated.fixture.ts), so each test
+ * opens the dashboard directly instead of driving the login UI.
+ *
  * @author Yousuf Waqar
  */
 
 test.describe("Dashboard Feature Tests", () => {
-  const testData = TestDataManager.getInstance();
-
-  test.beforeEach(async ({ loginPage, dashboardPage, logger }: { loginPage: LoginPage; dashboardPage: DashboardPage; logger: Logger }) => {
-    logger.info("Pre-condition: Login and navigate to dashboard");
-    const user = testData.getValidUser();
-    await loginPage.goto();
-    await loginPage.login(user.username, user.password);
+  test.beforeEach(async ({ dashboardPage, logger }: { dashboardPage: DashboardPage; logger: Logger }) => {
+    logger.info("Pre-condition: open the dashboard (authenticated via storageState)");
+    await dashboardPage.goto();
     await dashboardPage.assertDashboardLoaded();
   });
 
@@ -48,9 +46,8 @@ test.describe("Dashboard Feature Tests", () => {
       logger.step(1, "Search for a report");
       await dashboardPage.searchReport("Sales Report");
 
-      logger.step(2, "Verify search results are displayed");
-      const reportCount = await dashboardPage.getReportCount();
-      expect(reportCount).toBeGreaterThan(0);
+      logger.step(2, "Verify only the matching report tile remains visible");
+      await dashboardPage.assertOnlyVisibleReport("Sales Report");
 
       logger.info("Report search test completed");
     }
@@ -89,8 +86,7 @@ test.describe("Dashboard Feature Tests", () => {
       await dashboardPage.logout();
 
       logger.step(2, "Verify redirect to login page");
-      const isLoginPageLoaded = await loginPage.isPageLoaded();
-      expect(isLoginPageLoaded).toBe(true);
+      await loginPage.assertLoaded();
 
       logger.info("Logout test completed successfully");
     }
