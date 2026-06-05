@@ -19,10 +19,7 @@ export class LoginPage extends BasePage {
   private readonly emailInput: Locator;
   private readonly passwordInput: Locator;
   private readonly loginButton: Locator;
-  private readonly forgotPasswordLink: Locator;
   private readonly errorMessage: Locator;
-  private readonly rememberMeCheckbox: Locator;
-  private readonly ssoButton: Locator;
   private readonly loadingSpinner: Locator;
 
   constructor(page: Page) {
@@ -31,14 +28,7 @@ export class LoginPage extends BasePage {
     this.emailInput = page.locator('[data-testid="email-input"]');
     this.passwordInput = page.locator('[data-testid="password-input"]');
     this.loginButton = page.locator('[data-testid="login-button"]');
-    this.forgotPasswordLink = page.locator(
-      '[data-testid="forgot-password-link"]'
-    );
     this.errorMessage = page.locator('[data-testid="error-message"]');
-    this.rememberMeCheckbox = page.locator(
-      '[data-testid="remember-me-checkbox"]'
-    );
-    this.ssoButton = page.locator('[data-testid="sso-button"]');
     this.loadingSpinner = page.locator('[data-testid="loading-spinner"]');
   }
 
@@ -51,7 +41,7 @@ export class LoginPage extends BasePage {
    */
   async goto(): Promise<void> {
     await this.navigateTo("/login");
-    await this.waitForPageLoad();
+    await this.waitForVisible(this.emailInput);
   }
 
   /**
@@ -61,32 +51,6 @@ export class LoginPage extends BasePage {
     await this.fill(this.emailInput, email);
     await this.fill(this.passwordInput, password);
     await this.click(this.loginButton);
-    await this.waitForPageLoad();
-  }
-
-  /**
-   * Perform login with "Remember Me" checked
-   */
-  async loginWithRememberMe(email: string, password: string): Promise<void> {
-    await this.fill(this.emailInput, email);
-    await this.fill(this.passwordInput, password);
-    await this.click(this.rememberMeCheckbox);
-    await this.click(this.loginButton);
-    await this.waitForPageLoad();
-  }
-
-  /**
-   * Click "Forgot Password" link
-   */
-  async clickForgotPassword(): Promise<void> {
-    await this.click(this.forgotPasswordLink);
-  }
-
-  /**
-   * Click SSO login button
-   */
-  async clickSSOLogin(): Promise<void> {
-    await this.click(this.ssoButton);
   }
 
   // ==========================================
@@ -113,6 +77,14 @@ export class LoginPage extends BasePage {
    */
   async isPageLoaded(): Promise<boolean> {
     return this.isVisible(this.emailInput);
+  }
+
+  /**
+   * Assert the login page is loaded (email field visible). Web-first wait so
+   * callers do not need their own retry.
+   */
+  async assertLoaded(): Promise<void> {
+    await this.waitForVisible(this.emailInput);
   }
 
   /**

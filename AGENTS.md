@@ -19,7 +19,8 @@ external dependencies.
 ```
 src/
   pages/        Page Objects (extend BasePage). External sites under pages/external/
-  fixtures/     Custom Playwright fixtures (page objects + logger + authenticatedPage)
+  fixtures/     Custom Playwright fixtures (base: page objects + logger;
+                authenticated: storageState-seeded login for protected pages)
   utils/        ConfigManager, Logger, TestDataManager, AccessibilityHelper, PerformanceHelper
   global.d.ts   Declaration merging for custom fixtures into PlaywrightTest.TestArgs
 tests/
@@ -45,10 +46,10 @@ performance/    k6 load script
 3. **Never weaken an assertion to get green.** If a test fails, fix the root
    cause (locator, timing, data, or product behavior). Do not relax matchers,
    delete assertions, or add blanket `try/catch` to hide failures.
-4. **No new `waitForLoadState("networkidle")` and no hard `waitForTimeout`.**
-   `networkidle` is flake-prone and discouraged by Playwright; `BasePage` still
-   exposes `waitForPageLoad()` for legacy reasons, but new code must use
-   web-first assertions (`expect(locator).toBeVisible()`) or `waitForVisible()`.
+4. **No `waitForLoadState("networkidle")` and no hard `waitForTimeout`.**
+   `networkidle` is flake-prone and discouraged by Playwright. Use web-first
+   assertions (`expect(locator).toBeVisible()`), `waitForVisible()`, or
+   `page.waitForURL()` instead.
 5. **Keep cross-browser honest.** Chromium is the only blocking gate. Firefox and
    WebKit are real, enabled projects, runnable via `npm run test:firefox` /
    `test:webkit` / `test:cross-browser`. If you add or remove a browser project,

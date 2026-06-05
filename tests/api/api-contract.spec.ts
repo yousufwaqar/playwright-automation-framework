@@ -76,13 +76,12 @@ test.describe("API Contract Tests", () => {
     expect(body).toHaveProperty("data");
     expect(Array.isArray(body.data)).toBe(true);
 
-    if (body.data.length > 0) {
-      const firstReport = body.data[0];
-      expect(firstReport).toHaveProperty("id");
-      expect(firstReport).toHaveProperty("name");
-      expect(firstReport).toHaveProperty("createdAt");
-      expect(firstReport).toHaveProperty("status");
-    }
+    expect(body.data.length).toBeGreaterThan(0);
+    const firstReport = body.data[0];
+    expect(firstReport).toHaveProperty("id");
+    expect(firstReport).toHaveProperty("name");
+    expect(firstReport).toHaveProperty("createdAt");
+    expect(firstReport).toHaveProperty("status");
 
     logger.info("Schema validation test passed");
   });

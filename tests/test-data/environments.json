@@ -1,8 +1,8 @@
 {
-  "defaultEnvironment": "staging",
+  "defaultEnvironment": "local",
   "environments": {
-    "staging": {
-      "name": "staging",
+    "local": {
+      "name": "local",
       "baseUrl": "http://localhost:3000",
       "apiBaseUrl": "http://localhost:3000/api/v1",
       "timeout": 30000,
@@ -20,26 +20,6 @@
       "navigationTimeout": 60000,
       "expectTimeout": 15000,
       "retries": 2
-    },
-    "production": {
-      "name": "production",
-      "baseUrl": "http://localhost:3000",
-      "apiBaseUrl": "http://localhost:3000/api/v1",
-      "timeout": 60000,
-      "actionTimeout": 15000,
-      "navigationTimeout": 60000,
-      "expectTimeout": 15000,
-      "retries": 2
-    },
-    "local": {
-      "name": "local",
-      "baseUrl": "http://localhost:3000",
-      "apiBaseUrl": "http://localhost:3000/api/v1",
-      "timeout": 30000,
-      "actionTimeout": 10000,
-      "navigationTimeout": 30000,
-      "expectTimeout": 10000,
-      "retries": 0
     }
   }
 }

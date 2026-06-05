@@ -23,7 +23,6 @@ export class DashboardPage extends BasePage {
   private readonly userProfileIcon: Locator;
   private readonly logoutButton: Locator;
   private readonly reportTiles: Locator;
-  private readonly createNewButton: Locator;
   private readonly notificationBell: Locator;
   private readonly sidePanel: Locator;
 
@@ -36,7 +35,6 @@ export class DashboardPage extends BasePage {
     this.userProfileIcon = page.locator('[data-testid="user-profile"]');
     this.logoutButton = page.locator('[data-testid="logout-button"]');
     this.reportTiles = page.locator('[data-testid="report-tile"]');
-    this.createNewButton = page.locator('[data-testid="create-new-btn"]');
     this.notificationBell = page.locator('[data-testid="notification-bell"]');
     this.sidePanel = page.locator('[data-testid="side-panel"]');
   }
@@ -50,7 +48,7 @@ export class DashboardPage extends BasePage {
    */
   async goto(): Promise<void> {
     await this.navigateTo("/dashboard");
-    await this.waitForPageLoad();
+    await this.waitForVisible(this.welcomeMessage);
   }
 
   /**
@@ -59,7 +57,6 @@ export class DashboardPage extends BasePage {
   async searchReport(query: string): Promise<void> {
     await this.fill(this.searchInput, query);
     await this.page.keyboard.press("Enter");
-    await this.waitForPageLoad();
   }
 
   /**
@@ -67,25 +64,6 @@ export class DashboardPage extends BasePage {
    */
   async openReport(index: number): Promise<void> {
     await this.click(this.reportTiles.nth(index));
-    await this.waitForPageLoad();
-  }
-
-  /**
-   * Click on a specific report tile by name
-   */
-  async openReportByName(reportName: string): Promise<void> {
-    const reportTile = this.page.locator(
-      `[data-testid="report-tile"]:has-text("${reportName}")`
-    );
-    await this.click(reportTile);
-    await this.waitForPageLoad();
-  }
-
-  /**
-   * Click "Create New" button
-   */
-  async clickCreateNew(): Promise<void> {
-    await this.click(this.createNewButton);
   }
 
   /**
@@ -94,7 +72,7 @@ export class DashboardPage extends BasePage {
   async logout(): Promise<void> {
     await this.click(this.userProfileIcon);
     await this.click(this.logoutButton);
-    await this.waitForPageLoad();
+    await this.page.waitForURL(/\/login/);
   }
 
   /**
@@ -121,6 +99,15 @@ export class DashboardPage extends BasePage {
    */
   async getReportCount(): Promise<number> {
     return this.reportTiles.count();
+  }
+
+  /**
+   * Get the number of report tiles currently visible (the mock search hides
+   * non-matching tiles via `display:none` rather than removing them, so a plain
+   * count would not reflect a search). Uses the `:visible` engine.
+   */
+  async getVisibleReportCount(): Promise<number> {
+    return this.page.locator('[data-testid="report-tile"]:visible').count();
   }
 
   /**
@@ -157,5 +144,19 @@ export class DashboardPage extends BasePage {
         `Expected ${expectedCount} reports but found ${actualCount}`
       );
     }
+  }
+
+  /**
+   * Assert that exactly one report tile is visible after a search and that it is
+   * the expected report. The mock filters by toggling `display`, so this checks
+   * the search actually narrowed the visible set rather than just leaving tiles
+   * in the DOM.
+   */
+  async assertOnlyVisibleReport(reportName: string): Promise<void> {
+    const visibleTiles = this.page.locator(
+      '[data-testid="report-tile"]:visible'
+    );
+    await expect(visibleTiles).toHaveCount(1);
+    await expect(visibleTiles).toContainText(reportName);
   }
 }

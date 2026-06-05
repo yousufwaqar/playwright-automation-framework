@@ -108,7 +108,7 @@ Click any link to see the actual implementation.
 | Skill | File |
 |---|---|
 | **Bundled mock application** for self-contained CI runs | [`mock-app/server.js`](mock-app/server.js) |
-| **Environment-specific config files** (CI / dev / staging / prod) | [`tests/test-data/environments.json`](tests/test-data/environments.json) |
+| **Environment-specific config** (local + ci timeout/retry profiles) | [`tests/test-data/environments.json`](tests/test-data/environments.json) |
 | **Test data files** (users, environments, external sites) | [`tests/test-data/`](tests/test-data/) |
 
 ### 🚀 CI/CD Pipelines
@@ -127,9 +127,8 @@ Click any link to see the actual implementation.
 
 | Skill | File |
 |---|---|
-| **Renovate** — automated dependency updates with grouping rules | [`renovate.json`](renovate.json) |
+| **Dependabot** — automated weekly dependency + GitHub Actions updates, plus security alerts | [`.github/dependabot.yml`](.github/dependabot.yml) |
 | **Mergify** — auto-merge config for low-risk PRs | [`.mergify.yml`](.mergify.yml) |
-| **Dependabot** — security-focused dependency updates | [`.github/dependabot.yml`](.github/dependabot.yml) |
 | **CODEOWNERS** — review routing | [`CODEOWNERS`](CODEOWNERS) |
 | **PR template** — consistent PR descriptions | [`pull_request_template.md`](pull_request_template.md) |
 | **Issue templates** — bug + feature request | [`.github/ISSUE_TEMPLATE/`](.github/ISSUE_TEMPLATE/) |
@@ -155,7 +154,7 @@ Click any link to see the actual implementation.
 
 ✅ I make **opinionated technical decisions** and can defend them — Chromium-only in CI, BasePage scope, tag taxonomy.
 
-✅ I treat **automation around the code** as part of the craft — Renovate, Release Drafter, link checking, stale management.
+✅ I treat **automation around the code** as part of the craft — Dependabot, Release Drafter, link checking, stale management.
 
 ✅ I **document for humans** — every README section, contributing guide, PR template is written with the reader in mind.
 

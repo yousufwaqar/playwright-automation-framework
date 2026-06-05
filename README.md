@@ -7,7 +7,7 @@
 [![Quality Gate](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/quality-gate.yml/badge.svg)](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/quality-gate.yml)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Playwright](https://img.shields.io/badge/Playwright-1.60+-45ba4b?logo=playwright&logoColor=white)](https://playwright.dev/)
- [![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+ [![Node.js](https://img.shields.io/badge/Node.js-20+-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
  [![License](https://img.shields.io/github/license/yousufwaqar/playwright-automation-framework?color=yellow)](./LICENSE)
  [![Tests](https://img.shields.io/badge/UI%20%2B%20API-Covered-success)](#test-coverage)
  [![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen.svg)](./CONTRIBUTING.md)
@@ -40,9 +40,9 @@ engineering skills this repo demonstrates and how to reach me.
 
 The framework drives, screenshots, and visually diffs a bundled mock BI app on every run — so the suite is fully self-contained and the visual baselines live in version control.
 
-<img src="tests/visual/visual.spec.ts-snapshots/dashboard-page-chromium-win32.png" alt="Mock BI dashboard exercised by the framework" width="720"/>
+<img src="tests/visual/dashboard.visual.spec.ts-snapshots/dashboard-page-chromium-win32.png" alt="Mock BI dashboard exercised by the framework" width="720"/>
 
-<sub><em>Committed visual-regression baseline (dashboard). A matching login baseline sits alongside it; the Quality Gate CI fails on any unintended pixel drift.</em></sub>
+<sub><em>Committed visual-regression baseline (dashboard). A matching login baseline sits alongside it; the `visual` CI job reports any unintended pixel drift (advisory / non-blocking until promoted, see CI section).</em></sub>
 
 </div>
 
@@ -60,7 +60,7 @@ It is designed to be easy to clone, easy to understand, and easy to extend for r
 | Fast feedback              | Parallel execution on Chromium as the blocking CI gate, with Firefox and WebKit runnable locally and in an optional CI job |
 | Reliable CI runs           | A lightweight bundled mock app removes external system dependencies          |
 | API confidence             | Contract tests validate health, auth behavior, schema, and response time     |
-| Environment flexibility    | Centralized JSON config supports CI, dev, staging, and production targets    |
+| Environment flexibility    | Centralized JSON config drives per-environment timeout and retry profiles (local + ci)    |
 | Debuggability              | HTML reports, screenshots, traces, videos, and structured logs               |
 | Real-world examples        | Optional external suites against SauceDemo, The Internet, and RESTful Booker |
 
@@ -257,16 +257,28 @@ playwright-automation-framework/
 │   │   ├── quality-gate.yml           # Authoritative CI: composite quality gate
 │   │   ├── copilot-setup-steps.yml    # Copilot coding agent environment setup
 │   │   ├── visual-baseline.yml        # Manual: generate Linux visual baselines
-│   │   └── external-ci.yml            # Nightly external demo-site suite
-│   ├── instructions/                  # Path-scoped agent rules (src/**, tests/**)
+│   │   ├── external-ci.yml            # Nightly external demo-site suite
+│   │   ├── playwright-update.yml      # Automated Playwright version bumps
+│   │   ├── cspell.yml                 # Spell-check workflow
+│   │   ├── link-check.yml             # Markdown link checker
+│   │   ├── release-drafter.yml        # Drafts release notes from merged PRs
+│   │   └── stale.yml                  # Marks stale issues and PRs
+│   ├── instructions/                  # Path-scoped agent rules
+│   │   ├── pages.instructions.md      # Rules for src/pages/**
+│   │   └── tests.instructions.md      # Rules for tests/**
 │   ├── prompts/                       # Reusable Copilot task recipes
+│   │   ├── new-page-object.prompt.md
+│   │   ├── write-test.prompt.md
+│   │   ├── fix-failing-test.prompt.md
+│   │   ├── add-a11y.prompt.md
+│   │   ├── add-security-check.prompt.md
+│   │   └── review-before-pr.prompt.md
 │   ├── ISSUE_TEMPLATE/
 │   │   ├── bug_report.md
 │   │   └── feature_request.md
 │   ├── copilot-instructions.md        # Repo ruleset for the Copilot agent
-│   ├── pull_request_template.md
-│   ├── CODEOWNERS
-│   └── dependabot.yml
+│   ├── dependabot.yml
+│   └── release-drafter.yml            # Release Drafter config
 ├── docs/
 │   ├── test-strategy.md               # Layers, tagging, principles
 │   ├── architecture.md                # Framework structure & design decisions
@@ -284,7 +296,8 @@ playwright-automation-framework/
 │       └── api-load.js                # k6 API load script
 ├── src/
 │   ├── fixtures/
-│   │   ├── base.fixture.ts            # Custom Playwright fixtures (mock app)
+│   │   ├── base.fixture.ts            # Page objects + logger (logged-out)
+│   │   ├── authenticated.fixture.ts   # storageState-seeded login (protected pages)
 │   │   └── saucedemo.fixture.ts       # Fixtures for SauceDemo external suite
 │   ├── pages/
 │   │   ├── BasePage.ts                # Shared page actions and assertions
@@ -307,14 +320,18 @@ playwright-automation-framework/
 │   ├── api/
 │   │   └── api-contract.spec.ts       # Mock API contract tests
 │   ├── a11y/
-│   │   └── accessibility.spec.ts      # Accessibility audits
+│   │   ├── accessibility.spec.ts      # Login-page accessibility audit
+│   │   └── dashboard.a11y.spec.ts     # Dashboard audit (authenticated)
 │   ├── security/
 │   │   └── api-security.spec.ts       # API & HTTP security assertions
 │   ├── performance/
-│   │   └── perf-smoke.spec.ts         # Performance smoke tests
+│   │   ├── perf-smoke.spec.ts         # Login + API performance smoke
+│   │   └── dashboard.perf.spec.ts     # Dashboard load budget (authenticated)
 │   ├── visual/
-│   │   ├── visual.spec.ts             # Visual regression tests
-│   │   └── visual.spec.ts-snapshots/  # Committed baselines
+│   │   ├── visual.spec.ts             # Login-page visual regression
+│   │   ├── visual.spec.ts-snapshots/  # Committed login baseline
+│   │   ├── dashboard.visual.spec.ts   # Dashboard visual regression (authenticated)
+│   │   └── dashboard.visual.spec.ts-snapshots/  # Committed dashboard baseline
 │   ├── external/
 │   │   ├── saucedemo/
 │   │   │   ├── login.spec.ts
@@ -324,21 +341,32 @@ playwright-automation-framework/
 │   │   └── api/
 │   │       └── restful-booker.spec.ts
 │   ├── test-data/
-│   │   ├── environments.json          # CI/dev/staging/prod config
+│   │   ├── environments.json          # local + ci timeout/retry profiles
 │   │   ├── users.json                 # Test users
 │   │   └── external-sites.json        # Credentials/URLs for demo sites
 │   ├── dashboard.spec.ts              # Dashboard UI tests
 │   └── login.spec.ts                  # Login UI tests
+├── reports/                           # Generated reports (kept via .gitkeep)
+├── .vscode/
+│   └── tasks.json                     # Editor task shortcuts
+├── AGENTS.md                          # Operating manual for AI coding agents
+├── SKILLS.md                          # Guided tour of the skills this repo shows
+├── CONTRIBUTING.md
+├── CODEOWNERS                         # Review ownership
+├── pull_request_template.md
+├── LICENSE
 ├── Dockerfile                         # Pinned Playwright image
 ├── docker-compose.yml                 # One-command containerised run
 ├── .dockerignore
-├── .nvmrc                             # Pinned Node version
-├── AGENTS.md                          # Operating manual for AI coding agents
+├── .gitignore
+├── .nvmrc                             # Pinned Node version (22)
+├── .mergify.yml                       # Mergify merge automation
 ├── eslint.config.mjs                  # ESLint flat config (ts + playwright rules)
-├── CONTRIBUTING.md
 ├── playwright.config.ts               # Playwright configuration
 ├── package.json                       # Scripts and dependencies
+├── package-lock.json
 ├── tsconfig.json                      # TypeScript configuration
+├── cspell.json                        # Spell-check dictionary/config
 └── README.md
 ```
 
@@ -375,7 +403,7 @@ test("should login successfully", async ({ loginPage, logger }) => {
 tests/test-data/environments.json
 ```
 
-This supports clean switching between `ci`, `dev`, `staging`, and `production` through:
+This supports clean switching between the `local` and `ci` timeout/retry profiles through:
 
 ```bash
 TEST_ENV=ci

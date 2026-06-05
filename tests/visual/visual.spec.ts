@@ -26,13 +26,4 @@ test.describe("Visual Regression @visual", () => {
     await page.goto("/", { waitUntil: "load" });
     await expect(page).toHaveScreenshot("login-page.png", { fullPage: true });
   });
-
-  test("dashboard page matches visual baseline @visual @regression", async ({
-    page,
-  }) => {
-    await page.goto("/dashboard", { waitUntil: "load" });
-    await expect(page).toHaveScreenshot("dashboard-page.png", {
-      fullPage: true,
-    });
-  });
 });

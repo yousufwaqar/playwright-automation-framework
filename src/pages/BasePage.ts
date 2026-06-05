@@ -151,20 +151,6 @@ export class BasePage {
     await locator.waitFor({ state: "hidden", timeout });
   }
 
-  /**
-   * Wait for page to finish loading
-   */
-  async waitForPageLoad(): Promise<void> {
-    await this.page.waitForLoadState("networkidle");
-  }
-
-  /**
-   * Wait for a specific duration (use sparingly)
-   */
-  async wait(milliseconds: number): Promise<void> {
-    await this.page.waitForTimeout(milliseconds);
-  }
-
   // ==========================================
   // Assertions
   // ==========================================

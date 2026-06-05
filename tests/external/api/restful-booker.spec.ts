@@ -17,6 +17,11 @@ import data from "../../test-data/external-sites.json";
 const baseUrl = data.restfulBooker.baseUrl;
 
 test.describe("RESTful Booker API @external @api", () => {
+  // The CRUD tests share `bookingId` created by one test and consumed by the
+  // next, so they must run in order on a single worker. Serial mode also aborts
+  // the remaining steps if an earlier one fails, instead of silently skipping.
+  test.describe.configure({ mode: "serial" });
+
   let token: string;
   let bookingId: number;
 
@@ -44,9 +49,10 @@ test.describe("RESTful Booker API @external @api", () => {
 
     const bookings = await response.json();
     expect(Array.isArray(bookings)).toBe(true);
-    if (bookings.length > 0) {
-      expect(bookings[0]).toHaveProperty("bookingid");
-    }
+    // The public sandbox is seeded with bookings, so the list is non-empty and
+    // every entry must expose a bookingid.
+    expect(bookings.length).toBeGreaterThan(0);
+    expect(bookings[0]).toHaveProperty("bookingid");
   });
 
   test("should create a new booking @regression", async ({ request }) => {
@@ -75,7 +81,6 @@ test.describe("RESTful Booker API @external @api", () => {
   });
 
   test("should fetch the created booking @regression", async ({ request }) => {
-    test.skip(!bookingId, "Booking creation test must run first");
     const response = await request.get(`${baseUrl}/booking/${bookingId}`);
     expect(response.status()).toBe(200);
 
@@ -85,7 +90,6 @@ test.describe("RESTful Booker API @external @api", () => {
   });
 
   test("should update the booking with PUT @regression", async ({ request }) => {
-    test.skip(!bookingId, "Booking creation test must run first");
     const response = await request.put(`${baseUrl}/booking/${bookingId}`, {
       headers: {
         Cookie: `token=${token}`,
@@ -109,7 +113,6 @@ test.describe("RESTful Booker API @external @api", () => {
   });
 
   test("should delete the booking @regression", async ({ request }) => {
-    test.skip(!bookingId, "Booking creation test must run first");
     const response = await request.delete(`${baseUrl}/booking/${bookingId}`, {
       headers: { Cookie: `token=${token}` },
     });
