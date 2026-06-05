@@ -25,7 +25,11 @@ export class Logger {
   private log(level: LogLevel, message: string): void {
     const timestamp = new Date().toISOString();
     const formattedMessage = `[${timestamp}] [${level}] [${this.testName}] ${message}`;
-    console.log(formattedMessage);
+    if (level === LogLevel.ERROR || level === LogLevel.WARN) {
+      console.error(formattedMessage);
+    } else {
+      console.log(formattedMessage);
+    }
   }
 
   info(message: string): void {

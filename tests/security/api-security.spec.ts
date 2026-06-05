@@ -40,7 +40,7 @@ test.describe("API & HTTP Security @security", () => {
   }) => {
     const logger = new Logger("Security: invalid token");
     const response = await request.get(`${apiBaseUrl}/reports`, {
-      headers: { Authorization: "Bearer invalid-token" },
+      headers: { Authorization: "Bearer not-a-real-token" },
     });
     expect(response.status()).toBe(401);
     logger.info("Invalid-token rejection verified");

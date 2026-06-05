@@ -43,10 +43,10 @@ test.describe("API Contract Tests", () => {
   }) => {
     const logger = new Logger("API Unauthorized Access");
 
-    logger.step(1, "Send request without authentication");
+    logger.step(1, "Send request with an arbitrary, non-issued token");
     const response = await request.get(`${apiBaseUrl}/reports`, {
       headers: {
-        Authorization: "Bearer invalid-token",
+        Authorization: "Bearer not-a-real-token",
       },
     });
 
@@ -64,7 +64,7 @@ test.describe("API Contract Tests", () => {
     logger.step(1, "Send authenticated GET request to reports endpoint");
     const response = await request.get(`${apiBaseUrl}/reports`, {
       headers: {
-        Authorization: `Bearer ${process.env.API_TOKEN || "test-token"}`,
+        Authorization: `Bearer ${process.env.API_TOKEN || "mock-jwt-token-12345"}`,
       },
     });
 

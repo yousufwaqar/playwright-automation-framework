@@ -39,6 +39,8 @@ jobs:
           node-version-file: ".nvmrc"
           cache: "npm"
       - run: npm ci
+      - name: Lint
+        run: npm run lint
       - name: Typecheck
         run: npm run typecheck
       - name: Spell check
@@ -143,6 +145,30 @@ jobs:
         uses: grafana/setup-k6-action@v1
       - name: Run k6 load test
         run: k6 run performance/k6/api-load.js
+
+  cross-browser:
+    name: Cross-browser FF/WebKit (non-blocking)
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/playwright:v1.60.0-jammy
+    # Firefox refuses to launch when $HOME is not owned by the current user.
+    # GitHub Actions sets HOME=/github/home inside containers; point it at the
+    # root-owned /root so Firefox launches in the Playwright image.
+    env:
+      HOME: /root
+    # Chromium is the blocking gate (see the `functional` job). Firefox and WebKit
+    # run here as an optional signal; the Playwright container ships both engines.
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v6
+      - run: npm ci
+      - name: Run functional suite across Chromium, Firefox and WebKit
+        run: npm run test:cross-browser
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: report-cross-browser
+          path: playwright-report/
+          retention-days: 14
 
   quality-gate:
     name: Quality Gate

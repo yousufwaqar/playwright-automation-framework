@@ -59,18 +59,20 @@ export default defineConfig({
 
       },
     },
-    // {
-    //   name: "firefox",
-    //   use: {
-    //     ...devices["Desktop Firefox"],
-    //   },
-    // },
-    // {
-    //   name: "webkit",
-    //   use: {
-    //     ...devices["Desktop Safari"],
-    //   },
-    // },
+    {
+      name: "firefox",
+      use: {
+        ...devices["Desktop Firefox"],
+      },
+    },
+    {
+      name: "webkit",
+      use: {
+        ...devices["Desktop Safari"],
+      },
+    },
+    // Mobile viewport projects are configured and opt-in. Uncomment to enable
+    // them locally or in the optional cross-browser job.
     // {
     //   name: "mobile-chrome",
     //   use: {
