@@ -70,6 +70,19 @@ test.describe("Dashboard Feature Tests", () => {
   );
 
   test(
+    "should open the notifications panel @smoke @regression",
+    async ({ dashboardPage, logger }: { dashboardPage: DashboardPage; logger: Logger }) => {
+      logger.step(1, "Open the notifications panel");
+      await dashboardPage.openNotifications();
+
+      logger.step(2, "Verify the notifications panel is in its open state");
+      await dashboardPage.assertNotificationsOpen();
+
+      logger.info("Notifications panel test completed");
+    }
+  );
+
+  test(
     "should logout successfully @smoke @regression",
     async ({ dashboardPage, loginPage, logger }: { dashboardPage: DashboardPage; loginPage: LoginPage; logger: Logger }) => {
       logger.step(1, "Click logout");
