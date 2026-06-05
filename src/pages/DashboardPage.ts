@@ -1,4 +1,4 @@
-import { Page, Locator } from "@playwright/test";
+import { Page, Locator, expect } from "@playwright/test";
 import { BasePage } from "./BasePage";
 
 /**
@@ -128,6 +128,15 @@ export class DashboardPage extends BasePage {
    */
   async isDashboardLoaded(): Promise<boolean> {
     return this.isVisible(this.welcomeMessage);
+  }
+
+  /**
+   * Assert the notifications side panel is in its open state. The panel is always
+   * present in the DOM and slides in via the `visible` class, so assert on that
+   * class rather than mere visibility (which would pass even when closed).
+   */
+  async assertNotificationsOpen(): Promise<void> {
+    await expect(this.sidePanel).toHaveClass(/visible/);
   }
 
   /**
