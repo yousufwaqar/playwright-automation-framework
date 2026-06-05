@@ -114,7 +114,7 @@ npm --version
 
 Required:
 
-- Node.js 18 or higher (see `.nvmrc`)
+- Node.js 20.19 or higher (see `.nvmrc`)
 - npm 8 or higher
 
 ### Install
