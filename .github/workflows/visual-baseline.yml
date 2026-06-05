@@ -29,10 +29,11 @@ jobs:
         run: npm run test:visual:update
       - name: Commit updated baselines
         run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           if [ -n "$(git status --porcelain tests/visual)" ]; then
-            git add tests/visual/**/*-linux.png
+            git add tests/visual
             git commit -m "chore: update Linux visual baselines [skip ci]"
             git push
           else

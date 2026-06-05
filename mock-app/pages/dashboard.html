@@ -5,74 +5,204 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard - Demo App</title>
   <style>
+    :root {
+      --bg: #f1f5f9; --panel: #ffffff; --border: #e2e8f0; --ink: #0f172a;
+      --muted: #475569; --accent: #4338ca; --sidebar: #0f172a; --sidebar-ink: #cbd5e1;
+    }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f2f5; }
-    .header { background: white; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-    .header-left { display: flex; align-items: center; gap: 16px; }
-    .header-right { display: flex; align-items: center; gap: 12px; }
-    .search-box { padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; width: 300px; font-size: 14px; }
-    .icon-btn { background: none; border: none; cursor: pointer; font-size: 20px; padding: 8px; border-radius: 50%; }
-    .icon-btn:hover { background: #f0f0f0; }
-    .main { padding: 24px; }
-    .welcome { font-size: 24px; margin-bottom: 24px; color: #1a1a1a; }
-    .tiles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-    .report-tile { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); cursor: pointer; transition: box-shadow 0.2s; }
-    .report-tile:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-    .report-tile h3 { margin-bottom: 8px; color: #1a1a1a; }
-    .report-tile p { font-size: 13px; color: #666; }
-    .nav-menu { display: flex; gap: 16px; }
-    .nav-menu a { text-decoration: none; color: #555; font-size: 14px; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased; }
+    .app-shell { display: flex; min-height: 100vh; }
+
+    /* Sidebar */
+    .sidebar { width: 248px; background: var(--sidebar); color: var(--sidebar-ink); display: flex; flex-direction: column; padding: 20px 16px; flex-shrink: 0; }
+    .brand { display: flex; align-items: center; gap: 10px; padding: 8px 8px 24px; }
+    .brand-mark { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 9px; background-color: #4338ca; background-image: linear-gradient(135deg, #6366f1, #4338ca); color: #fff; font-size: 16px; font-weight: 700; }
+    .brand-name { font-size: 18px; font-weight: 700; color: #fff; letter-spacing: 0.2px; }
+    .brand-accent { color: #a5b4fc; }
+    .nav-menu { display: flex; flex-direction: column; gap: 4px; margin-top: 6px; }
+    .nav-link { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 9px; text-decoration: none; color: var(--sidebar-ink); font-size: 14px; font-weight: 500; }
+    .nav-link:hover { background: rgba(255,255,255,0.06); color: #fff; }
+    .nav-link.active { background: rgba(99,102,241,0.22); color: #fff; }
+    .nav-ico { font-size: 14px; width: 18px; text-align: center; }
+    .sidebar-footer { margin-top: auto; }
+    .plan-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px; }
+    .plan-title { font-size: 13px; font-weight: 600; color: #fff; }
+    .plan-sub { font-size: 12px; color: #94a3b8; margin: 4px 0 10px; }
+    .plan-bar { height: 6px; border-radius: 99px; background: rgba(255,255,255,0.12); overflow: hidden; }
+    .plan-bar span { display: block; height: 100%; background: linear-gradient(90deg, #6366f1, #818cf8); }
+
+    /* Main column */
+    .app-main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 28px; background: var(--panel); border-bottom: 1px solid var(--border); }
+    .topbar-search { position: relative; flex: 1; max-width: 440px; }
+    .search-ico { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 15px; }
+    .search-box { width: 100%; padding: 10px 12px 10px 34px; border: 1px solid var(--border); border-radius: 9px; font-size: 14px; color: var(--ink); background: #f8fafc; }
+    .search-box:focus { outline: none; border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,0.15); background: #fff; }
+    .search-box::placeholder { color: #64748b; }
+    .topbar-actions { display: flex; align-items: center; gap: 10px; }
+    .create-btn { background: var(--accent); color: #fff; border: none; padding: 9px 16px; border-radius: 9px; cursor: pointer; font-size: 14px; font-weight: 600; }
+    .create-btn:hover { background: #3730a3; }
+    .icon-btn { background: #f1f5f9; border: 1px solid var(--border); cursor: pointer; font-size: 16px; width: 38px; height: 38px; border-radius: 9px; display: grid; place-items: center; }
+    .icon-btn:hover { background: #e2e8f0; }
+    .avatar-btn { width: 38px; height: 38px; border-radius: 50%; border: none; cursor: pointer; background-color: #4338ca; background-image: linear-gradient(135deg, #6366f1, #4338ca); color: #fff; font-size: 13px; font-weight: 700; }
     .dropdown { position: relative; display: inline-block; }
-    .dropdown-content { display: none; position: absolute; right: 0; top: 100%; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.15); border-radius: 4px; min-width: 150px; z-index: 100; }
+    .dropdown-content { display: none; position: absolute; right: 0; top: calc(100% + 8px); background: #fff; box-shadow: 0 8px 24px rgba(15,23,42,0.14); border: 1px solid var(--border); border-radius: 10px; min-width: 160px; z-index: 100; overflow: hidden; }
     .dropdown-content.visible { display: block; }
-    .dropdown-content button { width: 100%; padding: 10px 16px; border: none; background: none; text-align: left; cursor: pointer; font-size: 14px; }
-    .dropdown-content button:hover { background: #f5f5f5; }
-    .side-panel { position: fixed; right: -300px; top: 0; width: 300px; height: 100vh; background: white; box-shadow: -2px 0 8px rgba(0,0,0,0.1); padding: 20px; transition: right 0.3s; z-index: 200; }
+    .dropdown-content button { width: 100%; padding: 11px 16px; border: none; background: none; text-align: left; cursor: pointer; font-size: 14px; color: var(--ink); }
+    .dropdown-content button:hover { background: #f1f5f9; }
+
+    .main { padding: 28px; flex: 1; }
+    .page-head { margin-bottom: 22px; }
+    .welcome { font-size: 24px; font-weight: 700; color: var(--ink); }
+    .page-sub { font-size: 14px; color: var(--muted); margin-top: 6px; }
+
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; margin-bottom: 28px; }
+    .stat-card { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 18px; }
+    .stat-label { font-size: 13px; color: var(--muted); font-weight: 500; }
+    .stat-value { font-size: 26px; font-weight: 700; color: var(--ink); margin: 8px 0 10px; }
+    .badge { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 99px; }
+    .badge-up { background: #dcfce7; color: #166534; }
+    .badge-down { background: #fee2e2; color: #991b1b; }
+    .badge-muted { background: #eef2ff; color: #3730a3; }
+
+    .section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .section-title { font-size: 16px; font-weight: 700; color: var(--ink); }
+    .tiles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 18px; }
+    .report-tile { display: block; background: var(--panel); padding: 20px; border-radius: 14px; border: 1px solid var(--border); cursor: pointer; transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s; }
+    .report-tile:hover { box-shadow: 0 10px 28px rgba(15,23,42,0.10); transform: translateY(-2px); border-color: #c7d2fe; }
+    .tile-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .tile-ico { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 11px; font-size: 17px; font-weight: 700; color: #fff; }
+    .ico-sales { background-color: #4338ca; background-image: linear-gradient(135deg, #6366f1, #4338ca); }
+    .ico-mkt { background-color: #0369a1; background-image: linear-gradient(135deg, #0ea5e9, #0369a1); }
+    .ico-fin { background-color: #047857; background-image: linear-gradient(135deg, #10b981, #047857); }
+    .tile-metric { font-size: 24px; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
+    .report-tile h3 { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+    .tile-sub { font-size: 13px; color: var(--muted); }
+    .spark { display: flex; align-items: flex-end; gap: 5px; height: 38px; margin-top: 16px; }
+    .spark span { flex: 1; background: #e0e7ff; border-radius: 3px 3px 0 0; }
+
+    .side-panel { position: fixed; right: -320px; top: 0; width: 320px; height: 100vh; background: #fff; box-shadow: -8px 0 24px rgba(15,23,42,0.12); padding: 24px; transition: right 0.3s; z-index: 200; }
     .side-panel.visible { right: 0; }
-    .create-btn { background: #1976d2; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 14px; }
+    .side-panel h3 { margin-bottom: 8px; color: var(--ink); }
+    .side-panel p { color: var(--muted); font-size: 14px; }
     .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
   </style>
 </head>
 <body>
-  <header class="header">
-    <div class="header-left">
-      <nav data-testid="nav-menu" class="nav-menu">
-        <a href="/dashboard">Home</a>
-        <a href="#">Reports</a>
-        <a href="#">Workspaces</a>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">&#x25C6;</span>
+        <span class="brand-name">Insight<span class="brand-accent">BI</span></span>
+      </div>
+      <nav data-testid="nav-menu" class="nav-menu" aria-label="Primary">
+        <a class="nav-link active" href="/dashboard"><span class="nav-ico" aria-hidden="true">&#x2302;</span>Home</a>
+        <a class="nav-link" href="#"><span class="nav-ico" aria-hidden="true">&#x25A4;</span>Reports</a>
+        <a class="nav-link" href="#"><span class="nav-ico" aria-hidden="true">&#x25A6;</span>Workspaces</a>
       </nav>
-    </div>
-    <div class="header-right">
-      <label for="searchInput" class="visually-hidden">Search reports</label>
-      <input data-testid="search-input" type="text" class="search-box" placeholder="Search reports..." id="searchInput" aria-label="Search reports">
-      <button data-testid="create-new-btn" class="create-btn">+ Create</button>
-      <button data-testid="notification-bell" class="icon-btn" aria-label="Notifications">&#x1F514;</button>
-      <div class="dropdown">
-        <button data-testid="user-profile" class="icon-btn" aria-label="User profile menu" aria-haspopup="true">&#x1F464;</button>
-        <div class="dropdown-content" id="profileMenu">
-          <button data-testid="logout-button">Sign Out</button>
+      <div class="sidebar-footer">
+        <div class="plan-card">
+          <p class="plan-title">Pro workspace</p>
+          <p class="plan-sub">12 of 20 reports used</p>
+          <div class="plan-bar"><span style="width: 60%;"></span></div>
         </div>
       </div>
-    </div>
-  </header>
+    </aside>
 
-  <main class="main">
-    <div data-testid="welcome-message" class="welcome">Welcome back, Test User!</div>
-    <div class="tiles-grid" id="tilesGrid">
-      <div data-testid="report-tile" class="report-tile" data-report-id="1">
-        <h3>Sales Report</h3>
-        <p>Last updated: Jan 15, 2026</p>
-      </div>
-      <div data-testid="report-tile" class="report-tile" data-report-id="2">
-        <h3>Marketing Dashboard</h3>
-        <p>Last updated: Feb 20, 2026</p>
-      </div>
-      <div data-testid="report-tile" class="report-tile" data-report-id="3">
-        <h3>Finance Overview</h3>
-        <p>Last updated: Mar 10, 2026</p>
-      </div>
+    <div class="app-main">
+      <header class="topbar">
+        <div class="topbar-search">
+          <span class="search-ico" aria-hidden="true">&#x2315;</span>
+          <label for="searchInput" class="visually-hidden">Search reports</label>
+          <input data-testid="search-input" type="text" class="search-box" placeholder="Search reports..." id="searchInput" aria-label="Search reports">
+        </div>
+        <div class="topbar-actions">
+          <button data-testid="create-new-btn" class="create-btn">+ Create</button>
+          <button data-testid="notification-bell" class="icon-btn" aria-label="Notifications">&#x1F514;</button>
+          <div class="dropdown">
+            <button data-testid="user-profile" class="avatar-btn" aria-label="User profile menu" aria-haspopup="true">TU</button>
+            <div class="dropdown-content" id="profileMenu">
+              <button data-testid="logout-button">Sign Out</button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="main">
+        <div class="page-head">
+          <h1 data-testid="welcome-message" class="welcome">Welcome back, Test User!</h1>
+          <p class="page-sub">Here is what is happening across your workspaces today.</p>
+        </div>
+
+        <section class="stats" aria-label="Workspace summary">
+          <div class="stat-card">
+            <p class="stat-label">Active reports</p>
+            <p class="stat-value">12</p>
+            <span class="badge badge-up">&#x25B2; 8.2%</span>
+          </div>
+          <div class="stat-card">
+            <p class="stat-label">Total views (30d)</p>
+            <p class="stat-value">8,420</p>
+            <span class="badge badge-up">&#x25B2; 14.3%</span>
+          </div>
+          <div class="stat-card">
+            <p class="stat-label">Scheduled refreshes</p>
+            <p class="stat-value">36</p>
+            <span class="badge badge-up">&#x25B2; 5.0%</span>
+          </div>
+          <div class="stat-card">
+            <p class="stat-label">Connected sources</p>
+            <p class="stat-value">7</p>
+            <span class="badge badge-muted">Healthy</span>
+          </div>
+        </section>
+
+        <section aria-label="Reports">
+          <div class="section-head">
+            <h2 class="section-title">Your reports</h2>
+          </div>
+          <div class="tiles-grid" id="tilesGrid">
+            <div data-testid="report-tile" class="report-tile" data-report-id="1">
+              <div class="tile-top">
+                <span class="tile-ico ico-sales" aria-hidden="true">$</span>
+                <span class="badge badge-up">&#x25B2; 12.5%</span>
+              </div>
+              <p class="tile-metric">$48.2K</p>
+              <h3>Sales Report</h3>
+              <p class="tile-sub">Last updated: Jan 15, 2026</p>
+              <div class="spark" aria-hidden="true">
+                <span style="height: 42%;"></span><span style="height: 58%;"></span><span style="height: 48%;"></span><span style="height: 70%;"></span><span style="height: 62%;"></span><span style="height: 86%;"></span><span style="height: 76%;"></span>
+              </div>
+            </div>
+            <div data-testid="report-tile" class="report-tile" data-report-id="2">
+              <div class="tile-top">
+                <span class="tile-ico ico-mkt" aria-hidden="true">%</span>
+                <span class="badge badge-up">&#x25B2; 6.1%</span>
+              </div>
+              <p class="tile-metric">18.4K</p>
+              <h3>Marketing Dashboard</h3>
+              <p class="tile-sub">Last updated: Feb 20, 2026</p>
+              <div class="spark" aria-hidden="true">
+                <span style="height: 55%;"></span><span style="height: 40%;"></span><span style="height: 62%;"></span><span style="height: 50%;"></span><span style="height: 72%;"></span><span style="height: 60%;"></span><span style="height: 80%;"></span>
+              </div>
+            </div>
+            <div data-testid="report-tile" class="report-tile" data-report-id="3">
+              <div class="tile-top">
+                <span class="tile-ico ico-fin" aria-hidden="true">&#x2211;</span>
+                <span class="badge badge-down">&#x25BC; 2.3%</span>
+              </div>
+              <p class="tile-metric">$112K</p>
+              <h3>Finance Overview</h3>
+              <p class="tile-sub">Last updated: Mar 10, 2026</p>
+              <div class="spark" aria-hidden="true">
+                <span style="height: 80%;"></span><span style="height: 68%;"></span><span style="height: 74%;"></span><span style="height: 60%;"></span><span style="height: 66%;"></span><span style="height: 52%;"></span><span style="height: 58%;"></span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
-  </main>
+  </div>
 
   <div data-testid="side-panel" class="side-panel" id="sidePanel">
     <h3>Notifications</h3>

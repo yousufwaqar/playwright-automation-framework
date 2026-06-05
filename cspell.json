@@ -65,7 +65,8 @@
     "hsl", "hsla", "hex",
     "nosniff", "referrer", "Referrer", "externalised", "Externalised",
     "antialiasing", "aria", "haspopup", "fingerprinting", "Navigation",
-    "percentile", "Lighthouse", "deterministic"
+    "percentile", "Lighthouse", "deterministic", "InsightBI", "BI",
+    "workspaces"
   ],
   "flagWords": [],
   "allowCompoundWords": true
