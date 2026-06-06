@@ -30,11 +30,8 @@ test.describe("Dashboard Feature Tests", () => {
   test(
     "should display dashboard with welcome message @smoke @regression",
     async ({ dashboardPage, logger }: { dashboardPage: DashboardPage; logger: Logger }) => {
-      logger.step(1, "Verify welcome message is displayed");
-      const welcomeMessage = await dashboardPage.getWelcomeMessage();
-
-      logger.step(2, "Assert welcome message contains expected text");
-      expect(welcomeMessage).toContain("Welcome");
+      logger.step(1, "Assert welcome message contains expected text");
+      await dashboardPage.assertWelcomeMessageContains("Welcome");
 
       logger.info("Welcome message verification completed");
     }

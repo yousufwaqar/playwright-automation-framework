@@ -1,4 +1,4 @@
-import { test, expect } from "../src/fixtures/base.fixture";
+import { test } from "../src/fixtures/base.fixture";
 import { TestDataManager } from "../src/utils/TestDataManager";
 import type { LoginPage } from "../src/pages/LoginPage";
 import type { Logger } from "../src/utils/Logger";
@@ -60,11 +60,8 @@ test.describe("Login Feature Tests", () => {
   test(
     "should disable login button when fields are empty @regression",
     async ({ loginPage, logger }: { loginPage: LoginPage; logger: Logger }) => {
-      logger.step(1, "Verify login button is disabled on page load");
-      const isEnabled = await loginPage.isLoginButtonEnabled();
-
-      logger.step(2, "Assert login button is disabled");
-      expect(isEnabled).toBe(false);
+      logger.step(1, "Assert login button is disabled on page load");
+      await loginPage.assertLoginButtonDisabled();
 
       logger.info("Empty field validation test completed");
     }
@@ -73,11 +70,8 @@ test.describe("Login Feature Tests", () => {
   test(
     "should verify login page is loaded correctly @smoke",
     async ({ loginPage, logger }: { loginPage: LoginPage; logger: Logger }) => {
-      logger.step(1, "Verify login page elements are visible");
-      const isLoaded = await loginPage.isPageLoaded();
-
-      logger.step(2, "Assert page is loaded");
-      expect(isLoaded).toBe(true);
+      logger.step(1, "Assert login page elements are visible");
+      await loginPage.assertLoaded();
 
       logger.info("Page load verification completed");
     }
