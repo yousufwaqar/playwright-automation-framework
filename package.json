@@ -25,6 +25,7 @@
     "test:saucedemo": "cross-env NODE_OPTIONS=\"--import tsx\" npx playwright test --project=chromium --grep @saucedemo",
     "test:theinternet": "cross-env NODE_OPTIONS=\"--import tsx\" npx playwright test --project=chromium --grep @theinternet",
     "test:api:external": "cross-env NODE_OPTIONS=\"--import tsx\" npx playwright test --project=chromium tests/external/api/",
+    "test:unit": "cross-env NODE_OPTIONS=\"--import tsx\" npx playwright test --config=playwright.unit.config.ts",
     "perf:k6": "k6 run performance/k6/api-load.js",
     "report": "npx playwright show-report",
     "allure:generate": "allure generate allure-results --clean -o allure-report",
@@ -34,7 +35,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc --noEmit",
-    "clean": "rm -rf test-results/ playwright-report/"
+    "clean": "node scripts/clean.js"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.3",

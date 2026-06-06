@@ -26,17 +26,6 @@ function serveFile(res, filePath, contentType) {
   }
 }
 
-function serveStatic(res, filePath, contentType) {
-  try {
-    const fullPath = path.join(__dirname, filePath);
-    const content = fs.readFileSync(fullPath, "utf-8");
-    res.writeHead(200, { "Content-Type": contentType });
-    res.end(content);
-  } catch {
-    jsonResponse(res, 404, { error: "Not Found" });
-  }
-}
-
 function jsonResponse(res, statusCode, data) {
   res.writeHead(statusCode, { "Content-Type": "application/json" });
   res.end(JSON.stringify(data));
@@ -106,7 +95,7 @@ const server = http.createServer(async (req, res) => {
   // path-traversal (e.g. /public/../../etc/passwd).
   if (pathname.startsWith("/public/") && pathname.endsWith(".js")) {
     const safeName = path.basename(pathname);
-    return serveStatic(
+    return serveFile(
       res,
       path.join("public", safeName),
       "application/javascript; charset=utf-8"

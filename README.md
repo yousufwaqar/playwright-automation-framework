@@ -2,7 +2,7 @@
 
 # 🎭 Playwright Automation Framework
 
-### Enterprise-grade end-to-end test automation built for scale
+### End-to-end UI and API testing with a composite CI quality gate: functional, accessibility, security, performance, and visual checks
 
 [![Quality Gate](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/quality-gate.yml/badge.svg)](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/quality-gate.yml)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)

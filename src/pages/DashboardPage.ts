@@ -95,6 +95,13 @@ export class DashboardPage extends BasePage {
   }
 
   /**
+   * Assert the welcome message contains the expected text (web-first, auto-retries).
+   */
+  async assertWelcomeMessageContains(expectedText: string): Promise<void> {
+    await expect(this.welcomeMessage).toContainText(expectedText);
+  }
+
+  /**
    * Get total number of report tiles displayed
    */
   async getReportCount(): Promise<number> {
@@ -135,15 +142,12 @@ export class DashboardPage extends BasePage {
   }
 
   /**
-   * Assert specific number of reports are displayed
+   * Assert specific number of report tiles are present in the DOM (web-first,
+   * auto-retries). Counts all tiles including hidden ones; use
+   * assertOnlyVisibleReport for the post-search visible set.
    */
   async assertReportCount(expectedCount: number): Promise<void> {
-    const actualCount = await this.getReportCount();
-    if (actualCount !== expectedCount) {
-      throw new Error(
-        `Expected ${expectedCount} reports but found ${actualCount}`
-      );
-    }
+    await expect(this.reportTiles).toHaveCount(expectedCount);
   }
 
   /**

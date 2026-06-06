@@ -73,6 +73,14 @@ export class LoginPage extends BasePage {
   }
 
   /**
+   * Assert the login button is disabled (web-first, auto-retries). Used for the
+   * empty-fields state where the form should block submission.
+   */
+  async assertLoginButtonDisabled(): Promise<void> {
+    await this.assertDisabled(this.loginButton);
+  }
+
+  /**
    * Verify login page is fully loaded
    */
   async isPageLoaded(): Promise<boolean> {
@@ -80,11 +88,11 @@ export class LoginPage extends BasePage {
   }
 
   /**
-   * Assert the login page is loaded (email field visible). Web-first wait so
-   * callers do not need their own retry.
+   * Assert the login page is loaded (email field visible). Web-first assertion
+   * so callers do not need their own retry.
    */
   async assertLoaded(): Promise<void> {
-    await this.waitForVisible(this.emailInput);
+    await this.assertVisible(this.emailInput);
   }
 
   /**

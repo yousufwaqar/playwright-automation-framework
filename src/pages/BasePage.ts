@@ -1,4 +1,5 @@
 import { Page, Locator, expect } from "@playwright/test";
+import { ConfigManager } from "../utils/ConfigManager";
 
 /**
  * BasePage - Abstract base class for all Page Objects
@@ -10,9 +11,20 @@ import { Page, Locator, expect } from "@playwright/test";
  */
 export class BasePage {
   protected page: Page;
+  /** Wait budget for a single element interaction (visible-before-act). */
+  protected readonly actionTimeout: number;
+  /** Wait budget for explicit visible/hidden waits. */
+  protected readonly waitTimeout: number;
 
   constructor(page: Page) {
     this.page = page;
+    // Derive timeouts from the active environment so local and CI runs honour
+    // their configured budgets instead of hardcoded magic numbers. expectTimeout
+    // (not the full navigation/test timeout) keeps a missing element from
+    // consuming the whole test budget and surfacing as a vague test timeout.
+    const config = ConfigManager.getInstance();
+    this.actionTimeout = config.getActionTimeout();
+    this.waitTimeout = config.getExpectTimeout();
   }
 
   // ==========================================
@@ -48,7 +60,7 @@ export class BasePage {
    * Click on an element with auto-wait
    */
   async click(locator: Locator): Promise<void> {
-    await locator.waitFor({ state: "visible", timeout: 10000 });
+    await locator.waitFor({ state: "visible", timeout: this.actionTimeout });
     await locator.click();
   }
 
@@ -56,7 +68,7 @@ export class BasePage {
    * Double-click on an element
    */
   async doubleClick(locator: Locator): Promise<void> {
-    await locator.waitFor({ state: "visible", timeout: 10000 });
+    await locator.waitFor({ state: "visible", timeout: this.actionTimeout });
     await locator.dblclick();
   }
 
@@ -64,7 +76,7 @@ export class BasePage {
    * Fill a text input field (clears existing text first)
    */
   async fill(locator: Locator, text: string): Promise<void> {
-    await locator.waitFor({ state: "visible", timeout: 10000 });
+    await locator.waitFor({ state: "visible", timeout: this.actionTimeout });
     await locator.clear();
     await locator.fill(text);
   }
@@ -73,7 +85,7 @@ export class BasePage {
    * Type text character by character (for inputs that need keystrokes)
    */
   async typeText(locator: Locator, text: string): Promise<void> {
-    await locator.waitFor({ state: "visible", timeout: 10000 });
+    await locator.waitFor({ state: "visible", timeout: this.actionTimeout });
     await locator.pressSequentially(text, { delay: 50 });
   }
 
@@ -140,15 +152,21 @@ export class BasePage {
   /**
    * Wait for an element to be visible
    */
-  async waitForVisible(locator: Locator, timeout = 15000): Promise<void> {
-    await locator.waitFor({ state: "visible", timeout });
+  async waitForVisible(locator: Locator, timeout?: number): Promise<void> {
+    await locator.waitFor({
+      state: "visible",
+      timeout: timeout ?? this.waitTimeout,
+    });
   }
 
   /**
    * Wait for an element to be hidden
    */
-  async waitForHidden(locator: Locator, timeout = 15000): Promise<void> {
-    await locator.waitFor({ state: "hidden", timeout });
+  async waitForHidden(locator: Locator, timeout?: number): Promise<void> {
+    await locator.waitFor({
+      state: "hidden",
+      timeout: timeout ?? this.waitTimeout,
+    });
   }
 
   // ==========================================
@@ -160,6 +178,13 @@ export class BasePage {
    */
   async assertVisible(locator: Locator): Promise<void> {
     await expect(locator).toBeVisible();
+  }
+
+  /**
+   * Assert element is disabled
+   */
+  async assertDisabled(locator: Locator): Promise<void> {
+    await expect(locator).toBeDisabled();
   }
 
   /**

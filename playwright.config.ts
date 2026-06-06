@@ -17,6 +17,9 @@ export default defineConfig({
   },
   testDir: "./tests",
   testMatch: "**/*.spec.ts",
+  // Pure-logic unit tests run under playwright.unit.config.ts (no browser, no
+  // webServer); exclude them here so they don't run across browser projects.
+  testIgnore: "**/unit/**",
   timeout: config.getTimeout(),
 
   expect: {
