@@ -1,5 +1,6 @@
 import { Page, Locator, expect } from "@playwright/test";
 import { ConfigManager } from "../utils/ConfigManager";
+import { SelfHealingHelper, SimpleLogger } from "../utils/SelfHealingHelper";
 
 /**
  * BasePage - Abstract base class for all Page Objects
@@ -65,6 +66,26 @@ export class BasePage {
   }
 
   /**
+   * Click on an element with AI Self-Healing fallback.
+   */
+  async clickWithHealing(
+    locator: Locator,
+    primarySelectorString: string,
+    fallbacks: string[],
+    logger: SimpleLogger,
+    timeout?: number
+  ): Promise<void> {
+    await SelfHealingHelper.clickWithHealing(
+      this.page,
+      locator,
+      primarySelectorString,
+      fallbacks,
+      logger,
+      timeout ?? this.actionTimeout
+    );
+  }
+
+  /**
    * Double-click on an element
    */
   async doubleClick(locator: Locator): Promise<void> {
@@ -79,6 +100,28 @@ export class BasePage {
     await locator.waitFor({ state: "visible", timeout: this.actionTimeout });
     await locator.clear();
     await locator.fill(text);
+  }
+
+  /**
+   * Fill a text input field with AI Self-Healing fallback.
+   */
+  async fillWithHealing(
+    locator: Locator,
+    primarySelectorString: string,
+    fallbacks: string[],
+    text: string,
+    logger: SimpleLogger,
+    timeout?: number
+  ): Promise<void> {
+    await SelfHealingHelper.fillWithHealing(
+      this.page,
+      locator,
+      primarySelectorString,
+      fallbacks,
+      text,
+      logger,
+      timeout ?? this.actionTimeout
+    );
   }
 
   /**
