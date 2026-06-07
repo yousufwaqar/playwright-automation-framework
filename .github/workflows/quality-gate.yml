@@ -57,6 +57,13 @@ jobs:
       - run: npm ci
       - name: Run functional + API tests
         run: npm run test:functional
+      - name: Run CI Quality Analysis
+        if: always()
+        run: |
+          node scripts/ci-failure-analyzer.js
+          if [ -f test-results/ci-quality-summary.md ]; then
+            cat test-results/ci-quality-summary.md >> $GITHUB_STEP_SUMMARY
+          fi
       - uses: actions/upload-artifact@v7
         if: always()
         with:
