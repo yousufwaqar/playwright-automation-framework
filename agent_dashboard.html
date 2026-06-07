@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI SDET Agent Workbench</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --panel-bg: #161b22;
+            --accent-color: #58a6ff;
+            --text-color: #c9d1d9;
+            --text-dim: #8b949e;
+            --border-color: #30363d;
+            --success-color: #2ea043;
+            --warning-color: #d29922;
+            --error-color: #f85149;
+            --cyan-color: #39c5cf;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: 24px;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #fff;
+        }
+        .badge {
+            background-color: var(--border-color);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge.live {
+            background-color: rgba(46, 160, 67, 0.15);
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+        .badge.simulation {
+            background-color: rgba(210, 153, 34, 0.15);
+            color: var(--warning-color);
+            border: 1px solid var(--warning-color);
+        }
+        .main-layout {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 20px;
+        }
+        .panel {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .panel-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #fff;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        select, input, textarea {
+            width: 100%;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 8px 12px;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+        .btn {
+            background-color: var(--success-color);
+            color: #fff;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+            transition: background-color 0.2s;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        .btn-secondary {
+            background-color: var(--border-color);
+            color: var(--text-color);
+            margin-top: 10px;
+        }
+        .terminal-panel {
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+        }
+        .terminal-screen {
+            flex-grow: 1;
+            background-color: #05070a;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-family: "Courier New", Courier, monospace;
+            padding: 15px;
+            overflow-y: auto;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #a6accd;
+        }
+        .log-entry {
+            margin-bottom: 10px;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        .log-thought {
+            color: #ffcb6b;
+            background-color: rgba(255, 203, 107, 0.05);
+            padding: 8px 12px;
+            border-left: 3px solid #ffcb6b;
+            border-radius: 0 4px 4px 0;
+        }
+        .log-tool-call {
+            color: var(--cyan-color);
+            font-weight: bold;
+        }
+        .log-tool-result {
+            color: #82aaff;
+            background-color: rgba(130, 170, 255, 0.05);
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: pre-wrap;
+            border-left: 3px solid #82aaff;
+            margin-top: 4px;
+        }
+        .log-status {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+        .log-summary {
+            color: #c3e88d;
+            background-color: rgba(195, 232, 141, 0.05);
+            padding: 12px;
+            border: 1px solid #c3e88d;
+            border-radius: 6px;
+            margin-top: 15px;
+            white-space: pre-wrap;
+        }
+        .log-error {
+            color: var(--error-color);
+            font-weight: bold;
+        }
+        .step-indicator {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            line-height: 18px;
+            text-align: center;
+            border-radius: 50%;
+            background-color: var(--border-color);
+            color: #fff;
+            font-size: 11px;
+            margin-right: 6px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .file-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+        .tab {
+            padding: 6px 12px;
+            font-size: 13px;
+            cursor: pointer;
+            border-radius: 4px;
+            border: 1px solid transparent;
+            background-color: transparent;
+            color: var(--text-dim);
+        }
+        .tab.active {
+            background-color: var(--border-color);
+            color: #fff;
+            border-color: var(--border-color);
+        }
+        .tab:hover {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div>
+                <h1>🤖 AI SDET Agent Workbench</h1>
+                <div style="margin-top: 5px; font-size: 14px; color: var(--text-dim);">
+                    Custom ReAct Loop orchestrator aligning with <code style="color:var(--accent-color)">AGENTS.md</code> guidelines
+                </div>
+            </div>
+            <div id="engine-badge" class="badge simulation">SIMULATION & HYBRID MODE</div>
+        </header>
+
+        <div class="main-layout">
+            <div class="panel">
+                <div class="panel-title">Agent Control Room</div>
+                
+                <div class="form-group">
+                    <label for="recipe-select">Select SDET Action Recipe</label>
+                    <select id="recipe-select" onchange="updatePromptText()">
+                        <option value="fix_test">Auto-Fix a Locator Drift</option>
+                        <option value="create_page">Create Page Object & Spec</option>
+                        <option value="add_a11y">Integrate Accessibility check</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="prompt-input">Task prompt / Instruction</label>
+                    <textarea id="prompt-input" rows="5" style="resize: none;">Analyze and resolve the locator drift on the Login Page.</textarea>
+                </div>
+
+                <div class="form-group" style="margin-top: 25px;">
+                    <button class="btn" id="run-btn" onclick="startAgent()">Run SDET Agent</button>
+                    <button class="btn btn-secondary" onclick="clearTerminal()">Clear Console</button>
+                </div>
+
+                <div class="panel-title" style="margin-top: 30px;">How to run live locally</div>
+                <div style="font-size: 12px; color: var(--text-dim); line-height: 1.6;">
+                    To run the agent using actual LLM keys, run the CLI:
+                    <pre style="background: #000; padding: 10px; border-radius: 4px; color: var(--cyan-color); overflow-x: auto;">export OPENAI_API_KEY="..."
+python3 agent/cli.py</pre>
+                </div>
+            </div>
+
+            <div class="panel terminal-panel">
+                <div class="file-tabs">
+                    <div class="tab active" id="tab-console" onclick="switchView('console')">Agent Terminal console</div>
+                    <div class="tab" id="tab-code" onclick="switchView('code')">Active Repo Code View</div>
+                </div>
+
+                <div class="terminal-screen" id="terminal-view">
+                    <div class="log-entry log-status">System Initialized. Select a recipe and click "Run SDET Agent".</div>
+                </div>
+
+                <div class="terminal-screen" id="code-view" style="display: none; white-space: pre; overflow-x: auto;">
+                    <div id="code-content" style="color: #c3e88d;">// Select "Run SDET Agent" to see workspace modifications here!</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const prompts = {
+            fix_test: "Analyze and resolve the locator drift on the Login Page.",
+            create_page: "Create a new Page Object for SettingsPage and write a functional smoke test.",
+            add_a11y: "Add WCAG AA accessibility audit on the Dashboard page."
+        };
+
+        const codes = {
+            login_original: `export class LoginPage extends BasePage {
+  private readonly submitButton: Locator;
+  constructor(page: Page) {
+    super(page);
+    // Drifting selector (was login-button)
+    this.submitButton = page.locator('[data-testid="signin-button"]');
+  }
+}`,
+            login_fixed: `export class LoginPage extends BasePage {
+  private readonly submitButton: Locator;
+  constructor(page: Page) {
+    super(page);
+    // Correct selector restored!
+    this.submitButton = page.locator('[data-testid="login-button"]');
+  }
+}`,
+            settings_page: `import { Page, Locator } from "@playwright/test";
+import { BasePage } from "./BasePage";
+
+export class SettingsPage extends BasePage {
+  private readonly heading: Locator;
+  constructor(page: Page) {
+    super(page);
+    this.heading = page.locator('[data-testid="settings-heading"]');
+  }
+}`,
+            a11y_test: `import { test, expect } from "../../src/fixtures/base.fixture";
+import { runA11yAudit } from "../../src/utils/AccessibilityHelper";
+
+test.describe("Dashboard Accessibility Audits @a11y", () => {
+  test("dashboard page must have zero WCAG AA violations", async ({ page, dashboardPage }) => {
+    await dashboardPage.goto();
+    const results = await runA11yAudit(page, "dashboard-page-audit");
+    expect(results.violations.length).toBe(0);
+  });
+});`
+        };
+
+        function updatePromptText() {
+            const select = document.getElementById("recipe-select");
+            const input = document.getElementById("prompt-input");
+            input.value = prompts[select.value];
+        }
+
+        function switchView(view) {
+            const consoleTab = document.getElementById("tab-console");
+            const codeTab = document.getElementById("tab-code");
+            const consoleView = document.getElementById("terminal-view");
+            const codeView = document.getElementById("code-view");
+
+            if (view === 'console') {
+                consoleTab.classList.add('active');
+                codeTab.classList.remove('active');
+                consoleView.style.display = 'block';
+                codeView.style.display = 'none';
+            } else {
+                consoleTab.classList.remove('active');
+                codeTab.classList.add('active');
+                consoleView.style.display = 'none';
+                codeView.style.display = 'block';
+            }
+        }
+
+        function clearTerminal() {
+            document.getElementById("terminal-view").innerHTML = '<div class="log-entry log-status">Console cleared. Ready.</div>';
+        }
+
+        function appendLog(html, className = '') {
+            const consoleView = document.getElementById("terminal-view");
+            const div = document.createElement("div");
+            div.className = `log-entry ${className}`;
+            div.innerHTML = html;
+            consoleView.appendChild(div);
+            consoleView.scrollTop = consoleView.scrollHeight;
+        }
+
+        function startAgent() {
+            const btn = document.getElementById("run-btn");
+            btn.disabled = true;
+            btn.innerText = "Running Agent...";
+            
+            const recipe = document.getElementById("recipe-select").value;
+            clearTerminal();
+            
+            appendLog("🤖 Initializing custom SDET coding agent...", "log-status");
+            
+            if (recipe === "fix_test") {
+                runFixTestScenario(btn);
+            } else if (recipe === "create_page") {
+                runCreatePageScenario(btn);
+            } else if (recipe === "add_a11y") {
+                runAddA11yScenario(btn);
+            }
+        }
+
+        function runFixTestScenario(btn) {
+            document.getElementById("code-content").textContent = codes.login_original;
+            
+            setTimeout(() => {
+                appendLog("🤔 <b>Agent Thought:</b> Analyzing quality logs. Let's execute functional tests first to isolate the issue.", "log-thought");
+            }, 1000);
+
+            setTimeout(() => {
+                appendLog("🛠️ <b>Tool Call:</b> <span class='log-tool-call'>run_command(cmd='npm run test:functional -- -g \"Login Feature Tests\"')</span>");
+            }, 2500);
+
+            setTimeout(() => {
+                appendLog(`📥 <b>Tool Result:</b>\nExit code: 1\nSTDOUT:\n[chromium] › tests/login.spec.ts:26:3 › should login successfully @smoke @regression\n  ❌ Error: locator.click: Timeout 5000ms exceeded.\n  Waiting for locator('data-testid=\"login-button\"')`, "log-tool-result");
+            }, 4000);
+
+            setTimeout(() => {
+                appendLog("🤔 <b>Agent Thought:</b> The Login test timed out waiting for the login-button selector. Let's read <code>src/pages/LoginPage.ts</code> to audit locators against <code>AGENTS.md</code>.", "log-thought");
+            }, 5500);
+
+            setTimeout(() => {
+                appendLog("🛠️ <b>Tool Call:</b> <span class='log-tool-call'>read_file(file_path='src/pages/LoginPage.ts')</span>");
+            }, 7000);
+
+            setTimeout(() => {
+                appendLog(`📥 <b>Tool Result:</b>\n${codes.login_original}`, "log-tool-result");
+            }, 8500);
+
+            setTimeout(() => {
+                appendLog("🤔 <b>Agent Thought:</b> Found drift! LoginPage has <code>this.submitButton = page.locator('[data-testid=\"signin-button\"]')</code>. It should be <code>login-button</code> to match the mock server login form elements. Applying patch...", "log-thought");
+            }, 10000);
+
+            setTimeout(() => {
+                appendLog("🛠️ <b>Tool Call:</b> <span class='log-tool-call'>edit_file_patch(file_path='src/pages/LoginPage.ts', search='signin-button', replace='login-button')</span>");
+                document.getElementById("code-content").textContent = codes.login_fixed;
+            }, 11500);
+
+            setTimeout(() => {
+                appendLog("📥 <b>Tool Result:</b> Successfully updated src/pages/LoginPage.ts", "log-tool-result");
+            }, 13000);
+
+            setTimeout(() => {
+                appendLog("🤔 <b>Agent Thought:</b> Patch complete. Verifying codebase integrity by running ESLint and TypeScript compilation checks.", "log-thought");
+            }, 14500);
+
+            setTimeout(() => {
+                appendLog("🛠️ <b>Tool Call:</b> <span class='log-tool-call'>run_command(cmd='npm run lint && npm run typecheck')</span>");
+            }, 16000);
+
+            setTimeout(() => {
+                appendLog("📥 <b>Tool Result:</b>\nExit code: 0\nSTDOUT:\nESLint passed with 0 warnings\nTypeScript Typecheck successfully compiled with 0 errors.", "log-tool-result");
+            }, 17500);
+
+            setTimeout(() => {
+                appendLog("🤔 <b>Agent Thought:</b> Quality gates passed. Re-running functional tests to confirm the fix.", "log-thought");
+            }, 19000);
+
+            setTimeout(() => {
+                appendLog("🛠️ <b>Tool Call:</b> <span class='log-tool-call'>run_command(cmd='npm run test:functional')</span>");
+            }, 20500);
+
+            setTimeout(() => {
+                appendLog("📥 <b>Tool Result:</b>\nExit code: 0\nSTDOUT:\n13 passed (8.1s)\nAll functional test cases executing successfully against local webServer!", "log-tool-result");
+            }, 22000);
+
+            setTimeout(() => {
+                appendLog(`🎉 <b>Agent Summary:</b>\n\n<b>Root Cause:</b> Locator Drift in LoginPage constructor where the selector drifted to 'signin-button'.\n<b>Action:</b> Patched LoginPage.ts back to standard 'login-button'.\n<b>Result:</b> 13/13 functional tests passing perfectly, 0 lint/typecheck issues. Clean run accomplished.`, "log-summary");
+                btn.disabled = false;
+                btn.innerText = "Run SDET Agent";
+            }, 23500);
+        }
+
+        function runCreatePageScenario(btn) {
+            document.getElementById("code-content").textContent = "// Generating files...";
+            
+            setTimeout(() => {
+                appendLog("🤔 <b>Agent Thought:</b> Setting up brand new Page Object for <code>SettingsPage</code> extending <code>BasePage</code> structure defined in <code>AGENTS.md</code>.", "log-thought");
+            }, 1000);
+
+            setTimeout(() => {
+                appendLog("🛠️ <b>Tool Call:</b> <span class='log-tool-call'>write_file(file_path='src/pages/SettingsPage.ts', content='...')</span>");
+                document.getElementById("code-content").textContent = codes.settings_page;
+            }, 2500);
+
+            setTimeout(() => {
+                appendLog("📥 <b>Tool Result:</b> Successfully wrote 450 bytes to src/pages/SettingsPage.ts", "log-tool-result");
+            }, 4000);
+
+            setTimeout(() => {
+                appendLog("🤔 <b>Agent Thought:</b> Standard page object created. Now building a smoke test validation suite in <code>tests/settings.spec.ts</code> consuming the page object.", "log-thought");
+            }, 5500);
+
+            setTimeout(() => {
+                appendLog("🛠️ <b>Tool Call:</b> <span class='log-tool-call'>write_file(file_path='tests/settings.spec.ts', content='...')</span>");
+                document.getElementById("code-content").textContent += "\n\n/* tests/settings.spec.ts */\n" + codes.a11y_test; // placeholder/simulated
+            }, 7000);
+
+            setTimeout(() => {
+                appendLog("📥 <b>Tool Result:</b> Successfully wrote 620 bytes to tests/settings.spec.ts", "log-tool-result");
+            }, 8500);
+
+            setTimeout(() => {
+                appendLog("🤔 <b>Agent Thought:</b> Verifying syntactic and framework compliance with linter & typechecker.", "log-thought");
+            }, 10000);
+
+            setTimeout(() => {
+                appendLog("🛠️ <b>Tool Call:</b> <span class='log-tool-call'>run_command(cmd='npm run lint && npm run typecheck')</span>");
+            }, 11500);
+
+            setTimeout(() => {
+                appendLog("📥 <b>Tool Result:</b>\nExit code: 0\nSTDOUT: ESLint and Typecheck successful (0 errors).", "log-tool-result");
+            }, 13000);
+
+            setTimeout(() => {
+                appendLog(`🎉 <b>Agent Summary:</b>\n\n<b>Action:</b> Created new Page Object <code>src/pages/SettingsPage.ts</code> and associated smoke tests in <code>tests/settings.spec.ts</code>.\n<b>Verification:</b> Verified code quality via tsc and eslint. Everything meets the portfolio quality bar perfectly.`, "log-summary");
+                btn.disabled = false;
+                btn.innerText = "Run SDET Agent";
+            }, 14500);
+        }
+
+        function runAddA11yScenario(btn) {
+            document.getElementById("code-content").textContent = "// Auditing structure...";
+
+            setTimeout(() => {
+                appendLog("🤔 <b>Agent Thought:</b> Integrating a brand new Accessibility Audit. Let's inspect active directories for WCAG AA compliance structure.", "log-thought");
+            }, 1000);
+
+            setTimeout(() => {
+                appendLog("🛠️ <b>Tool Call:</b> <span class='log-tool-call'>list_files(dir_path='tests/a11y')</span>");
+            }, 2500);
+
+            setTimeout(() => {
+                appendLog("📥 <b>Tool Result:</b> ['tests/a11y/accessibility.spec.ts']", "log-tool-result");
+            }, 4000);
+
+            setTimeout(() => {
+                appendLog("🤔 <b>Agent Thought:</b> Utilizing <code>runA11yAudit</code> from Accessibility Helper. Writing dashboard-specific accessibility test in <code>tests/a11y/dashboard-a11y.spec.ts</code>.", "log-thought");
+            }, 5500);
+
+            setTimeout(() => {
+                appendLog("🛠️ <b>Tool Call:</b> <span class='log-tool-call'>write_file(file_path='tests/a11y/dashboard-a11y.spec.ts', content='...')</span>");
+                document.getElementById("code-content").textContent = codes.a11y_test;
+            }, 7000);
+
+            setTimeout(() => {
+                appendLog("📥 <b>Tool Result:</b> Successfully wrote 530 bytes to tests/a11y/dashboard-a11y.spec.ts", "log-tool-result");
+            }, 8500);
+
+            setTimeout(() => {
+                appendLog("🤔 <b>Agent Thought:</b> Running accessibility suite to perform Axe-Core auditing on the local mock app.", "log-thought");
+            }, 10000);
+
+            setTimeout(() => {
+                appendLog("🛠️ <b>Tool Call:</b> <span class='log-tool-call'>run_command(cmd='npm run test:a11y')</span>");
+            }, 11500);
+
+            setTimeout(() => {
+                appendLog("📥 <b>Tool Result:</b>\nExit code: 0\nSTDOUT:\nRunning 1 test using 1 worker\n ✓  [chromium] › tests/a11y/dashboard-a11y.spec.ts (WCAG 2.1 AA compliant - 0 violations)", "log-tool-result");
+            }, 13000);
+
+            setTimeout(() => {
+                appendLog(`🎉 <b>Agent Summary:</b>\n\n<b>Action:</b> Created <code>tests/a11y/dashboard-a11y.spec.ts</code> using Axe-Core helper.\n<b>Validation:</b> Ran the test suite successfully. 0 WCAG 2.1 AA violations detected. Quality gate met perfectly.`, "log-summary");
+                btn.disabled = false;
+                btn.innerText = "Run SDET Agent";
+            }, 14500);
+        }
+    </script>
+</body>
+</html>
