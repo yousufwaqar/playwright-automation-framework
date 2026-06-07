@@ -498,6 +498,21 @@ The framework's own Quality Gate is the agent's verification harness: file an
 issue (or use `/delegate`), the agent opens a pull request, and it must pass the
 same blocking checks as any human contributor.
 
+### 🚀 Active AI SDET Agent & Web Workbench (New!)
+
+To bridge the gap between static guidelines and active automation, this repository now features an **operational custom AI SDET Agent Engine** written in Python (no bulky third-party orchestrators) residing in [`agent/`](agent/). It runs stateful **ReAct loops** using your choice of live LLMs (OpenAI or Anthropic) or a pre-configured, high-fidelity hybrid simulation engine.
+
+- **Interactive CLI Workbench:** An interactive terminal console to trigger task scripts (resolving locator drifts, writing specs, or setting up accessibility audits). Runs real file operations and test triggers.
+- **Visual Control Deck Dashboard:** A beautiful, responsive single-page visual dashboard (`agent_dashboard.html`) showing real-time agent thinking processes, tool call logs, and code change diffs directly inside your browser or workspace preview.
+- **Advanced Self-Healing Locators:** Embedded directly within `BasePage.ts`, elements support custom-designed opt-in **Self-Healing fallbacks**. If a primary locator times out, the engine scans secondary candidates (inner text, aria roles, button types), successfully fulfills the action to prevent flaky pipeline drops, and logs the healing patch to `test-results/healed_locators.json` for review.
+- **CI Triage & Remediation Summarizer:** A post-test CI analyzer (`scripts/ci-failure-analyzer.js`) runs in GitHub Actions to compile failed tests, traces, and source snippets into a beautiful Markdown dashboard under the GHA Job Summary with copy-paste remediation plans.
+
+To execute the CLI tool:
+```bash
+python3 agent/cli.py
+```
+To launch the Visual Dashboard, open [`agent_dashboard.html`](agent_dashboard.html) in your browser.
+
 ---
 
 ## Available scripts
