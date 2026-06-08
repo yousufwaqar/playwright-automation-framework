@@ -507,10 +507,17 @@ To bridge the gap between static guidelines and active automation, this reposito
 - **Advanced Self-Healing Locators:** Embedded directly within `BasePage.ts`, elements support custom-designed opt-in **Self-Healing fallbacks**. If a primary locator times out, the engine scans secondary candidates (inner text, aria roles, button types), successfully fulfills the action to prevent flaky pipeline drops, and logs the healing patch to `test-results/healed_locators.json` for review.
 - **CI Triage & Remediation Summarizer:** A post-test CI analyzer (`scripts/ci-failure-analyzer.js`) runs in GitHub Actions to compile failed tests, traces, and source snippets into a beautiful Markdown dashboard under the GHA Job Summary with copy-paste remediation plans.
 
-To execute the CLI tool:
+**Setup (one-time)** — install the Python dependencies (Python 3.9+):
 ```bash
-python3 agent/cli.py
+npm run agent:install      # or: pip install -r agent/requirements.txt
 ```
+
+**Run the interactive CLI workbench:**
+```bash
+npm run agent              # or: python agent/cli.py   (use python3 on macOS/Linux)
+```
+Live LLM mode activates automatically when `OPENAI_API_KEY` or `ANTHROPIC_API_KEY` is set (see [`.env.example`](.env.example)); otherwise the high-fidelity hybrid simulation engine runs with no keys required.
+
 To launch the Visual Dashboard, open [`agent_dashboard.html`](agent_dashboard.html) in your browser.
 
 ---
@@ -535,6 +542,8 @@ To launch the Visual Dashboard, open [`agent_dashboard.html`](agent_dashboard.ht
 | `npm run test:performance`  | Run performance smoke tests           |
 | `npm run test:visual`       | Run visual regression tests           |
 | `npm run test:visual:update`| Refresh visual baselines (current platform) |
+| `npm run test:unit`         | Run isolated unit tests (helpers/config) |
+| `npm run test:selfheal`     | Run self-healing locator recovery tests |
 | `npm run perf:k6`           | Run k6 API load script (requires k6)  |
 | `npm run typecheck`         | Type-check without emitting           |
 | `npm run lint`              | Lint with ESLint (typescript-eslint + playwright rules) |
@@ -543,6 +552,9 @@ To launch the Visual Dashboard, open [`agent_dashboard.html`](agent_dashboard.ht
 | `npm run test:theinternet`  | Run The Internet external suite       |
 | `npm run test:api:external` | Run RESTful Booker external API suite |
 | `npm run report`            | Open Playwright HTML report           |
+| `npm run agent:install`     | Install the Python AI SDET agent deps |
+| `npm run agent`             | Launch the interactive AI SDET agent CLI |
+| `npm run clean`             | Remove test-results/ and playwright-report/ |
 
 ---
 

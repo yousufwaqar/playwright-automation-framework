@@ -1,0 +1,10 @@
+# Python dependencies for the AI SDET Agent workbench (agent/cli.py).
+# Install with: npm run agent:install   (or: pip install -r agent/requirements.txt)
+#
+# rich + python-dotenv are required for the CLI and simulation engine.
+# openai / anthropic are only needed for live LLM mode (set the matching API key
+# in your environment or .env); the simulation engine runs without them.
+rich>=13.7.0
+python-dotenv>=1.0.0
+openai>=1.40.0
+anthropic>=0.34.0
