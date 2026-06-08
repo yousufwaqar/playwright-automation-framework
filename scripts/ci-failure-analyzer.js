@@ -14,7 +14,7 @@ const path = require('path');
  * @author Yousuf Waqar & AI SDET Agent
  */
 
-const REPORT_PATH = path.join(process.cwd(), 'playwright-report', 'results.json');
+const REPORT_PATH = path.join(process.cwd(), 'test-results', 'results.json');
 const OUTPUT_SUMMARY_PATH = path.join(process.cwd(), 'test-results', 'ci-quality-summary.md');
 
 function main() {
@@ -39,16 +39,23 @@ function main() {
       report.suites.forEach(suite => parseSuite(suite, failures));
     }
 
-    totalTests = report.stats?.numTotalTests || 0;
-    failedTests = report.stats?.numFailedTests || 0;
-    passedTests = totalTests - failedTests;
+    // Playwright's JSON reporter exposes run totals under `stats`:
+    // expected = passed, unexpected = failed, plus flaky/skipped.
+    const stats = report.stats || {};
+    passedTests = stats.expected || 0;
+    failedTests = stats.unexpected || 0;
+    const flakyTests = stats.flaky || 0;
+    const skippedTests = stats.skipped || 0;
+    totalTests = passedTests + failedTests + flakyTests + skippedTests;
 
     let markdown = `# 📊 GITHUB ACTIONS CI QUALITY REPORT SUMMARY\n\n`;
     markdown += `| Metric | Count | Status |\n`;
     markdown += `| --- | --- | --- |\n`;
     markdown += `| **Total Tests** | ${totalTests} | 📋 |\n`;
     markdown += `| **Passed** | ${passedTests} | ${failedTests === 0 ? '✅ SUCCESS' : '⚠️ WARN'} |\n`;
-    markdown += `| **Failed** | ${failedTests} | ${failedTests === 0 ? '✅ ZERO FAILURES' : '❌ FAILURES DETECTED'} |\n\n`;
+    markdown += `| **Failed** | ${failedTests} | ${failedTests === 0 ? '✅ ZERO FAILURES' : '❌ FAILURES DETECTED'} |\n`;
+    markdown += `| **Flaky** | ${flakyTests} | ${flakyTests === 0 ? '✅ STABLE' : '⚠️ UNSTABLE'} |\n`;
+    markdown += `| **Skipped** | ${skippedTests} | ${skippedTests === 0 ? '—' : '⏭️ SKIPPED'} |\n\n`;
 
     if (failures.length > 0) {
       markdown += `## ❌ Detailed Failure Breakdown & Remediation Guides\n\n`;

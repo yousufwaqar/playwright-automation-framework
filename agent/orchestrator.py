@@ -17,6 +17,7 @@ class SDETAgentOrchestrator:
         self.anthropic_key = os.getenv("ANTHROPIC_API_KEY")
         self.is_live = bool(self.openai_key or self.anthropic_key)
         self.history: List[Dict[str, Any]] = []
+        self.max_iterations = int(os.getenv("AGENT_MAX_ITERATIONS", "10"))
 
     def run_task(self, task_description: str, scenario_id: str = None) -> Generator[Dict[str, Any], None, None]:
         """Runs the agent on a task. Yields status/step dictionaries for real-time reporting."""
@@ -72,30 +73,205 @@ Your output must be a structured loop of thoughts and tool calls.
         # To ensure the demo works beautifully, we fall back to simulation if the API call fails or keys are invalid.
         try:
             if self.openai_key:
-                from openai import OpenAI
-                client = OpenAI(api_key=self.openai_key)
-                model = "gpt-4o"
-                # Standard OpenAI structured tool call implementation
-                # ...
+                yield from self._run_openai_loop(task, system_prompt)
             elif self.anthropic_key:
-                import anthropic
-                client = anthropic.Anthropic(api_key=self.anthropic_key)
-                model = "claude-3-5-sonnet-20241022"
-                # Standard Anthropic tools implementation
-                # ...
+                yield from self._run_anthropic_loop(task, system_prompt)
+            else:
+                yield from self._run_simulation(task, None)
             
-            # Since we want to provide an absolutely rock-solid hybrid demo, let's fall back gracefully
-            # if we encounter any library or networking issues.
-            yield {
-                "type": "thought",
-                "text": "Live LLM engine configured. Executing task agent loop..."
-            }
+            # Live execution completed inside the provider loop above.
         except Exception as e:
             yield {
                 "type": "error",
-                "message": f"Error initializing live client: {e}. Falling back to simulation mode."
+                "message": f"Live LLM execution failed ({e}). Falling back to the simulation engine."
             }
-            yield from self._run_simulation(task, "fix_test")
+            yield from self._run_simulation(task, None)
+
+    def _execute_tool(self, name: str, args: Dict[str, Any]) -> str:
+        """Dispatch a single tool call to the sandboxed tools module and return a string result."""
+        try:
+            if name == "list_files":
+                return json.dumps(tools.list_files())
+            if name == "read_file":
+                return tools.read_file(args["file_path"])
+            if name == "write_file":
+                return tools.write_file(args["file_path"], args.get("content", ""))
+            if name == "edit_file_patch":
+                return tools.edit_file_patch(args["file_path"], args["search"], args["replace"])
+            if name == "run_command":
+                return json.dumps(tools.run_command(args["command"]))
+            return f"Error: unknown tool '{name}'."
+        except KeyError as missing:
+            return f"Error: missing required argument {missing} for tool '{name}'."
+        except Exception as exc:
+            return f"Error executing tool '{name}': {exc}"
+
+    def _tool_schemas(self) -> List[Dict[str, Any]]:
+        """Provider-agnostic JSON-schema description of every tool the agent may call."""
+        return [
+            {
+                "name": "list_files",
+                "description": "List every source file path in the repository.",
+                "parameters": {"type": "object", "properties": {}, "required": []},
+            },
+            {
+                "name": "read_file",
+                "description": "Read the full UTF-8 contents of a repository file.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "file_path": {"type": "string", "description": "Path relative to the repo root."}
+                    },
+                    "required": ["file_path"],
+                },
+            },
+            {
+                "name": "write_file",
+                "description": "Create or overwrite a file with the given contents.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "file_path": {"type": "string"},
+                        "content": {"type": "string"},
+                    },
+                    "required": ["file_path", "content"],
+                },
+            },
+            {
+                "name": "edit_file_patch",
+                "description": "Replace the first occurrence of `search` with `replace` inside a file.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "file_path": {"type": "string"},
+                        "search": {"type": "string"},
+                        "replace": {"type": "string"},
+                    },
+                    "required": ["file_path", "search", "replace"],
+                },
+            },
+            {
+                "name": "run_command",
+                "description": "Run an allow-listed command (npm, npx, git, node) and return exit_code/stdout/stderr.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "command": {"type": "string", "description": "The full command line to execute."}
+                    },
+                    "required": ["command"],
+                },
+            },
+        ]
+
+    def _openai_tool_specs(self) -> List[Dict[str, Any]]:
+        return [{"type": "function", "function": schema} for schema in self._tool_schemas()]
+
+    def _anthropic_tool_specs(self) -> List[Dict[str, Any]]:
+        return [
+            {
+                "name": schema["name"],
+                "description": schema["description"],
+                "input_schema": schema["parameters"],
+            }
+            for schema in self._tool_schemas()
+        ]
+
+    def _run_openai_loop(self, task: str, system_prompt: str) -> Generator[Dict[str, Any], None, None]:
+        """Drive a tool-using ReAct loop against the OpenAI Chat Completions API."""
+        from openai import OpenAI
+
+        client = OpenAI(api_key=self.openai_key)
+        model = os.getenv("OPENAI_MODEL", "gpt-4o")
+        tool_specs = self._openai_tool_specs()
+        messages: List[Any] = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": task},
+        ]
+
+        yield {"type": "thought", "text": f"Live OpenAI engine ready ({model}). Entering ReAct loop..."}
+
+        for _ in range(self.max_iterations):
+            response = client.chat.completions.create(
+                model=model,
+                messages=messages,
+                tools=tool_specs,
+                tool_choice="auto",
+            )
+            message = response.choices[0].message
+            messages.append(message)
+
+            if message.content:
+                yield {"type": "thought", "text": message.content}
+
+            tool_calls = message.tool_calls or []
+            if not tool_calls:
+                yield {"type": "summary", "message": message.content or "Task complete."}
+                return
+
+            for call in tool_calls:
+                name = call.function.name
+                try:
+                    args = json.loads(call.function.arguments or "{}")
+                except json.JSONDecodeError:
+                    args = {}
+                yield {"type": "tool_call", "tool": name, "arguments": args}
+                output = self._execute_tool(name, args)
+                yield {"type": "tool_result", "tool": name, "output": output}
+                messages.append({
+                    "role": "tool",
+                    "tool_call_id": call.id,
+                    "content": output,
+                })
+
+        yield {"type": "summary", "message": f"Reached the maximum of {self.max_iterations} iterations."}
+
+    def _run_anthropic_loop(self, task: str, system_prompt: str) -> Generator[Dict[str, Any], None, None]:
+        """Drive a tool-using ReAct loop against the Anthropic Messages API."""
+        import anthropic
+
+        client = anthropic.Anthropic(api_key=self.anthropic_key)
+        model = os.getenv("ANTHROPIC_MODEL", "claude-3-5-sonnet-20241022")
+        tool_specs = self._anthropic_tool_specs()
+        messages: List[Any] = [{"role": "user", "content": task}]
+
+        yield {"type": "thought", "text": f"Live Anthropic engine ready ({model}). Entering ReAct loop..."}
+
+        for _ in range(self.max_iterations):
+            response = client.messages.create(
+                model=model,
+                max_tokens=4096,
+                system=system_prompt,
+                tools=tool_specs,
+                messages=messages,
+            )
+
+            tool_results = []
+            for block in response.content:
+                if block.type == "text":
+                    yield {"type": "thought", "text": block.text}
+                elif block.type == "tool_use":
+                    yield {"type": "tool_call", "tool": block.name, "arguments": block.input}
+                    output = self._execute_tool(block.name, block.input or {})
+                    yield {"type": "tool_result", "tool": block.name, "output": output}
+                    tool_result = {
+                        "type": "tool_result",
+                        "tool_use_id": block.id,
+                        "content": output,
+                    }
+                    if output.startswith("Error"):
+                        tool_result["is_error"] = True
+                    tool_results.append(tool_result)
+
+            messages.append({"role": "assistant", "content": response.content})
+
+            if response.stop_reason != "tool_use":
+                final_text = "".join(b.text for b in response.content if b.type == "text")
+                yield {"type": "summary", "message": final_text or "Task complete."}
+                return
+
+            messages.append({"role": "user", "content": tool_results})
+
+        yield {"type": "summary", "message": f"Reached the maximum of {self.max_iterations} iterations."}
 
     def _run_simulation(self, task: str, scenario_id: str) -> Generator[Dict[str, Any], None, None]:
         """Runs high-fidelity simulations that perform REAL file edits, command execution, and test runs!"""
