@@ -82,12 +82,12 @@ async function loadAndRenderReports() {
         <h3>${report.name}</h3>
         <p class="tile-sub">Last updated: ${new Date(report.createdAt).toLocaleDateString()}</p>
         <div class="spark" aria-hidden="true" style="display: flex; gap: 4px; margin-top: 10px; height: 30px;">
-          <span style="flex: 1; background: #e0e7ff; border-radius: 2px; height: 40%"></span>
-          <span style="flex: 1; background: #e0e7ff; border-radius: 2px; height: 60%"></span>
-          <span style="flex: 1; background: #e0e7ff; border-radius: 2px; height: 50%"></span>
-          <span style="flex: 1; background: #e0e7ff; border-radius: 2px; height: 80%"></span>
+          <span style="flex: 1; background: #818cf8; border-radius: 2px; height: 40%"></span>
+          <span style="flex: 1; background: #818cf8; border-radius: 2px; height: 60%"></span>
+          <span style="flex: 1; background: #818cf8; border-radius: 2px; height: 50%"></span>
+          <span style="flex: 1; background: #818cf8; border-radius: 2px; height: 80%"></span>
         </div>
-        <button class="delete-report-btn" data-testid="delete-report-btn" style="margin-top: 12px; padding: 4px 8px; font-size: 11px; background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; border-radius: 4px; cursor: pointer; font-weight: 600; width: 100%;">Delete</button>
+        <button class="delete-report-btn" data-testid="delete-report-btn" style="margin-top: 12px; padding: 4px 8px; font-size: 11px; background: rgba(239,68,68,0.14); color: #f87171; border: 1px solid rgba(239,68,68,0.32); border-radius: 4px; cursor: pointer; font-weight: 600; width: 100%;">Delete</button>
       `;
 
       // Event Listeners
