@@ -70,6 +70,14 @@ jobs:
           name: report-functional
           path: playwright-report/
           retention-days: 14
+      - name: Upload Allure results
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: allure-results
+          path: allure-results/
+          if-no-files-found: ignore
+          retention-days: 14
 
   accessibility:
     name: Accessibility (a11y)
@@ -177,6 +185,41 @@ jobs:
         with:
           name: report-cross-browser
           path: playwright-report/
+          retention-days: 14
+
+  allure-report:
+    name: Allure Report (non-blocking)
+    runs-on: ubuntu-latest
+    # Builds the rich Allure HTML report from the results produced by the
+    # functional job. Runs on the host runner (not the Playwright container)
+    # because the Allure CLI needs a JRE. Non-blocking and excluded from the
+    # quality-gate aggregation; published as a downloadable artifact.
+    needs: [functional]
+    if: always()
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+      - run: npm ci
+      - name: Set up Java (required by the Allure CLI)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Download Allure results
+        uses: actions/download-artifact@v7
+        with:
+          name: allure-results
+          path: allure-results
+      - name: Generate Allure HTML report
+        run: npm run allure:generate
+      - uses: actions/upload-artifact@v7
+        with:
+          name: allure-report
+          path: allure-report/
           retention-days: 14
 
   quality-gate:
