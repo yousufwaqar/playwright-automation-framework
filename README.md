@@ -418,6 +418,7 @@ The framework is configured to generate:
 | Artifact     | Purpose                      |
 | ---          | ---                          |
 | HTML report  | Interactive test report      |
+| Allure report| Rich historical test report (generated from `allure-results/`) |
 | JSON results | Machine-readable test output |
 | Screenshots  | Captured on failure          |
 | Traces       | Captured on first retry      |
@@ -429,6 +430,24 @@ Open the report after a run:
 ```bash
 npm run report
 ```
+
+Every run also writes raw Allure results to `allure-results/`. Build and open the
+Allure HTML report locally (requires a Java runtime for the Allure CLI):
+
+```bash
+npm run allure:report
+```
+
+In CI, the **Allure Report** job generates the report and publishes it as the
+downloadable `allure-report` artifact on each Quality Gate run.
+
+<div align="center">
+
+<img src="docs/images/allure-report.png" alt="Allure report overview generated from the deterministic suite" width="760"/>
+
+<sub><em>Allure report overview (deterministic suite). Generated from <code>allure-results/</code> and published as the <code>allure-report</code> CI artifact.</em></sub>
+
+</div>
 
 ---
 
@@ -552,6 +571,7 @@ To launch the Visual Dashboard, open [`agent_dashboard.html`](agent_dashboard.ht
 | `npm run test:theinternet`  | Run The Internet external suite       |
 | `npm run test:api:external` | Run RESTful Booker external API suite |
 | `npm run report`            | Open Playwright HTML report           |
+| `npm run allure:report`     | Generate + open the Allure report (needs Java) |
 | `npm run agent:install`     | Install the Python AI SDET agent deps |
 | `npm run agent`             | Launch the interactive AI SDET agent CLI |
 | `npm run clean`             | Remove test-results/ and playwright-report/ |
@@ -570,10 +590,10 @@ Recently delivered:
 - ✅ Composite Quality Gate CI with per-module status checks
 - ✅ ESLint (typescript-eslint + eslint-plugin-playwright) in CI
 - ✅ Repo-committed AI agent toolkit (AGENTS.md, prompt recipes, Copilot setup steps)
+- ✅ Allure reporting (results on every run; HTML report published as a CI artifact)
 
 Planned:
 
-- Add Allure reporting integration
 - Publish Playwright HTML reports to GitHub Pages
 - Promote the visual job to blocking once Linux baselines are seeded
 - Add reusable GitHub Actions workflow templates
