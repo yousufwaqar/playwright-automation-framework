@@ -1,0 +1,60 @@
+name: Coverage
+
+# Measures unit-test coverage of the framework's pure-logic utility layer
+# (src/utils). The browser-coupled SelfHealingHelper is excluded in .c8rc.json
+# because its public API only orchestrates a live Page/Locator and is exercised
+# by the @selfheal integration suite, not the unit suite. The c8 threshold in
+# .c8rc.json fails this job if coverage regresses; the Codecov upload is
+# supplementary visualisation and is non-blocking.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  coverage:
+    name: Unit coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run unit tests with coverage (enforces thresholds)
+        run: npm run test:unit:coverage
+
+      - name: Write coverage job summary
+        if: always()
+        run: node scripts/coverage-summary.js >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: coverage
+          path: coverage/
+          retention-days: 14
+
+      - name: Upload to Codecov
+        if: always()
+        continue-on-error: true
+        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7
+        with:
+          files: ./coverage/lcov.info
+          flags: unit
+          fail_ci_if_error: false
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
