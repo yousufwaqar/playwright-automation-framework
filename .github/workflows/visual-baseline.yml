@@ -42,7 +42,7 @@ jobs:
       API_BASE_URL: http://localhost:3000/api/v1
       API_TOKEN: mock-jwt-token-12345
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
           # Use a PAT when available so the side-branch push and the PR it opens
           # are attributed to a real user and therefore trigger CI. Falls back
