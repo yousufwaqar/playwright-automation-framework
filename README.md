@@ -5,6 +5,8 @@
 ### End-to-end UI and API testing with a composite CI quality gate: functional, accessibility, security, performance, and visual checks
 
 [![Quality Gate](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/quality-gate.yml/badge.svg)](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/quality-gate.yml)
+[![CodeQL](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/codeql.yml/badge.svg)](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/codeql.yml)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/yousufwaqar/playwright-automation-framework/badge)](https://scorecard.dev/viewer/?uri=github.com/yousufwaqar/playwright-automation-framework)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Playwright](https://img.shields.io/badge/Playwright-1.60+-45ba4b?logo=playwright&logoColor=white)](https://playwright.dev/)
  [![Node.js](https://img.shields.io/badge/Node.js-20+-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org/)

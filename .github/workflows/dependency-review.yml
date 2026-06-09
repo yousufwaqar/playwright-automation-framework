@@ -1,0 +1,30 @@
+name: Dependency Review
+
+# Reviews the dependency delta a pull request introduces and fails when it adds
+# a dependency with a known high-severity vulnerability or a disallowed license.
+# Complements the runtime `npm audit` gate in quality-gate.yml: audit guards the
+# committed lockfile, this guards what a PR is about to add.
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  dependency-review:
+    name: Review dependency changes
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+
+      - name: Dependency review
+        uses: actions/dependency-review-action@2031cfc080254a8a887f58cffee85186f0e49e48 # v4
+        with:
+          fail-on-severity: high
+          comment-summary-in-pr: on-failure
