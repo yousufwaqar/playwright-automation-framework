@@ -28,6 +28,13 @@ test.describe("TestDataManager @unit", () => {
     expect(data.getReadOnlyUser().username).toBeTruthy();
   });
 
+  test("exposes a distinct invalid user for negative testing", () => {
+    const invalid = data.getInvalidUser();
+    expect(invalid.username).toBeTruthy();
+    expect(invalid.password).toBeTruthy();
+    expect(invalid).not.toEqual(data.getValidUser());
+  });
+
   test("generates well-formed random emails", () => {
     expect(TestDataManager.generateRandomEmail()).toMatch(
       /^testuser_\d+@testdomain\.com$/

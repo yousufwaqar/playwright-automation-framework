@@ -68,7 +68,7 @@
     "percentile", "Lighthouse", "deterministic", "InsightBI", "BI",
     "workspaces",
     "OpenSSF", "Scorecard", "scorecard", "SARIF", "sarif", "SAST",
-    "gitleaks", "Gitleaks", "Snyk", "Trivy", "Semgrep", "SLSA"
+    "gitleaks", "Gitleaks", "Snyk", "Trivy", "Semgrep", "SLSA", "c8"
   ],
   "flagWords": [],
   "allowCompoundWords": true
