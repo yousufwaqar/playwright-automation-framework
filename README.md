@@ -7,6 +7,7 @@
 [![Quality Gate](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/quality-gate.yml/badge.svg)](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/quality-gate.yml)
 [![CodeQL](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/codeql.yml/badge.svg)](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/codeql.yml)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/yousufwaqar/playwright-automation-framework/badge)](https://scorecard.dev/viewer/?uri=github.com/yousufwaqar/playwright-automation-framework)
+[![codecov](https://codecov.io/gh/yousufwaqar/playwright-automation-framework/graph/badge.svg)](https://codecov.io/gh/yousufwaqar/playwright-automation-framework)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Playwright](https://img.shields.io/badge/Playwright-1.60+-45ba4b?logo=playwright&logoColor=white)](https://playwright.dev/)
  [![Node.js](https://img.shields.io/badge/Node.js-20+-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
@@ -234,6 +235,7 @@ Mock app routes:
 
 | Area                          | Coverage                                                                        |
 | ---                           | ---                                                                             |
+| Framework utilities (unit)    | c8-enforced unit coverage of the `src/utils` pure-logic layer (ConfigManager, Logger, PerformanceHelper, TestDataManager, AccessibilityHelper formatter); `Page`-coupled helpers are covered by the `@a11y`/`@selfheal` suites |
 | Login UI (mock)               | Valid login, invalid login, empty field validation, page-load verification      |
 | Dashboard UI (mock)           | Dashboard load, welcome message, report search, report tile interaction, logout |
 | API contracts (mock)          | Health check, unauthorized access, schema validation, response-time threshold   |
@@ -257,6 +259,11 @@ playwright-automation-framework/
 ├── .github/
 │   ├── workflows/
 │   │   ├── quality-gate.yml           # Authoritative CI: composite quality gate
+│   │   ├── coverage.yml               # Unit coverage (c8) + Codecov upload
+│   │   ├── codeql.yml                 # CodeQL SAST (JS/TS)
+│   │   ├── scorecard.yml              # OpenSSF Scorecard supply-chain score
+│   │   ├── dependency-review.yml      # Blocks PRs adding vulnerable deps
+│   │   ├── gitleaks.yml               # Secret scanning
 │   │   ├── copilot-setup-steps.yml    # Copilot coding agent environment setup
 │   │   ├── visual-baseline.yml        # Manual: generate Linux visual baselines
 │   │   ├── external-ci.yml            # Nightly external demo-site suite
