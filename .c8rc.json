@@ -1,0 +1,14 @@
+{
+  "all": true,
+  "src": ["src/utils"],
+  "include": ["src/utils/**/*.ts"],
+  "exclude": ["**/*.d.ts", "src/utils/SelfHealingHelper.ts"],
+  "reporter": ["text", "text-summary", "lcov", "json-summary"],
+  "report-dir": "coverage",
+  "clean": true,
+  "check-coverage": true,
+  "statements": 75,
+  "branches": 70,
+  "functions": 85,
+  "lines": 75
+}

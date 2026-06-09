@@ -10,6 +10,7 @@ export default tseslint.config(
       "test-results/**",
       "allure-results/**",
       "allure-report/**",
+      "coverage/**",
       "mock-app/public/**",
     ],
   },
