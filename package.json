@@ -39,10 +39,16 @@
     "typecheck": "tsc --noEmit",
     "clean": "node scripts/clean.js",
     "agent": "python agent/cli.py",
-    "agent:install": "pip install -r agent/requirements.txt"
+    "agent:install": "pip install -r agent/requirements.txt",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,js,mjs,cjs}": "eslint --fix"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.3",
+    "@commitlint/cli": "^19.6.1",
+    "@commitlint/config-conventional": "^19.6.0",
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.60.0",
     "@types/node": "^25.9.2",
@@ -53,6 +59,8 @@
     "dotenv": "^17.4.2",
     "eslint": "^10.4.1",
     "eslint-plugin-playwright": "^2.10.4",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.2",
     "tsx": "^4.22.4",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.60.1"

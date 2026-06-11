@@ -59,6 +59,10 @@ docs: clarify mock-app setup steps
 chore: bump @playwright/test to 1.46
 ```
 
+A [commitlint](https://commitlint.js.org/) hook (via husky) checks this format
+on every commit, and a `lint-staged` pre-commit hook runs ESLint `--fix` on
+staged sources. The hooks install automatically on `npm ci` (`prepare` script).
+
 ## Code conventions
 
 - **Page Objects** live in `src/pages/`. Each page owns its locators and exposes business-level methods. Tests must not contain raw selectors.

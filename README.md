@@ -604,11 +604,12 @@ Recently delivered:
 - ✅ ESLint (typescript-eslint + eslint-plugin-playwright) in CI
 - ✅ Repo-committed AI agent toolkit (AGENTS.md, prompt recipes, Copilot setup steps)
 - ✅ Allure reporting (results on every run; HTML report published as a CI artifact and a [live GitHub Pages site](https://yousufwaqar.github.io/playwright-automation-framework/) with trend history)
+- ✅ Reusable CI workflow shared by every container-based test suite
+- ✅ Local git hooks (husky + lint-staged + commitlint) enforcing lint and Conventional Commits
 
 Planned:
 
 - Promote the visual job to blocking once Linux baselines are seeded
-- Add reusable GitHub Actions workflow templates
 
 ---
 

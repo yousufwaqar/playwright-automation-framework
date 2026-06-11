@@ -50,100 +50,52 @@ jobs:
       - name: Spell check
         run: npx cspell "**/*.{ts,js,md}" --no-progress || true
 
+  # The container-based suites share one definition via the reusable workflow.
   functional:
     name: Functional & API
-    runs-on: ubuntu-latest
-    container: mcr.microsoft.com/playwright:v1.60.0-jammy
-    steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
-      - run: npm ci
-      - name: Run functional + API tests
-        run: npm run test:functional
-      - name: Run CI Quality Analysis
-        if: always()
-        run: |
-          node scripts/ci-failure-analyzer.js
-          if [ -f test-results/ci-quality-summary.md ]; then
-            cat test-results/ci-quality-summary.md >> $GITHUB_STEP_SUMMARY
-          fi
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
-        if: always()
-        with:
-          name: report-functional
-          path: playwright-report/
-          retention-days: 14
-      - name: Upload Allure results
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
-        if: always()
-        with:
-          name: allure-results
-          path: allure-results/
-          if-no-files-found: ignore
-          retention-days: 14
+    uses: ./.github/workflows/reusable-test.yml
+    with:
+      name: Functional & API
+      command: npm run test:functional
+      report-artifact: report-functional
+      upload-allure: true
+      run-ci-analysis: true
 
   accessibility:
     name: Accessibility (a11y)
-    runs-on: ubuntu-latest
-    container: mcr.microsoft.com/playwright:v1.60.0-jammy
-    steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
-      - run: npm ci
-      - name: Run axe-core WCAG audits
-        run: npm run test:a11y
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
-        if: always()
-        with:
-          name: report-a11y
-          path: playwright-report/
-          retention-days: 14
+    uses: ./.github/workflows/reusable-test.yml
+    with:
+      name: Accessibility (a11y)
+      command: npm run test:a11y
+      report-artifact: report-a11y
 
   security:
     name: API & HTTP Security
-    runs-on: ubuntu-latest
-    container: mcr.microsoft.com/playwright:v1.60.0-jammy
-    steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
-      - run: npm ci
-      - name: Run security tests
-        run: npm run test:security
-      - name: Dependency vulnerability audit
-        run: npm audit --omit=dev --audit-level=high
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
-        if: always()
-        with:
-          name: report-security
-          path: playwright-report/
-          retention-days: 14
+    uses: ./.github/workflows/reusable-test.yml
+    with:
+      name: API & HTTP Security
+      command: npm run test:security
+      report-artifact: report-security
+      extra-command: npm audit --omit=dev --audit-level=high
 
   performance:
     name: Performance Smoke (non-blocking)
-    runs-on: ubuntu-latest
-    container: mcr.microsoft.com/playwright:v1.60.0-jammy
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
-      - run: npm ci
-      - name: Run performance smoke tests
-        run: npm run test:performance
+    uses: ./.github/workflows/reusable-test.yml
+    with:
+      name: Performance Smoke
+      command: npm run test:performance
+      continue-on-error: true
 
+  # Non-blocking until Linux baselines are generated via the
+  # "Update Visual Baselines" workflow (visual-baseline.yml).
   visual:
     name: Visual Regression (non-blocking)
-    runs-on: ubuntu-latest
-    container: mcr.microsoft.com/playwright:v1.60.0-jammy
-    # Non-blocking until Linux baselines are generated via the
-    # "Update Visual Baselines" workflow (visual-baseline.yml).
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
-      - run: npm ci
-      - name: Run visual regression tests
-        run: npm run test:visual
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
-        if: always()
-        with:
-          name: report-visual
-          path: playwright-report/
-          retention-days: 14
+    uses: ./.github/workflows/reusable-test.yml
+    with:
+      name: Visual Regression
+      command: npm run test:visual
+      report-artifact: report-visual
+      continue-on-error: true
 
   k6-load:
     name: k6 API Load (non-blocking)
@@ -167,27 +119,14 @@ jobs:
 
   cross-browser:
     name: Cross-browser FF/WebKit (non-blocking)
-    runs-on: ubuntu-latest
-    container: mcr.microsoft.com/playwright:v1.60.0-jammy
-    # Firefox refuses to launch when $HOME is not owned by the current user.
-    # GitHub Actions sets HOME=/github/home inside containers; point it at the
-    # root-owned /root so Firefox launches in the Playwright image.
-    env:
-      HOME: /root
-    # Chromium is the blocking gate (see the `functional` job). Firefox and WebKit
-    # run here as an optional signal; the Playwright container ships both engines.
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
-      - run: npm ci
-      - name: Run functional suite across Chromium, Firefox and WebKit
-        run: npm run test:cross-browser
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
-        if: always()
-        with:
-          name: report-cross-browser
-          path: playwright-report/
-          retention-days: 14
+    # Chromium is the blocking gate (see the `functional` job). Firefox and
+    # WebKit run here as an optional signal; the Playwright container ships both.
+    uses: ./.github/workflows/reusable-test.yml
+    with:
+      name: Cross-browser FF/WebKit
+      command: npm run test:cross-browser
+      report-artifact: report-cross-browser
+      continue-on-error: true
 
   allure-report:
     name: Allure Report (non-blocking)

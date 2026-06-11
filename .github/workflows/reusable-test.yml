@@ -1,0 +1,92 @@
+name: Reusable test suite
+
+# Parameterised Playwright suite job, reused by quality-gate.yml so every test
+# module shares one definition. Reusable workflows do not inherit the caller's
+# workflow-level `env`, so the mock test constants are redeclared below.
+
+on:
+  workflow_call:
+    inputs:
+      name:
+        description: Display name for the suite (used in step names).
+        type: string
+        required: true
+      command:
+        description: npm script that runs the suite.
+        type: string
+        required: true
+      report-artifact:
+        description: Artifact name for the Playwright HTML report; empty skips the upload.
+        type: string
+        required: false
+        default: ""
+      extra-command:
+        description: Optional extra shell command run after the suite (e.g. npm audit).
+        type: string
+        required: false
+        default: ""
+      continue-on-error:
+        description: Mark the suite non-blocking so a failure does not fail the run.
+        type: boolean
+        required: false
+        default: false
+      upload-allure:
+        description: Upload the allure-results directory as an artifact.
+        type: boolean
+        required: false
+        default: false
+      run-ci-analysis:
+        description: Run the CI failure analyzer and append its summary.
+        type: boolean
+        required: false
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: ${{ inputs.name }}
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/playwright:v1.60.0-jammy
+    continue-on-error: ${{ inputs.continue-on-error }}
+    env:
+      CI: "true"
+      BASE_URL: http://localhost:3000
+      API_BASE_URL: http://localhost:3000/api/v1
+      TEST_ENV: ci
+      API_TOKEN: mock-jwt-token-12345
+      # Firefox/WebKit refuse to launch when $HOME (/github/home in containers)
+      # is not owned by the current user; /root is root-owned and the container
+      # runs as root, so this is safe for every suite.
+      HOME: /root
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+      - run: npm ci
+      - name: Run ${{ inputs.name }}
+        run: ${{ inputs.command }}
+      - name: Extra checks
+        if: ${{ inputs.extra-command != '' }}
+        run: ${{ inputs.extra-command }}
+      - name: Run CI Quality Analysis
+        if: ${{ always() && inputs.run-ci-analysis }}
+        run: |
+          node scripts/ci-failure-analyzer.js
+          if [ -f test-results/ci-quality-summary.md ]; then
+            cat test-results/ci-quality-summary.md >> $GITHUB_STEP_SUMMARY
+          fi
+      - name: Upload Playwright report
+        if: ${{ always() && inputs.report-artifact != '' }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: ${{ inputs.report-artifact }}
+          path: playwright-report/
+          retention-days: 14
+      - name: Upload Allure results
+        if: ${{ always() && inputs.upload-allure }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: allure-results
+          path: allure-results/
+          if-no-files-found: ignore
+          retention-days: 14
