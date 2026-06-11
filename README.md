@@ -448,13 +448,17 @@ npm run allure:report
 ```
 
 In CI, the **Allure Report** job generates the report and publishes it as the
-downloadable `allure-report` artifact on each Quality Gate run.
+downloadable `allure-report` artifact on every Quality Gate run. On pushes to
+`main`, the **Publish Allure to Pages** job also deploys it as a live site with
+accumulating trend, duration and retry history:
+
+**📊 [View the live Allure report](https://yousufwaqar.github.io/playwright-automation-framework/)**
 
 <div align="center">
 
 <img src="docs/images/allure-report.png" alt="Allure report overview generated from the deterministic suite" width="760"/>
 
-<sub><em>Allure report overview (deterministic suite). Generated from <code>allure-results/</code> and published as the <code>allure-report</code> CI artifact.</em></sub>
+<sub><em>Allure report overview (deterministic suite). Generated from <code>allure-results/</code>, published as the <code>allure-report</code> CI artifact and deployed live to <a href="https://yousufwaqar.github.io/playwright-automation-framework/">GitHub Pages</a>.</em></sub>
 
 </div>
 
@@ -599,11 +603,10 @@ Recently delivered:
 - ✅ Composite Quality Gate CI with per-module status checks
 - ✅ ESLint (typescript-eslint + eslint-plugin-playwright) in CI
 - ✅ Repo-committed AI agent toolkit (AGENTS.md, prompt recipes, Copilot setup steps)
-- ✅ Allure reporting (results on every run; HTML report published as a CI artifact)
+- ✅ Allure reporting (results on every run; HTML report published as a CI artifact and a [live GitHub Pages site](https://yousufwaqar.github.io/playwright-automation-framework/) with trend history)
 
 Planned:
 
-- Publish Playwright HTML reports to GitHub Pages
 - Promote the visual job to blocking once Linux baselines are seeded
 - Add reusable GitHub Actions workflow templates
 
