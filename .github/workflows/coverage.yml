@@ -4,8 +4,8 @@ name: Coverage
 # (src/utils). The browser-coupled SelfHealingHelper is excluded in .c8rc.json
 # because its public API only orchestrates a live Page/Locator and is exercised
 # by the @selfheal integration suite, not the unit suite. The c8 threshold in
-# .c8rc.json fails this job if coverage regresses; the Codecov upload is
-# supplementary visualisation and is non-blocking.
+# .c8rc.json fails this job if coverage regresses. The full HTML/lcov report is
+# published as a downloadable CI artifact.
 
 on:
   push:
@@ -47,14 +47,3 @@ jobs:
           name: coverage
           path: coverage/
           retention-days: 14
-
-      - name: Upload to Codecov
-        if: always()
-        continue-on-error: true
-        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7
-        with:
-          files: ./coverage/lcov.info
-          flags: unit
-          fail_ci_if_error: false
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

@@ -7,11 +7,10 @@
 [![Quality Gate](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/quality-gate.yml/badge.svg)](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/quality-gate.yml)
 [![CodeQL](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/codeql.yml/badge.svg)](https://github.com/yousufwaqar/playwright-automation-framework/actions/workflows/codeql.yml)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/yousufwaqar/playwright-automation-framework/badge)](https://scorecard.dev/viewer/?uri=github.com/yousufwaqar/playwright-automation-framework)
-[![codecov](https://codecov.io/gh/yousufwaqar/playwright-automation-framework/graph/badge.svg)](https://codecov.io/gh/yousufwaqar/playwright-automation-framework)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Playwright](https://img.shields.io/badge/Playwright-1.60+-45ba4b?logo=playwright&logoColor=white)](https://playwright.dev/)
  [![Node.js](https://img.shields.io/badge/Node.js-20+-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
- [![License](https://img.shields.io/github/license/yousufwaqar/playwright-automation-framework?color=yellow)](./LICENSE)
+ [![License](https://img.shields.io/badge/license-MIT-yellow.svg)](./LICENSE)
  [![Tests](https://img.shields.io/badge/UI%20%2B%20API-Covered-success)](#test-coverage)
  [![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen.svg)](./CONTRIBUTING.md)
  [![Last Commit](https://img.shields.io/github/last-commit/yousufwaqar/playwright-automation-framework?color=blue)](https://github.com/yousufwaqar/playwright-automation-framework/commits/main)
@@ -259,7 +258,7 @@ playwright-automation-framework/
 ├── .github/
 │   ├── workflows/
 │   │   ├── quality-gate.yml           # Authoritative CI: composite quality gate
-│   │   ├── coverage.yml               # Unit coverage (c8) + Codecov upload
+│   │   ├── coverage.yml               # Unit coverage (c8) + report artifact
 │   │   ├── codeql.yml                 # CodeQL SAST (JS/TS)
 │   │   ├── scorecard.yml              # OpenSSF Scorecard supply-chain score
 │   │   ├── dependency-review.yml      # Blocks PRs adding vulnerable deps
