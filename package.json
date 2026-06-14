@@ -54,7 +54,7 @@
     "@playwright/test": "^1.60.0",
     "@types/node": "^25.9.2",
     "allure-commandline": "^2.42.0",
-    "allure-playwright": "^3.9.0",
+    "allure-playwright": "^3.10.0",
     "c8": "^11.0.0",
     "cross-env": "^7.0.3",
     "cspell": "^8.17.1",
