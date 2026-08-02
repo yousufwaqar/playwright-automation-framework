@@ -63,7 +63,7 @@
     "eslint-plugin-playwright": "^2.10.4",
     "husky": "^9.1.7",
     "lint-staged": "^15.5.2",
-    "tsx": "^4.22.4",
+    "tsx": "^4.23.1",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.60.1"
   },
