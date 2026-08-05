@@ -76,6 +76,9 @@ Click any link to see the actual implementation.
 | **Centralized configuration management** | [`src/utils/ConfigManager.ts`](src/utils/ConfigManager.ts) |
 | **Structured logging utility** | [`src/utils/Logger.ts`](src/utils/Logger.ts) |
 | **Test data abstraction layer** | [`src/utils/TestDataManager.ts`](src/utils/TestDataManager.ts) |
+| **Accessibility audit wrapper** | [`src/utils/AccessibilityHelper.ts`](src/utils/AccessibilityHelper.ts) |
+| **Performance timing utility** | [`src/utils/PerformanceHelper.ts`](src/utils/PerformanceHelper.ts) |
+| **Self-healing locator helper** | [`src/utils/SelfHealingHelper.ts`](src/utils/SelfHealingHelper.ts) |
 | **Type definitions for global scope** | [`src/global.d.ts`](src/global.d.ts) |
 
 ### 🎭 Playwright Expertise
@@ -129,8 +132,8 @@ Click any link to see the actual implementation.
 |---|---|
 | **Dependabot** — automated weekly dependency + GitHub Actions updates, plus security alerts | [`.github/dependabot.yml`](.github/dependabot.yml) |
 | **Mergify** — auto-merge config for low-risk PRs | [`.mergify.yml`](.mergify.yml) |
-| **CODEOWNERS** — review routing | [`CODEOWNERS`](CODEOWNERS) |
-| **PR template** — consistent PR descriptions | [`pull_request_template.md`](pull_request_template.md) |
+| **CODEOWNERS** — review routing | [`.github/CODEOWNERS`](.github/CODEOWNERS) |
+| **PR template** — consistent PR descriptions | [`.github/pull_request_template.md`](.github/pull_request_template.md) |
 | **Issue templates** — bug + feature request | [`.github/ISSUE_TEMPLATE/`](.github/ISSUE_TEMPLATE/) |
 | **Contributing guide** | [`CONTRIBUTING.md`](CONTRIBUTING.md) |
 

@@ -39,6 +39,7 @@ gating runs because they depend on the public internet.
 | Security | `tests/security/` | `@security` | Playwright `request` | Authz, headers, CORS, input handling |
 | Performance | `tests/performance/` | `@performance` | Navigation Timing + request loop | No gross load/latency regressions |
 | Visual | `tests/visual/` | `@visual` | Playwright screenshots | Pages render as expected |
+| Self-healing | `tests/self-healing/` | `@selfheal` | Playwright locators | Tests resilient to UI changes |
 | Load (demonstrative) | `performance/k6/` | — | k6 | API behaviour under ramped load |
 
 ## Tagging & selection

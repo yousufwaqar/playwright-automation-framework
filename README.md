@@ -283,8 +283,10 @@ playwright-automation-framework/
 │   ├── ISSUE_TEMPLATE/
 │   │   ├── bug_report.md
 │   │   └── feature_request.md
+│   ├── CODEOWNERS                     # Review ownership
 │   ├── copilot-instructions.md        # Repo ruleset for the Copilot agent
-│   ├── dependabot.yml
+│   ├── dependabot.yml                 # Dependabot configuration
+│   ├── pull_request_template.md       # Pull request template
 │   └── release-drafter.yml            # Release Drafter config
 ├── docs/
 │   ├── test-strategy.md               # Layers, tagging, principles
@@ -370,30 +372,29 @@ playwright-automation-framework/
 ├── .vscode/
 │   └── tasks.json                     # Editor task shortcuts
 ├── AGENTS.md                          # Operating manual for AI coding agents
-├── SKILLS.md                          # Guided tour of the skills this repo shows
-├── CONTRIBUTING.md
-├── SECURITY.md                        # Security policy and disclosure process
+├── agent_dashboard.html               # UI for the triage agent
 ├── CHANGELOG.md                       # Notable changes (Keep a Changelog)
-├── CODEOWNERS                         # Review ownership
-├── pull_request_template.md
-├── LICENSE
+├── commitlint.config.mjs              # Conventional Commits rules
+├── CONTRIBUTING.md
+├── cspell.json                        # Spell-check dictionary/config
 ├── Dockerfile                         # Pinned Playwright image
 ├── docker-compose.yml                 # One-command containerised run
 ├── .dockerignore
 ├── .env.example                       # Sample environment variables
+├── eslint.config.mjs                  # ESLint flat config (ts + playwright rules)
 ├── .gitignore
 ├── .husky/                            # Git hooks (pre-commit, commit-msg)
-├── .nvmrc                             # Pinned Node version (22)
+├── LICENSE
 ├── .mergify.yml                       # Mergify merge automation
-├── commitlint.config.mjs              # Conventional Commits rules
-├── eslint.config.mjs                  # ESLint flat config (ts + playwright rules)
+├── .nvmrc                             # Pinned Node version (22)
+├── package-lock.json
+├── package.json                       # Scripts and dependencies
 ├── playwright.config.ts               # Playwright configuration
 ├── playwright.unit.config.ts          # Unit-test (non-browser) Playwright config
-├── package.json                       # Scripts and dependencies
-├── package-lock.json
-├── tsconfig.json                      # TypeScript configuration
-├── cspell.json                        # Spell-check dictionary/config
-└── README.md
+├── README.md
+├── SECURITY.md                        # Security policy and disclosure process
+├── SKILLS.md                          # Guided tour of the skills this repo shows
+└── tsconfig.json                      # TypeScript configuration
 ```
 
 ---

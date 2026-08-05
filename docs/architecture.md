@@ -5,19 +5,24 @@ here depends on a network service: a local mock app is the system under test.
 
 ## Directory layout
 
-```
+```text
 .
+├── .github/                  # workflows/, instructions/, prompts/, ISSUE_TEMPLATE/
+├── agent/                    # Optional Python AI triage agent
+├── docs/                     # Framework documentation and images
 ├── mock-app/                 # System under test (dependency-free Node server)
 │   ├── server.js             # Routes, security headers, JSON API
 │   ├── pages/                # login.html, dashboard.html (no inline scripts)
 │   └── public/               # Externalised page JS (CSP-friendly)
+├── performance/k6/           # Demonstrative k6 load script
+├── scripts/                  # CI failure analyzer, clean, coverage summary
 ├── src/
+│   ├── fixtures/             # Custom Playwright fixtures (DI for specs)
 │   ├── pages/                # Page Object Model
 │   │   ├── BasePage.ts       # Shared element/wait/assert helpers
 │   │   ├── LoginPage.ts
 │   │   ├── DashboardPage.ts
 │   │   └── external/         # POMs for external-site demos
-│   ├── fixtures/             # Custom Playwright fixtures (DI for specs)
 │   └── utils/                # Cross-cutting helpers
 │       ├── ConfigManager.ts          # Env/config (singleton)
 │       ├── Logger.ts                 # Structured step logging
@@ -30,13 +35,12 @@ here depends on a network service: a local mock app is the system under test.
 │   ├── a11y/                 # Accessibility
 │   ├── security/             # API & HTTP security
 │   ├── performance/          # Performance smoke
+│   ├── self-healing/         # Self-healing locator tests
 │   ├── visual/               # Visual regression (+ committed baselines)
 │   ├── external/             # @external demos (public sites)
 │   └── test-data/            # JSON fixtures
-├── performance/k6/           # Demonstrative k6 load script
-├── docs/                     # This documentation
 ├── Dockerfile, docker-compose.yml
-└── .github/workflows/        # CI (quality-gate.yml is authoritative)
+└── package.json              # Scripts and dependencies
 ```
 
 ## Key design decisions
