@@ -9,7 +9,7 @@
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/yousufwaqar/playwright-automation-framework/badge)](https://scorecard.dev/viewer/?uri=github.com/yousufwaqar/playwright-automation-framework)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Playwright](https://img.shields.io/badge/Playwright-1.60+-45ba4b?logo=playwright&logoColor=white)](https://playwright.dev/)
- [![Node.js](https://img.shields.io/badge/Node.js-20+-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+ [![Node.js](https://img.shields.io/badge/Node.js-22+-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
  [![License](https://img.shields.io/badge/license-MIT-yellow.svg)](./LICENSE)
  [![Tests](https://img.shields.io/badge/UI%20%2B%20API-Covered-success)](#test-coverage)
  [![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen.svg)](./CONTRIBUTING.md)
@@ -97,7 +97,7 @@ It is designed to be easy to clone, easy to understand, and easy to extend for r
 | ---                                           | ---                                            |
 | [Playwright](https://playwright.dev/)         | Browser automation and API testing             |
 | [TypeScript](https://www.typescriptlang.org/) | Type-safe test development                     |
-| [Node.js](https://nodejs.org/)                | Runtime environment (20.19+)                   |
+| [Node.js](https://nodejs.org/)                | Runtime environment (22+)                      |
 | [tsx](https://github.com/privatenumber/tsx)   | Native TypeScript loader for fixtures          |
 | [ESLint](https://eslint.org/) + [typescript-eslint](https://typescript-eslint.io/) | Linting with `eslint-plugin-playwright` rules |
 | GitHub Actions                                | CI pipeline (Chromium) and scheduled external runs |
@@ -117,7 +117,7 @@ npm --version
 
 Required:
 
-- Node.js 20.19 or higher (see `.nvmrc`)
+- Node.js 22 or higher (see `.nvmrc`)
 - npm 8 or higher
 
 ### Install
@@ -306,7 +306,8 @@ playwright-automation-framework/
 ├── scripts/
 │   ├── ci-failure-analyzer.js         # Summarises CI failures into the run log
 │   ├── clean.js                       # Cross-platform artifact cleanup
-│   └── coverage-summary.js            # Renders the coverage job summary
+│   ├── coverage-summary.js            # Renders the coverage job summary
+│   └── git-push.bat                   # Windows push helper
 ├── agent/                             # Optional Python AI triage agent
 ├── src/
 │   ├── fixtures/
@@ -328,6 +329,7 @@ playwright-automation-framework/
 │   │   ├── Logger.ts                  # Structured logging utility
 │   │   ├── TestDataManager.ts         # Test data accessor
 │   │   ├── AccessibilityHelper.ts     # axe-core audit wrapper
+│   │   ├── SelfHealingHelper.ts      # Self-healing locator fallbacks
 │   │   └── PerformanceHelper.ts       # Navigation Timing + percentiles
 │   └── global.d.ts                    # Ambient type declarations
 ├── tests/
@@ -593,16 +595,22 @@ To launch the Visual Dashboard, open [`agent_dashboard.html`](agent_dashboard.ht
 | `npm run test:visual`       | Run visual regression tests           |
 | `npm run test:visual:update`| Refresh visual baselines (current platform) |
 | `npm run test:unit`         | Run isolated unit tests (helpers/config) |
+| `npm run test:unit:coverage` | Run unit tests with c8 coverage report     |
 | `npm run test:selfheal`     | Run self-healing locator recovery tests |
 | `npm run perf:k6`           | Run k6 API load script (requires k6)  |
 | `npm run typecheck`         | Type-check without emitting           |
 | `npm run lint`              | Lint with ESLint (typescript-eslint + playwright rules) |
+| `npm run lint:fix`          | Auto-fix lint issues (ESLint)                  |
+| `npm run spellcheck`         | Spell-check Markdown/TS/JS files (cspell)  |
 | `npm run test:external`     | Run all external demo-site suites     |
 | `npm run test:saucedemo`    | Run SauceDemo external suite          |
 | `npm run test:theinternet`  | Run The Internet external suite       |
 | `npm run test:api:external` | Run RESTful Booker external API suite |
 | `npm run report`            | Open Playwright HTML report           |
 | `npm run allure:report`     | Generate + open the Allure report (needs Java) |
+| `npm run allure:generate`    | Generate the Allure HTML report from results |
+| `npm run allure:open`        | Open the generated Allure HTML report        |
+| `npm run allure:serve`       | Serve Allure results in a browser (needs Java) |
 | `npm run agent:install`     | Install the Python AI SDET agent deps |
 | `npm run agent`             | Launch the interactive AI SDET agent CLI |
 | `npm run clean`             | Remove test-results/ and playwright-report/ |
@@ -627,7 +635,7 @@ Recently delivered:
 
 Planned:
 
-- Promote the visual job to blocking once Linux baselines are seeded
+- Promote the visual job to blocking (Linux baselines are now committed and the `visual` job is green)
 
 ---
 
