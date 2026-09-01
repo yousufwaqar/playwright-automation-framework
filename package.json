@@ -47,7 +47,7 @@
     "*.{ts,js,mjs,cjs}": "eslint --fix"
   },
   "devDependencies": {
-    "@axe-core/playwright": "^4.11.3",
+    "@axe-core/playwright": "^4.12.1",
     "@commitlint/cli": "^19.6.1",
     "@commitlint/config-conventional": "^19.6.0",
     "@eslint/js": "^10.0.1",
